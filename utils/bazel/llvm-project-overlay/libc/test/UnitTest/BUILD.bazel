@@ -5,6 +5,7 @@
 # LLVM libc unittest library.
 
 load("//libc/test:libc_test_rules.bzl", "libc_test_library")
+load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -29,6 +30,11 @@ libc_test_library(
     ],
 )
 
+config_setting(
+    name = "alwayslink_test",
+    define_values = {"alwayslink_test": "True"},
+)
+
 libc_test_library(
     name = "LibcUnitTest",
     srcs = [
@@ -44,6 +50,10 @@ libc_test_library(
         "PlatformDefs.h",
         "Test.h",
     ],
+    alwayslink = select({
+        ":alwayslink_test": True,
+        "//conditions:default": False,
+    }),
     deps = [
         ":test_logger",
         "//libc:__support_c_string",

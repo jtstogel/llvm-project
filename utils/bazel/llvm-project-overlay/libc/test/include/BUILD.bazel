@@ -20,3 +20,21 @@ libc_test(
         "//libc:public_headers_deps",
     ],
 )
+
+libc_test(
+    name = "fpclassify_c_test",
+    srcs = ["fpclassify_test.c"],
+    deps = [
+        "//libc:public_headers_deps",
+    ],
+)
+
+libc_test(
+    name = "example_uses_custom_main_test",
+    srcs = ["example_uses_custom_main_test.cc"],
+)
+
+libc_test(
+    name = "example_uses_framework_main_test",
+    srcs = ["example_uses_framework_main_test.cc"],
+)
