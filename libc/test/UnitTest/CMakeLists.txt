@@ -117,6 +117,7 @@ add_unittest_framework_library(
   HDRS
     FEnvSafeTest.h
     FPMatcher.h
+    FPConstants.h
     RoundingModeUtils.h
   DEPENDS
     LibcTest

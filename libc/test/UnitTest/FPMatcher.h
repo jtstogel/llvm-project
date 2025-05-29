@@ -16,6 +16,7 @@
 #include "src/__support/FPUtil/fpbits_str.h"
 #include "src/__support/macros/config.h"
 #include "src/__support/macros/properties/architectures.h"
+#include "test/UnitTest/FPConstants.h"
 #include "test/UnitTest/RoundingModeUtils.h"
 #include "test/UnitTest/StringUtils.h"
 #include "test/UnitTest/Test.h"
@@ -222,25 +223,11 @@ private:
 } // namespace LIBC_NAMESPACE_DECL
 
 #define DECLARE_SPECIAL_CONSTANTS(T)                                           \
-  using FPBits = LIBC_NAMESPACE::fputil::FPBits<T>;                            \
+  DECLARE_SPECIAL_FP_SCALARS(T)                                                \
   using StorageType = typename FPBits::StorageType;                            \
                                                                                \
   static constexpr StorageType STORAGE_MAX =                                   \
       LIBC_NAMESPACE::cpp::numeric_limits<StorageType>::max();                 \
-  const T zero = FPBits::zero(Sign::POS).get_val();                            \
-  const T neg_zero = FPBits::zero(Sign::NEG).get_val();                        \
-  const T aNaN = FPBits::quiet_nan(Sign::POS).get_val();                       \
-  const T neg_aNaN = FPBits::quiet_nan(Sign::NEG).get_val();                   \
-  const T sNaN = FPBits::signaling_nan(Sign::POS).get_val();                   \
-  const T neg_sNaN = FPBits::signaling_nan(Sign::NEG).get_val();               \
-  const T inf = FPBits::inf(Sign::POS).get_val();                              \
-  const T neg_inf = FPBits::inf(Sign::NEG).get_val();                          \
-  const T min_normal = FPBits::min_normal().get_val();                         \
-  const T max_normal = FPBits::max_normal(Sign::POS).get_val();                \
-  const T neg_max_normal = FPBits::max_normal(Sign::NEG).get_val();            \
-  const T min_denormal = FPBits::min_subnormal(Sign::POS).get_val();           \
-  const T neg_min_denormal = FPBits::min_subnormal(Sign::NEG).get_val();       \
-  const T max_denormal = FPBits::max_subnormal().get_val();                    \
   static constexpr int UNKNOWN_MATH_ROUNDING_DIRECTION = 99;                   \
   static constexpr LIBC_NAMESPACE::cpp::array<int, 6>                          \
       MATH_ROUNDING_DIRECTIONS_INCLUDING_UNKNOWN = {                           \

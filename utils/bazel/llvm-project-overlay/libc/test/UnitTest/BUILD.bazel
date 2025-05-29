@@ -97,6 +97,7 @@ libc_test_library(
     ],
     hdrs = [
         "FEnvSafeTest.h",
+        "FPConstants.h",
         "FPExceptMatcher.h",
         "FPMatcher.h",
         "RoundingModeUtils.h",

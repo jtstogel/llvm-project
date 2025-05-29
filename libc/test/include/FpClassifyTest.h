@@ -9,14 +9,14 @@
 #ifndef LLVM_LIBC_TEST_INCLUDE_MATH_FPCLASSIFY_H
 #define LLVM_LIBC_TEST_INCLUDE_MATH_FPCLASSIFY_H
 
-#include "test/UnitTest/FPMatcher.h"
+#include "test/UnitTest/FPConstants.h"
 #include "test/UnitTest/Test.h"
 
 #include "include/llvm-libc-macros/math-function-macros.h"
 
 template <typename T>
 class FpClassifyTest : public LIBC_NAMESPACE::testing::Test {
-  DECLARE_SPECIAL_CONSTANTS(T)
+  DECLARE_SPECIAL_FP_SCALARS(T)
 
 public:
   typedef int (*FpClassifyFunc)(T);
