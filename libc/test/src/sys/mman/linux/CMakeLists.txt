@@ -68,6 +68,26 @@ add_libc_unittest(
 
 
 add_libc_unittest(
+  pkey_test
+  SUITE
+    libc_sys_mman_unittests
+  SRCS
+    pkey_test.cpp
+  DEPENDS
+    libc.include.sys_mman
+    libc.include.signal
+    libc.src.errno.errno
+    libc.src.sys.mman.mmap
+    libc.src.sys.mman.pkey_alloc
+    libc.src.sys.mman.pkey_free
+    libc.src.sys.mman.pkey_get
+    libc.src.sys.mman.pkey_mprotect
+    libc.src.sys.mman.pkey_set
+    libc.test.UnitTest.ErrnoCheckingTest
+    libc.test.UnitTest.ErrnoSetterMatcher
+)
+
+add_libc_unittest(
   posix_madvise_test
   SUITE
     libc_sys_mman_unittests

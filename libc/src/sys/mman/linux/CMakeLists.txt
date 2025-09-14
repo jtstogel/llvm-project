@@ -167,6 +167,72 @@ add_entrypoint_object(
 )
 
 add_entrypoint_object(
+  pkey_alloc
+  SRCS
+    pkey_alloc.cpp
+  HDRS
+    ../pkey_alloc.h
+  DEPENDS
+    libc.include.sys_mman
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  pkey_free
+  SRCS
+    pkey_free.cpp
+  HDRS
+    ../pkey_free.h
+  DEPENDS
+    libc.include.sys_mman
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  pkey_get
+  SRCS
+    pkey_get.cpp
+  HDRS
+    ../pkey_get.h
+  DEPENDS
+    libc.include.sys_mman
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  pkey_mprotect
+  SRCS
+    pkey_mprotect.cpp
+  HDRS
+    ../pkey_mprotect.h
+  DEPENDS
+    libc.include.sys_mman
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.sys.mman.mprotect
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
+  pkey_set
+  SRCS
+    pkey_set.cpp
+  HDRS
+    ../pkey_set.h
+  DEPENDS
+    libc.include.sys_mman
+    libc.include.sys_syscall
+    libc.src.__support.OSUtil.osutil
+    libc.src.errno.errno
+)
+
+add_entrypoint_object(
   remap_file_pages
   SRCS
     remap_file_pages.cpp
