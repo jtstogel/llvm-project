@@ -48,4 +48,13 @@ elseif (RUNTIMES_USE_LIBC STREQUAL "llvm-libc")
 
   # TODO: There's no support for building LLVM libc as a shared library yet.
   add_library(runtimes-libc-shared INTERFACE)
+  if (TARGET libc)
+    target_link_libraries(runtimes-libc-shared INTERFACE libc)
+  endif()
+  if (TARGET libm)
+    target_link_libraries(runtimes-libc-shared INTERFACE libm)
+  endif()
+  if (CXX_SUPPORTS_NOLIBC_FLAG)
+    target_link_options(runtimes-libc-shared INTERFACE "-nolibc")
+  endif()
 endif()

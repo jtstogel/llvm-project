@@ -147,7 +147,9 @@ _LIBCPP_DIAGNOSTIC_POP
 } // namespace __locale
 _LIBCPP_END_NAMESPACE_STD
 
-#include <__locale_dir/support/no_locale/characters.h>
+#include <__locale_dir/support/no_locale/collation.h>
+#include <__locale_dir/support/no_locale/ctype.h>
 #include <__locale_dir/support/no_locale/strtonum.h>
+#include <__locale_dir/support/no_locale/time.h>
 
 #endif // _LIBCPP___LOCALE_DIR_SUPPORT_FUCHSIA_H

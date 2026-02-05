@@ -58,7 +58,8 @@ for locale, alts in _locales.items():
     features.append(
         Feature(
             name="locale.{}".format(locale),
-            when=lambda cfg, alts=alts: hasAnyLocale(cfg, alts),
+            # DO NOT SUBMIT: hack for disabling just tests that REQUIRE a specific locale.
+            when=lambda cfg, alts=alts: hasAnyLocale(cfg, alts) and "_LIBCPP_LIBC_LLVM_LIBC" not in compilerMacros(cfg),
             actions=lambda cfg, locale=locale, alts=alts: _getLocaleFlagsAction(
                 cfg, locale, alts, _provide_locale_conversions[locale]
             )

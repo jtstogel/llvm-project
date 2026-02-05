@@ -35,7 +35,9 @@
 #  define __CORRECT_ISO_CPP_WCHAR_H_PROTO
 #endif
 
-#if _LIBCPP_HAS_MUSL_LIBC
+#if defined(_LIBCPP_LIBC_LLVM_LIBC)
+#  include <wchar.h>
+#elif _LIBCPP_HAS_MUSL_LIBC
 #  define __NEED_mbstate_t
 #  include <bits/alltypes.h>
 #  undef __NEED_mbstate_t

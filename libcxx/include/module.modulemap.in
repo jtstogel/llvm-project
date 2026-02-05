@@ -1592,10 +1592,15 @@ module std [system] {
       textual header "__locale_dir/support/freebsd.h"
       textual header "__locale_dir/support/fuchsia.h"
       textual header "__locale_dir/support/linux.h"
+      textual header "__locale_dir/support/llvm_libc.h"
       textual header "__locale_dir/support/netbsd.h"
       textual header "__locale_dir/support/newlib.h"
-      textual header "__locale_dir/support/no_locale/characters.h"
+      textual header "__locale_dir/support/no_locale/collation.h"
+      textual header "__locale_dir/support/no_locale/ctype.h"
+      textual header "__locale_dir/support/no_locale/encoding.h"
+      textual header "__locale_dir/support/no_locale/printf.h"
       textual header "__locale_dir/support/no_locale/strtonum.h"
+      textual header "__locale_dir/support/no_locale/time.h"
       textual header "__locale_dir/support/windows.h"
     }
 

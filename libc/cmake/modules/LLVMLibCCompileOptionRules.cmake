@@ -181,7 +181,9 @@ function(_get_common_compile_options output_var flags)
   set(compile_options ${LIBC_COMPILE_OPTIONS_DEFAULT} ${compile_flags} ${config_flags} ${arch_flags})
 
   if(LLVM_LIBC_COMPILER_IS_GCC_COMPATIBLE)
-    list(APPEND compile_options "-fpie")
+    # Hack for running libc++ tests w/ llvm-libc as a shared library.
+    # list(APPEND compile_options "-fpie")
+    list(APPEND compile_options "-fPIC")
 
     if(LLVM_LIBC_FULL_BUILD)
       # Only add -ffreestanding flag in non-GPU full build mode.

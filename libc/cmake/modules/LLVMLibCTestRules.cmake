@@ -16,7 +16,9 @@ function(_get_common_test_compile_options output_var c_test flags)
       ${arch_flags})
 
   if(LLVM_LIBC_COMPILER_IS_GCC_COMPATIBLE)
-    list(APPEND compile_options "-fpie")
+    # Hack for running libc++ tests w/ llvm-libc as a shared library.
+    # list(APPEND compile_options "-fpie")
+    list(APPEND compile_options "-fPIC")
 
     if(LLVM_LIBC_FULL_BUILD)
       list(APPEND compile_options "-DLIBC_FULL_BUILD")
