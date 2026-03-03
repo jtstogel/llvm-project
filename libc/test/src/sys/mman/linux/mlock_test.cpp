@@ -12,6 +12,7 @@
 
 #include "src/__support/OSUtil/syscall.h" // For internal syscall function.
 #include "src/__support/libc_errno.h"
+#include "src/__support/macros/sanitizer.h"
 #include "src/sys/mman/madvise.h"
 #include "src/sys/mman/mincore.h"
 #include "src/sys/mman/mlock.h"
@@ -31,8 +32,8 @@
 
 const size_t PAGE_SIZE = LIBC_NAMESPACE::sysconf(_SC_PAGESIZE);
 
-using namespace LIBC_NAMESPACE::testing::ErrnoSetterMatcher;
 using LlvmLibcMlockTest = LIBC_NAMESPACE::testing::ErrnoCheckingTest;
+using namespace LIBC_NAMESPACE::testing::ErrnoSetterMatcher;
 
 struct PageHolder {
   size_t size;
@@ -125,6 +126,9 @@ TEST_F(LlvmLibcMlockTest, InvalidFlag) {
 }
 
 TEST_F(LlvmLibcMlockTest, MLockAll) {
+  // Sanitizers mmap a large shadow memory region which causes the program
+  // to crash when mlockall is called with MCL_FUTURE.
+#ifndef LIBC_HAS_SANITIZER
   {
     PageHolder holder;
     EXPECT_TRUE(holder.is_valid());
@@ -178,5 +182,6 @@ TEST_F(LlvmLibcMlockTest, MLockAll) {
     EXPECT_EQ(vec & 1, 1);
     EXPECT_THAT(LIBC_NAMESPACE::munlockall(), Succeeds());
   }
-#endif
+#endif // MCL_ONFAULT
+#endif // LIBC_HAS_SANITIZER
 }

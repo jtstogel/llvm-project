@@ -9,6 +9,7 @@
 #include "hdr/errno_macros.h"
 #include "hdr/signal_macros.h"
 #include "hdr/types/size_t.h"
+#include "src/__support/macros/sanitizer.h"
 #include "src/sys/mman/mmap.h"
 #include "src/sys/mman/munmap.h"
 #include "src/sys/mman/pkey_alloc.h"
@@ -95,9 +96,23 @@ bool protection_keys_supported() {
   return supported;
 }
 
+constexpr bool death_tests_supported() {
+  // Sanitizers register SEGV handlers, which interferes
+  // with EXPECT_DEATH tests that look for SEGV from the child process.
+#ifdef LIBC_HAS_SANITIZER
+  return false;
+#else
+  return true;
+#endif
+}
+
 TEST_F(LlvmLibcProtectionKeyTest, MProtectWithPKeyDisablesWrite) {
   if (!protection_keys_supported()) {
     tlog << "Skipping test: pkey is not available\n";
+    return;
+  }
+  if (!death_tests_supported()) {
+    tlog << "Skipping test: death tests unsupported in current configuration\n";
     return;
   }
 
@@ -124,6 +139,10 @@ TEST_F(LlvmLibcProtectionKeyTest, MProtectWithPKeyDisablesWrite) {
 TEST_F(LlvmLibcProtectionKeyTest, PKeySetChangesAccessRights) {
   if (!protection_keys_supported()) {
     tlog << "Skipping test: pkey is not available\n";
+    return;
+  }
+  if (!death_tests_supported()) {
+    tlog << "Skipping test: death tests unsupported in current configuration\n";
     return;
   }
 
@@ -157,6 +176,10 @@ TEST_F(LlvmLibcProtectionKeyTest, PKeySetChangesAccessRights) {
 }
 
 TEST_F(LlvmLibcProtectionKeyTest, FallsBackToMProtectForInvalidPKey) {
+  if (!death_tests_supported()) {
+    tlog << "Skipping test: death tests unsupported in current configuration\n";
+    return;
+  }
   MMapPageGuard page = MMapPageGuard::mmap(PROT_READ | PROT_WRITE);
   ASSERT_NE(page.addr, nullptr);
 

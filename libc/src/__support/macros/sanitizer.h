@@ -23,6 +23,10 @@
 #define LIBC_HAS_MEMORY_SANITIZER
 #endif
 
+#if defined(LIBC_HAS_ADDRESS_SANITIZER) || defined(LIBC_HAS_MEMORY_SANITIZER)
+#define LIBC_HAS_SANITIZER
+#endif
+
 #ifdef LIBC_HAS_MEMORY_SANITIZER
 // Only perform MSAN unpoison in non-constexpr context.
 #include <sanitizer/msan_interface.h>

@@ -38,6 +38,7 @@ libc_test(
     name = "mlock_test",
     srcs = ["linux/mlock_test.cpp"],
     deps = [
+        "//libc:__support_macros_sanitizer",
         "//libc:__support_osutil_syscall",
         "//libc:getrlimit",
         "//libc:madvise",
@@ -99,6 +100,7 @@ libc_test(
     name = "pkey_test",
     srcs = ["linux/pkey_test.cpp"],
     deps = [
+        "//libc:__support_macros_sanitizer",
         "//libc:hdr_errno_macros",
         "//libc:hdr_signal_macros",
         "//libc:mmap",
