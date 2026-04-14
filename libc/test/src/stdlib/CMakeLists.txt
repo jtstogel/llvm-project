@@ -377,6 +377,18 @@ add_libc_test(
 )
 
 add_libc_test(
+  realpath_test
+  SUITE
+    libc-stdlib-tests
+  SRCS
+    realpath_test.cpp
+  DEPENDS
+    libc.src.stdlib.realpath
+    libc.src.unistd.chdir
+    libc.test.UnitTest.LibcFileSystemHelpers
+)
+
+add_libc_test(
   memalignment_test
   SUITE
     libc-stdlib-tests

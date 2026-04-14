@@ -204,6 +204,13 @@ functions:
     return_type: void
     arguments:
       - type: unsigned int
+  - name: realpath
+    standards:
+      - POSIX
+    return_type: char*
+    arguments:
+      - type: const char *__restrict
+      - type: char *__restrict
   - name: strfromd
     standards:
       - stdc

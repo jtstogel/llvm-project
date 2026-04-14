@@ -13,7 +13,7 @@
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/fixed_point/fx_rep.h"
 #include "src/__support/macros/config.h"
-#include "src/__support/macros/properties/types.h" // LIBC_TYPES_HAS_INT128
+#include "src/__support/macros/properties/properties.h"
 #include "src/__support/uint128.h"
 #include "test/UnitTest/TestLogger.h"
 

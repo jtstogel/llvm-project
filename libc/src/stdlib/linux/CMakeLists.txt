@@ -9,3 +9,16 @@ add_entrypoint_object(
     libc.src.signal.raise
     libc.src.stdlib._Exit
 )
+
+add_entrypoint_object(
+  realpath
+  SRCS
+    realpath.cpp
+  HDRS
+    ../realpath.h
+  DEPENDS
+    libc.src.__support.common
+    libc.src.__support.CPP.string_view
+    libc.src.__support.macros.config
+    libc.src.errno.errno
+)
