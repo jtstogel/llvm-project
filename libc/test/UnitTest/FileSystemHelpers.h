@@ -26,17 +26,12 @@ struct FileSystemEntry {
 };
 } // namespace internal
 
-// TestDir is an RAII object that maintains a temporary filesystem structure
-// and removes it upon destruction. It is created via a TestDirBuilder.
+// TestDir sets up a temporary directory structure on constrution
+// and removes it upon destrution. To make one, use TestDirBuilder.
 class TestDir {
 public:
   using FileSystemEntryVector = FixedVector<internal::FileSystemEntry, 32>;
 
-private:
-  cpp::string root;
-  FileSystemEntryVector entries;
-
-public:
   // TestDir takes ownership of the root path and the entries.
   TestDir(cpp::string &&root_path, FileSystemEntryVector &&entries);
   ~TestDir();
@@ -58,13 +53,13 @@ private:
     return absolute_path(relative_path);
   }
   void create_entry(const internal::FileSystemEntry &entry);
+
+  cpp::string root;
+  FileSystemEntryVector entries;
 };
 
 // TestDirBuilder allows declarative definition of a filesystem structure.
 class TestDirBuilder {
-  cpp::string_view root_name;
-  TestDir::FileSystemEntryVector entries;
-
 public:
   explicit TestDirBuilder(cpp::string_view name) : root_name(name) {}
 
@@ -74,16 +69,21 @@ public:
 
   // Materializes the defined structure to disk and returns an RAII TestDir.
   TestDir build();
+
+private:
+  cpp::string_view root_name;
+  TestDir::FileSystemEntryVector entries;
 };
 
-// ChangeDirGuard is an RAII object that saves the current working directory
-// and restores it upon destruction.
+// ChangeDirGuard chdir's into a directory on construction and restores the
+// previous working directory on destruction.
 class ChangeDirGuard {
-  cpp::string old_cwd;
-
 public:
   explicit ChangeDirGuard(cpp::string_view new_cwd);
   ~ChangeDirGuard();
+
+private:
+  cpp::string old_cwd;
 };
 
 } // namespace testing

@@ -64,7 +64,8 @@ void TestDir::create_entry(const internal::FileSystemEntry &entry) {
 
   switch (entry.type) {
   case internal::FileSystemEntry::Type::File: {
-    int fd = LIBC_NAMESPACE::open(full_path.c_str(), O_CREAT | O_WRONLY, S_IRWXU);
+    int fd =
+        LIBC_NAMESPACE::open(full_path.c_str(), O_CREAT | O_WRONLY, S_IRWXU);
     if (fd >= 0) {
       LIBC_NAMESPACE::close(fd);
     }
@@ -99,7 +100,8 @@ TestDirBuilder &TestDirBuilder::add_directory(cpp::string path) {
   return *this;
 }
 
-TestDirBuilder &TestDirBuilder::add_symlink(cpp::string path, cpp::string target) {
+TestDirBuilder &TestDirBuilder::add_symlink(cpp::string path,
+                                            cpp::string target) {
   bool success = entries.push_back({internal::FileSystemEntry::Type::Symlink,
                                     cpp::move(path), cpp::move(target)});
   LIBC_ASSERT(success);
@@ -115,8 +117,9 @@ ChangeDirGuard::ChangeDirGuard(cpp::string_view new_cwd) {
 }
 
 ChangeDirGuard::~ChangeDirGuard() {
-  if (!old_cwd.empty())
+  if (!old_cwd.empty()) {
     LIBC_NAMESPACE::chdir(old_cwd.c_str());
+  }
 }
 
 } // namespace testing

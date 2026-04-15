@@ -218,6 +218,7 @@ add_unittest_framework_library(
     LibcTest
     libc.src.fcntl.open
     libc.src.sys.stat.mkdir
+    libc.src.fcntl.open
     libc.src.unistd.chdir
     libc.src.unistd.close
     libc.src.unistd.getcwd
