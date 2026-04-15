@@ -8,25 +8,26 @@
 
 #include "src/unistd/getcwd.h"
 
-#include "src/__support/OSUtil/syscall.h" // For internal syscall function.
+#include "src/__support/OSUtil/linux/syscall_wrappers/getcwd.h"
 #include "src/__support/common.h"
 #include "src/__support/macros/config.h"
 #include "src/string/allocating_string_utils.h" // For strdup.
 
 #include "src/__support/libc_errno.h"
 #include <linux/limits.h> // This is safe to include without any name pollution.
-#include <sys/syscall.h> // For syscall numbers.
 
 namespace LIBC_NAMESPACE_DECL {
 
 namespace {
 
 bool getcwd_syscall(char *buf, size_t size) {
-  int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_getcwd, buf, size);
-  if (ret < 0) {
-    libc_errno = -ret;
+  auto result = linux_syscalls::getcwd(buf, size);
+  if (!result.has_value()) {
+    libc_errno = result.error();
     return false;
-  } else if (ret == 0 || buf[0] != '/') {
+  }
+  int ret = result.value();
+  if (ret == 0 || buf[0] != '/') {
     libc_errno = ENOENT;
     return false;
   }

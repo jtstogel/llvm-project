@@ -384,9 +384,6 @@ add_libc_test(
     realpath_test.cpp
   DEPENDS
     libc.src.stdlib.realpath
-    libc.src.sys.stat.mkdir
-    libc.src.unistd.chdir
-    libc.src.unistd.rmdir
     libc.src.__support.CPP.string
     libc.test.UnitTest.ErrnoCheckingTest
   LINK_LIBRARIES

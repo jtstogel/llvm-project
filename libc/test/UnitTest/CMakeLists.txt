@@ -45,6 +45,14 @@ function(add_unittest_framework_library name)
   target_compile_options(${name}.hermetic PRIVATE ${compile_options} -nostdinc++)
 
   if(TEST_LIB_DEPENDS)
+    get_fq_deps_list(fq_deps_list ${TEST_LIB_DEPENDS})
+    foreach(lib IN ITEMS ${name}.unit ${name}.hermetic)
+      set_target_properties(${lib} PROPERTIES 
+        TARGET_TYPE ${OBJECT_LIBRARY_TARGET_TYPE}
+        DEPS "${fq_deps_list}"
+      )
+    endforeach()
+
     foreach(dep IN ITEMS ${TEST_LIB_DEPENDS})
       if(TARGET ${dep}.unit)
         add_dependencies(${name}.unit ${dep}.unit)
@@ -221,7 +229,6 @@ add_header_library(
     libc.src.__support.macros.properties.architectures
     libc.src.errno.errno
 )
-
 add_unittest_framework_library(
   LibcFileSystemHelpers
   SRCS
@@ -230,15 +237,14 @@ add_unittest_framework_library(
     FileSystemHelpers.h
   DEPENDS
     LibcTest
-    libc.src.fcntl.open
-    libc.src.sys.stat.mkdir
-    libc.src.fcntl.open
-    libc.src.unistd.chdir
-    libc.src.unistd.close
-    libc.src.unistd.getcwd
-    libc.src.unistd.rmdir
-    libc.src.unistd.symlink
-    libc.src.unistd.unlink
+    libc.src.__support.OSUtil.linux.syscall_wrappers.open
+    libc.src.__support.OSUtil.linux.syscall_wrappers.close
+    libc.src.__support.OSUtil.linux.syscall_wrappers.mkdir
+    libc.src.__support.OSUtil.linux.syscall_wrappers.rmdir
+    libc.src.__support.OSUtil.linux.syscall_wrappers.chdir
+    libc.src.__support.OSUtil.linux.syscall_wrappers.getcwd
+    libc.src.__support.OSUtil.linux.syscall_wrappers.symlink
+    libc.src.__support.OSUtil.linux.syscall_wrappers.unlink
     libc.src.__support.CPP.string
     libc.src.__support.fixedvector
 )

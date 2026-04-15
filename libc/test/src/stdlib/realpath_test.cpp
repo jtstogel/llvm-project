@@ -7,10 +7,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "src/__support/CPP/string.h"
+#include "src/__support/OSUtil/filesystem.h"
 #include "src/stdlib/realpath.h"
-#include "src/sys/stat/mkdir.h"
-#include "src/unistd/chdir.h"
-#include "src/unistd/rmdir.h"
 #include "test/UnitTest/ErrnoCheckingTest.h"
 #include "test/UnitTest/FileSystemHelpers.h"
 #include "test/UnitTest/Test.h"
@@ -73,7 +71,7 @@ TEST_F(LlvmLibcRealpathABCTest, DotTraversalAtEndOfPathIsNop) {
 }
 
 TEST_F(LlvmLibcRealpathABCTest, DotDotTraversalInPathMovesBack) {
-  ASSERT_STREQ(realpath(abspath("a/../b")), abspath("b").c_str());
+  ASSERT_STREQ(realpath(abspath("a/../a")), abspath("a").c_str());
 }
 
 TEST_F(LlvmLibcRealpathABCTest, DotDotTraversalAtEndOfPathMovesBack) {
@@ -108,7 +106,8 @@ TEST_F(LlvmLibcRealpathTest, FollowsSymlinkAtEndOfPath) {
                    .add_directory("dir")
                    .add_symlink("link", "dir")
                    .build();
-  ASSERT_STREQ(realpath(fs.absolute_path("link")), fs.absolute_path("dir").c_str());
+  ASSERT_STREQ(realpath(fs.absolute_path("link")),
+               fs.absolute_path("dir").c_str());
 }
 
 TEST_F(LlvmLibcRealpathTest, ErrorsIfTraversingFile) {
@@ -139,8 +138,8 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfNameTooLong) {
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   size_t nested_dir_count = 0;
   for (size_t s = 0; s < PATH_MAX; s += segment.size()) {
-    LIBC_NAMESPACE::mkdir(segment.data(), S_IRWXU);
-    LIBC_NAMESPACE::chdir(segment.data());
+    LIBC_NAMESPACE::internal::mkdir(segment.data(), S_IRWXU);
+    LIBC_NAMESPACE::internal::chdir(segment.data());
     nested_dir_count++;
   }
 
@@ -149,8 +148,8 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfNameTooLong) {
   ASSERT_ERRNO_EQ(ENAMETOOLONG);
 
   for (; nested_dir_count > 0; nested_dir_count--) {
-    LIBC_NAMESPACE::chdir("..");
-    LIBC_NAMESPACE::rmdir(segment.data());
+    LIBC_NAMESPACE::internal::chdir("..");
+    LIBC_NAMESPACE::internal::rmdir(segment.data());
   }
 }
 
