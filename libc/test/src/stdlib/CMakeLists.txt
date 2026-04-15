@@ -385,6 +385,8 @@ add_libc_test(
   DEPENDS
     libc.src.stdlib.realpath
     libc.src.unistd.chdir
+    libc.src.__support.CPP.string
+    libc.test.UnitTest.ErrnoCheckingTest
     libc.test.UnitTest.LibcFileSystemHelpers
 )
 

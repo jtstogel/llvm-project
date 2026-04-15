@@ -187,26 +187,6 @@ add_unittest_framework_library(
     libc.test.UnitTest.string_utils
 )
 
-add_unittest_framework_library(
-  LibcFileSystemHelpers
-  SRCS
-    FileSystemHelpers.cpp
-  HDRS
-    FileSystemHelpers.h
-  DEPENDS
-    LibcTest
-    libc.src.fcntl.open
-    libc.src.sys.stat.mkdir
-    libc.src.unistd.chdir
-    libc.src.unistd.close
-    libc.src.unistd.getcwd
-    libc.src.unistd.rmdir
-    libc.src.unistd.symlink
-    libc.src.unistd.unlink
-    libc.src.__support.CPP.string
-    libc.src.__support.CPP.vector
-)
-
 add_header_library(
   ErrnoSetterMatcher
   HDRS
@@ -226,4 +206,24 @@ add_header_library(
     libc.src.__support.common
     libc.src.__support.macros.properties.architectures
     libc.src.errno.errno
+)
+
+add_unittest_framework_library(
+  LibcFileSystemHelpers
+  SRCS
+    FileSystemHelpers.cpp
+  HDRS
+    FileSystemHelpers.h
+  DEPENDS
+    LibcTest
+    libc.src.fcntl.open
+    libc.src.sys.stat.mkdir
+    libc.src.unistd.chdir
+    libc.src.unistd.close
+    libc.src.unistd.getcwd
+    libc.src.unistd.rmdir
+    libc.src.unistd.symlink
+    libc.src.unistd.unlink
+    libc.src.__support.CPP.string
+    libc.src.__support.fixedvector
 )

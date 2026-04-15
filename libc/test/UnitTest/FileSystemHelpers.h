@@ -11,7 +11,7 @@
 
 #include "src/__support/CPP/string.h"
 #include "src/__support/CPP/string_view.h"
-#include "src/__support/CPP/vector.h"
+#include "src/__support/fixedvector.h"
 #include "src/__support/macros/config.h"
 
 namespace LIBC_NAMESPACE_DECL {
@@ -29,13 +29,16 @@ struct FileSystemEntry {
 // TestDir is an RAII object that maintains a temporary filesystem structure
 // and removes it upon destruction. It is created via a TestDirBuilder.
 class TestDir {
+public:
+  using FileSystemEntryVector = FixedVector<internal::FileSystemEntry, 32>;
+
+private:
   cpp::string root;
-  cpp::vector<internal::FileSystemEntry> entries;
+  FileSystemEntryVector entries;
 
 public:
   // TestDir takes ownership of the root path and the entries.
-  TestDir(cpp::string &&root_path,
-          cpp::vector<internal::FileSystemEntry> &&entries);
+  TestDir(cpp::string &&root_path, FileSystemEntryVector &&entries);
   ~TestDir();
 
   TestDir(const TestDir &) = delete;
@@ -51,33 +54,23 @@ public:
   cpp::string absolute_path(cpp::string_view relative_path) const;
 
 private:
+  cpp::string get_path(cpp::string_view relative_path) const {
+    return absolute_path(relative_path);
+  }
   void create_entry(const internal::FileSystemEntry &entry);
 };
 
 // TestDirBuilder allows declarative definition of a filesystem structure.
 class TestDirBuilder {
   cpp::string_view root_name;
-  cpp::vector<internal::FileSystemEntry> entries;
+  TestDir::FileSystemEntryVector entries;
 
 public:
   explicit TestDirBuilder(cpp::string_view name) : root_name(name) {}
 
-  TestDirBuilder &add_file(cpp::string path) {
-    entries.push_back({internal::FileSystemEntry::Type::File, cpp::move(path), ""});
-    return *this;
-  }
-
-  TestDirBuilder &add_directory(cpp::string path) {
-    entries.push_back(
-        {internal::FileSystemEntry::Type::Directory, cpp::move(path), ""});
-    return *this;
-  }
-
-  TestDirBuilder &add_symlink(cpp::string path, cpp::string target) {
-    entries.push_back({internal::FileSystemEntry::Type::Symlink, cpp::move(path),
-                       cpp::move(target)});
-    return *this;
-  }
+  TestDirBuilder &add_file(cpp::string path);
+  TestDirBuilder &add_directory(cpp::string path);
+  TestDirBuilder &add_symlink(cpp::string path, cpp::string target);
 
   // Materializes the defined structure to disk and returns an RAII TestDir.
   TestDir build();

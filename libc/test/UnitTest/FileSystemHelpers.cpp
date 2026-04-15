@@ -26,7 +26,7 @@ namespace LIBC_NAMESPACE_DECL {
 namespace testing {
 
 TestDir::TestDir(cpp::string &&root_path,
-                 cpp::vector<internal::FileSystemEntry> &&entries)
+                 TestDir::FileSystemEntryVector &&entries)
     : root(cpp::move(root_path)), entries(cpp::move(entries)) {
   LIBC_NAMESPACE::mkdir(root.c_str(), S_IRWXU);
   for (const auto &entry : this->entries) {
@@ -80,14 +80,36 @@ void TestDir::create_entry(const internal::FileSystemEntry &entry) {
 }
 
 TestDir TestDirBuilder::build() {
-  return TestDir(libc_make_test_file_path(cpp::string(root_name).c_str()),
+  return TestDir(cpp::string(static_cast<const char *>(
+                     libc_make_test_file_path(cpp::string(root_name).c_str()))),
                  cpp::move(entries));
+}
+
+TestDirBuilder &TestDirBuilder::add_file(cpp::string path) {
+  bool success = entries.push_back(
+      {internal::FileSystemEntry::Type::File, cpp::move(path), ""});
+  LIBC_ASSERT(success);
+  return *this;
+}
+
+TestDirBuilder &TestDirBuilder::add_directory(cpp::string path) {
+  bool success = entries.push_back(
+      {internal::FileSystemEntry::Type::Directory, cpp::move(path), ""});
+  LIBC_ASSERT(success);
+  return *this;
+}
+
+TestDirBuilder &TestDirBuilder::add_symlink(cpp::string path, cpp::string target) {
+  bool success = entries.push_back({internal::FileSystemEntry::Type::Symlink,
+                                    cpp::move(path), cpp::move(target)});
+  LIBC_ASSERT(success);
+  return *this;
 }
 
 ChangeDirGuard::ChangeDirGuard(cpp::string_view new_cwd) {
   char buf[PATH_MAX];
   if (LIBC_NAMESPACE::getcwd(buf, PATH_MAX)) {
-    old_cwd = buf;
+    old_cwd = cpp::string_view(buf);
     LIBC_NAMESPACE::chdir(cpp::string(new_cwd).c_str());
   }
 }
