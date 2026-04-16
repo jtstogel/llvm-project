@@ -37,7 +37,7 @@ public:
 };
 
 // Test for simple traversals using directory structure {test_dir}/a/b/c.
-class LlvmLibcRealpathABCTest : public ErrnoCheckingTest {
+class LlvmLibcRealpathABCTest : public LlvmLibcRealpathTest {
 public:
   static TestDir &test_dir() {
     static TestDir fs = TestDirBuilder("LlvmLibcRealpathABCTest")
@@ -48,18 +48,9 @@ public:
     return fs;
   }
 
-  LIBC_NAMESPACE::cpp::string abspath(LIBC_NAMESPACE::cpp::string_view path) {
+  LIBC_NAMESPACE::cpp::string abspath(const char *path) {
     return test_dir().absolute_path(path);
   }
-
-  char *realpath(const char *path) {
-    return LIBC_NAMESPACE::realpath(path, test_buf);
-  }
-  char *realpath(const LIBC_NAMESPACE::cpp::string &path) {
-    return realpath(path.c_str());
-  }
-
-  char test_buf[PATH_MAX];
 };
 
 TEST_F(LlvmLibcRealpathABCTest, DotTraversalInPathIsNop) {
@@ -108,6 +99,17 @@ TEST_F(LlvmLibcRealpathTest, FollowsSymlinkAtEndOfPath) {
                    .build();
   ASSERT_STREQ(realpath(fs.absolute_path("link")),
                fs.absolute_path("dir").c_str());
+}
+
+TEST_F(LlvmLibcRealpathTest, AllocatesResolvedPathIfNullPassed) {
+  TestDir fs = TestDirBuilder(getName())
+                   .add_directory("exists")
+                   .add_file("exists/file")
+                   .build();
+  char *resolved = LIBC_NAMESPACE::realpath(
+      fs.absolute_path("exists//file").c_str(), nullptr);
+  ASSERT_STREQ(resolved, fs.absolute_path("exists/file").c_str());
+  ::free(resolved);
 }
 
 TEST_F(LlvmLibcRealpathTest, ErrorsIfTraversingFile) {
@@ -168,17 +170,6 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfFinalSegmentDoesNotExist) {
   ASSERT_EQ(realpath(fs.absolute_path("exists/file")),
             static_cast<char *>(nullptr));
   ASSERT_ERRNO_EQ(ENOENT);
-}
-
-TEST_F(LlvmLibcRealpathTest, AllocatesResolvedPathIfNullPassed) {
-  TestDir fs = TestDirBuilder(getName())
-                   .add_directory("exists")
-                   .add_file("exists/file")
-                   .build();
-  char *resolved = LIBC_NAMESPACE::realpath(
-      fs.absolute_path("exists//file").c_str(), nullptr);
-  ASSERT_STREQ(resolved, fs.absolute_path("exists/file").c_str());
-  free(resolved);
 }
 
 TEST_F(LlvmLibcRealpathTest, ErrorsIfPathIsEmpty) {

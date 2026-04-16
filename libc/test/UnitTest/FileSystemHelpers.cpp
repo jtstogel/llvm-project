@@ -27,17 +27,19 @@ TestDir::TestDir(cpp::string &&root_path,
 }
 
 TestDir::~TestDir() {
-  if (root.empty())
+  if (root.empty()) {
     return;
+  }
 
   // Iterate in reverse to remove files before their parent directories.
   for (size_t i = entries.size(); i > 0; --i) {
     const auto &entry = entries[i - 1];
     cpp::string full_path = get_path(entry.path);
-    if (entry.type == internal::FileSystemEntry::Type::Directory)
+    if (entry.type == internal::FileSystemEntry::Type::Directory) {
       LIBC_NAMESPACE::internal::rmdir(full_path.c_str());
-    else
+    } else {
       LIBC_NAMESPACE::internal::unlink(full_path.c_str());
+    }
   }
 
   LIBC_NAMESPACE::internal::rmdir(root.c_str());
@@ -45,8 +47,9 @@ TestDir::~TestDir() {
 
 cpp::string TestDir::absolute_path(cpp::string_view relative_path) const {
   cpp::string full_path = root;
-  if (!relative_path.empty() && relative_path[0] != '/')
+  if (!relative_path.empty() && relative_path[0] != '/') {
     full_path += "/";
+  }
   full_path += relative_path;
   return full_path;
 }
@@ -73,10 +76,17 @@ void TestDir::create_entry(const internal::FileSystemEntry &entry) {
 }
 
 TestDir TestDirBuilder::build() {
-  return TestDir(
-    cpp::string(libc_make_test_file_path(root_name.c_str())),
-    cpp::move(entries)
-  );
+  cpp::string root_path =
+      static_cast<const char *>(libc_make_test_file_path(root_name.data()));
+  if (!root_path.empty() && root_path[0] != '/') {
+    char buf[PATH_MAX];
+    LIBC_ASSERT(LIBC_NAMESPACE::internal::getcwd(buf, PATH_MAX));
+    cpp::string absolute_root = buf;
+    absolute_root += "/";
+    absolute_root += root_path;
+    root_path = absolute_root;
+  }
+  return TestDir(cpp::move(root_path), cpp::move(entries));
 }
 
 TestDirBuilder &TestDirBuilder::add_file(cpp::string path) {
