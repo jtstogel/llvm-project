@@ -113,7 +113,6 @@ TEST_F(LlvmLibcRealpathTest, FollowsSymlinkAtEndOfPath) {
 TEST_F(LlvmLibcRealpathTest, ErrorsIfTraversingFile) {
   TestDir fs = TestDirBuilder(getName()).add_file("file").build();
 
-  // Test error -- ENOTDIR.
   ASSERT_EQ(realpath(fs.absolute_path("file/other_file")),
             static_cast<char *>(nullptr));
   ASSERT_ERRNO_EQ(ENOTDIR);
@@ -143,7 +142,6 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfNameTooLong) {
     nested_dir_count++;
   }
 
-  // Test error -- ENAMETOOLONG.
   ASSERT_EQ(realpath("."), static_cast<char *>(nullptr));
   ASSERT_ERRNO_EQ(ENAMETOOLONG);
 
@@ -154,14 +152,12 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfNameTooLong) {
 }
 
 TEST_F(LlvmLibcRealpathTest, ErrorsIfPathIsNull) {
-  // Test error -- EINVAL.
   ASSERT_EQ(realpath(nullptr), static_cast<char *>(nullptr));
   ASSERT_ERRNO_EQ(EINVAL);
 }
 
 TEST_F(LlvmLibcRealpathTest, ErrorsIfPathDirectoryDoesNotExists) {
   TestDir fs = TestDirBuilder(getName()).add_directory("exists").build();
-  // Test error -- ENOENT.
   ASSERT_EQ(realpath(fs.absolute_path("does_not_exist/file")),
             static_cast<char *>(nullptr));
   ASSERT_ERRNO_EQ(ENOENT);
@@ -169,7 +165,6 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfPathDirectoryDoesNotExists) {
 
 TEST_F(LlvmLibcRealpathTest, ErrorsIfFinalSegmentDoesNotExist) {
   TestDir fs = TestDirBuilder(getName()).add_directory("exists").build();
-  // Test error -- ENOENT.
   ASSERT_EQ(realpath(fs.absolute_path("exists/file")),
             static_cast<char *>(nullptr));
   ASSERT_ERRNO_EQ(ENOENT);
@@ -187,7 +182,6 @@ TEST_F(LlvmLibcRealpathTest, AllocatesResolvedPathIfNullPassed) {
 }
 
 TEST_F(LlvmLibcRealpathTest, ErrorsIfPathIsEmpty) {
-  // Test error -- ENOENT.
   ASSERT_EQ(realpath(""), static_cast<char *>(nullptr));
   ASSERT_ERRNO_EQ(ENOENT);
 }

@@ -73,17 +73,10 @@ void TestDir::create_entry(const internal::FileSystemEntry &entry) {
 }
 
 TestDir TestDirBuilder::build() {
-  char buf[PATH_MAX];
-  cpp::string root;
-  if (LIBC_NAMESPACE::internal::getcwd(buf, PATH_MAX).has_value()) {
-    root = cpp::string(static_cast<const char *>(buf));
-    if (root[root.size() - 1] != '/')
-      root += "/";
-  }
-  root += static_cast<const char *>(
-      libc_make_test_file_path(cpp::string(root_name).c_str()));
-
-  return TestDir(cpp::move(root), cpp::move(entries));
+  return TestDir(
+    cpp::string(libc_make_test_file_path(root_name.c_str())),
+    cpp::move(entries)
+  );
 }
 
 TestDirBuilder &TestDirBuilder::add_file(cpp::string path) {

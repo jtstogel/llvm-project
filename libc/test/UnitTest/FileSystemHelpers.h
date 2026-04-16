@@ -71,7 +71,7 @@ public:
   TestDir build();
 
 private:
-  cpp::string_view root_name;
+  cpp::string root_name;
   TestDir::FileSystemEntryVector entries;
 };
 

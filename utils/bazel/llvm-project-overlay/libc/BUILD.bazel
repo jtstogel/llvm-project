@@ -498,6 +498,11 @@ libc_support_library(
     hdrs = ["hdr/sys_auxv_macros.h"],
 )
 
+libc_support_library(
+    name = "hdr_sys_stat_macros",
+    hdrs = ["hdr/sys_stat_macros.h"],
+)
+
 ############################ Type Proxy Header Files ###########################
 
 libc_support_library(
@@ -617,8 +622,50 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "types_blkcnt_t",
+    hdrs = ["hdr/types/blkcnt_t.h"],
+)
+
+libc_support_library(
+    name = "types_blksize_t",
+    hdrs = ["hdr/types/blksize_t.h"],
+)
+
+libc_support_library(
+    name = "types_dev_t",
+    hdrs = ["hdr/types/dev_t.h"],
+)
+
+libc_support_library(
+    name = "types_ino_t",
+    hdrs = ["hdr/types/ino_t.h"],
+)
+
+libc_support_library(
+    name = "types_nlink_t",
+    hdrs = ["hdr/types/nlink_t.h"],
+)
+
+libc_support_library(
     name = "types_struct_rlimit",
     hdrs = ["hdr/types/struct_rlimit.h"],
+)
+
+libc_support_library(
+    name = "types_struct_stat",
+    hdrs = ["hdr/types/struct_stat.h"],
+    deps = [
+        ":types_blkcnt_t",
+        ":types_blksize_t",
+        ":types_dev_t",
+        ":types_gid_t",
+        ":types_ino_t",
+        ":types_mode_t",
+        ":types_nlink_t",
+        ":types_off_t",
+        ":types_struct_timespec",
+        ":types_uid_t",
+    ],
 )
 
 libc_support_library(
@@ -629,6 +676,11 @@ libc_support_library(
 libc_support_library(
     name = "types_uid_t",
     hdrs = ["hdr/types/uid_t.h"],
+)
+
+libc_support_library(
+    name = "types_gid_t",
+    hdrs = ["hdr/types/gid_t.h"],
 )
 
 libc_support_library(
@@ -1959,6 +2011,137 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_getcwd",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/getcwd.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_lstat",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/lstat.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":__support_osutil_vdso",
+        ":hdr_fcntl_macros",
+        ":hdr_sys_stat_macros",
+        ":types_struct_stat",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_readlink",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/readlink.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_fcntl_macros",
+        ":types_ssize_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_chdir",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/chdir.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_mkdir",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/mkdir.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_fcntl_macros",
+        ":types_mode_t",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_rmdir",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/rmdir.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_fcntl_macros",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_symlink",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/symlink.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_fcntl_macros",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_linux_syscall_wrappers_unlink",
+    hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/unlink.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":hdr_fcntl_macros",
+    ],
+)
+
+libc_support_library(
     name = "__support_osutil_linux_syscall_wrappers_read",
     hdrs = ["src/__support/OSUtil/linux/syscall_wrappers/read.h"],
     target_compatible_with = select({
@@ -2107,6 +2290,30 @@ libc_support_library(
         ":__support_common",
         ":__support_macros_config",
         ":__support_osutil_syscall",
+    ],
+)
+
+libc_support_library(
+    name = "__support_osutil_filesystem",
+    hdrs = ["src/__support/OSUtil/filesystem.h"],
+    textual_hdrs = select({
+        "@platforms//os:linux": ["src/__support/OSUtil/linux/filesystem.h"],
+    }),
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_macros_properties_architectures",
+        ":__support_osutil_linux_syscall_wrappers_chdir",
+        ":__support_osutil_linux_syscall_wrappers_close",
+        ":__support_osutil_linux_syscall_wrappers_getcwd",
+        ":__support_osutil_linux_syscall_wrappers_lstat",
+        ":__support_osutil_linux_syscall_wrappers_mkdir",
+        ":__support_osutil_linux_syscall_wrappers_open",
+        ":__support_osutil_linux_syscall_wrappers_readlink",
+        ":__support_osutil_linux_syscall_wrappers_rmdir",
+        ":__support_osutil_linux_syscall_wrappers_symlink",
+        ":__support_osutil_linux_syscall_wrappers_unlink",
+        ":types_mode_t",
     ],
 )
 
@@ -9387,6 +9594,26 @@ libc_function(
         ":__support_macros_config",
         ":__support_str_to_float",
         ":errno",
+    ],
+)
+
+libc_function(
+    name = "realpath",
+    srcs = ["src/stdlib/linux/realpath.cpp"],
+    hdrs = ["src/stdlib/realpath.h"],
+    deps = [
+        ":__support_common",
+        ":__support_error_or",
+        ":__support_libc_errno",
+        ":__support_macros_config",
+        ":__support_osutil_filesystem",
+        ":__support_osutil_vdso",
+        ":errno",
+        ":func_malloc",
+        ":hdr_sys_stat_macros",
+        ":string_memory_utils",
+        ":string_utils",
+        ":types_struct_stat",
     ],
 )
 

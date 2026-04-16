@@ -17,10 +17,8 @@ add_entrypoint_object(
     ../realpath.h
   DEPENDS
     libc.hdr.func.malloc
-    libc.hdr.func.free
     libc.src.__support.common
-    libc.src.__support.CPP.string
-    libc.src.__support.CPP.string_view
+    libc.src.__support.error_or
     libc.src.__support.macros.config
     libc.src.__support.OSUtil.osutil
     libc.src.__support.OSUtil.linux.syscall_wrappers.getcwd
@@ -28,5 +26,6 @@ add_entrypoint_object(
     libc.src.__support.OSUtil.linux.syscall_wrappers.readlink
     libc.src.errno.errno
     libc.src.string.memory_utils.inline_memcpy
+    libc.src.string.memory_utils.inline_memmove
     libc.src.string.string_utils
 )
