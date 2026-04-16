@@ -27,6 +27,8 @@ namespace LIBC_NAMESPACE_DECL {
 
 namespace {
 
+constexpr size_t kMaxSymlinkFollows = 40;
+
 struct monostate {};
 
 // Type alias for clearer function signatures.
@@ -59,7 +61,7 @@ public:
 
   cpp::string_view view() const { return {buf, len}; }
 
-  MaybeError push(cpp::string_view comp) {
+  MaybeError push_component(cpp::string_view comp) {
     size_t add = (len > 1 ? 1 : 0) + comp.size();
     if (len + add + 1 > cap) {
       return Error(ENAMETOOLONG);
@@ -108,47 +110,48 @@ private:
   size_t cap;
 };
 
-class PathQueue {
+class PathComponentQueue {
   char *buf;
-  size_t cap;
+  size_t capacity;
   size_t pos;
   size_t end;
 
-  PathQueue(char *buffer, size_t capacity, size_t length)
-      : buf(buffer), cap(capacity), pos(0), end(length) {}
+  PathComponentQueue(char *buffer, size_t capacity, size_t length)
+      : buf(buffer), capacity(capacity), pos(0), end(length) {}
 
 public:
-  static ErrorOr<PathQueue> make(char *buffer, size_t capacity,
-                                 cpp::string_view path) {
-    if (path.size() + 1 > capacity) {
+  static ErrorOr<PathComponentQueue> make(char *buffer, size_t capacity,
+                                          cpp::string_view path) {
+    if (path.size() + 1 > capacity)
       return Error(ENAMETOOLONG);
-    }
+
     inline_memcpy(buffer, path.data(), path.size());
     buffer[path.size()] = '\0';
-    return PathQueue(buffer, capacity, path.size());
+
+    return PathComponentQueue(buffer, capacity, path.size());
   }
 
-  cpp::string_view next() {
+  cpp::optional<cpp::string_view> next() {
     while (pos < end && buf[pos] == '/') {
       ++pos;
     }
     if (pos >= end) {
-      return {};
+      return cpp::nullopt;
     }
     size_t start = pos;
     while (pos < end && buf[pos] != '/') {
       ++pos;
     }
-    return {buf + start, pos - start};
+    return cpp::string_view(buf + start, pos - start);
   }
 
-  bool has_more() const { return pos < end; }
+  bool empty() const { return pos >= end; }
 
-  MaybeError prepend(cpp::string_view p) {
+  MaybeError prepend_path(cpp::string_view p) {
     size_t remaining = end - pos;
     size_t sep = (remaining > 0) ? 1 : 0;
     size_t new_end = p.size() + sep + remaining;
-    if (new_end + 1 > cap) {
+    if (new_end + 1 > capacity) {
       return Error(ENAMETOOLONG);
     }
     inline_memmove(buf + p.size() + sep, buf + pos, remaining);
@@ -177,67 +180,71 @@ private:
   char *ptr_;
 };
 
-MaybeError resolve(PathBuilder &builder, PathQueue &queue, char *link_buf,
-                   size_t link_cap, int &symlinks_left) {
-  while (true) {
-    auto comp = queue.next();
-    if (comp.empty()) {
-      break;
-    }
+MaybeError resolve(PathBuilder &builder, PathComponentQueue &queue,
+                   char *link_buf, size_t link_cap) {
+  size_t symlinks_followed = 0;
 
-    if (comp == ".") {
+  while (true) {
+    cpp::optional<cpp::string_view> component = queue.next();
+    if (!component)
+      break;
+
+    // "//" and "/./" are both treated as the current directory.
+    if (component->empty() || *component == ".")
       continue;
-    }
-    if (comp == "..") {
+
+    // ".." moves up towards the root by one directory.
+    if (*component == "..") {
       builder.pop_component();
       continue;
     }
 
-    if (auto res = builder.push(comp); !res) {
+    MaybeError res = builder.push_component(*component);
+    if (!res)
       return res;
-    }
 
     struct stat st;
-    auto lstat_res = internal::lstat(builder.view().data(), &st);
-    if (!lstat_res) {
+    ErrorOr<int> lstat_res = internal::lstat(builder.view().data(), &st);
+    if (!lstat_res)
       return Error(lstat_res.error());
-    }
 
     if (S_ISLNK(st.st_mode)) {
-      if (symlinks_left <= 0) {
+      if (symlinks_followed > kMaxSymlinkFollows)
         return Error(ELOOP);
-      }
-      symlinks_left -= 1;
+      symlinks_followed++;
 
-      auto readlink_res =
+      ErrorOr<ssize_t> readlink_bytes_written =
           internal::readlink(builder.view().data(), link_buf, link_cap);
-      if (!readlink_res) {
-        return Error(readlink_res.error());
-      }
+      if (!readlink_bytes_written)
+        return Error(readlink_bytes_written.error());
 
-      size_t link_len = static_cast<size_t>(readlink_res.value());
-      if (link_len >= link_cap) {
+      // Check if the name exceeds link_buf's capacity and was truncated.
+      size_t link_len = static_cast<size_t>(*readlink_bytes_written);
+      if (link_len >= link_cap)
         return Error(ENAMETOOLONG);
-      }
 
+      // Construct a string view, as readlink does not null-terminate.
       cpp::string_view target(link_buf, link_len);
 
-      builder.pop_component();
-      if (!target.empty() && target[0] == '/') {
-        if (auto res = builder.reset("/"); !res) {
+      if (target.starts_with("/")) {
+        MaybeError res = builder.reset("/");
+        if (!res)
           return res;
-        }
+      } else {
+        // Relative symlink, so just drop the last component.
+        builder.pop_component();
       }
 
-      if (auto res = queue.prepend(target); !res) {
+      // Prepend the new target.
+      MaybeError res = queue.prepend_path(target);
+      if (!res)
         return res;
-      }
+
       continue;
     }
 
-    if (queue.has_more() && !S_ISDIR(st.st_mode)) {
+    if (!queue.empty() && !S_ISDIR(st.st_mode))
       return Error(ENOTDIR);
-    }
   }
 
   return ok();
@@ -245,50 +252,42 @@ MaybeError resolve(PathBuilder &builder, PathQueue &queue, char *link_buf,
 
 ErrorOr<char *> realpath_impl(const char *__restrict path,
                               char *__restrict resolved) {
-  if (path == nullptr) {
+  if (path == nullptr)
     return Error(EINVAL);
-  }
 
   cpp::string_view path_view(path);
-  if (path_view.empty()) {
+  if (path_view.empty())
     return Error(ENOENT);
-  }
 
   const size_t path_max = PATH_MAX;
 
+  // Allocate memory for the resolved path if `resolved` is null.
   char *out = resolved;
-  if (out == nullptr) {
+  if (resolved == nullptr) {
     out = reinterpret_cast<char *>(::malloc(path_max));
-    if (out == nullptr) {
+    if (out == nullptr)
       return Error(ENOMEM);
-    }
   }
   MallocGuard malloc_guard(resolved == nullptr ? out : nullptr);
 
   char queue_buf[path_max];
   char link_buf[path_max];
 
-  auto builder = [&path_view, out]() -> ErrorOr<PathBuilder> {
-    if (path_view.starts_with("/")) {
-      return PathBuilder::AtRootDir(out, path_max);
-    }
-    return PathBuilder::AtCurrentWorkingDir(out, path_max);
-  }();
-  if (!builder.has_value()) {
-    return Error(builder.error());
-  }
+  ErrorOr<PathBuilder> path_builder =
+      path_view.starts_with("/")
+          ? PathBuilder::AtRootDir(out, path_max)
+          : PathBuilder::AtCurrentWorkingDir(out, path_max);
+  if (!path_builder)
+    return Error(path_builder.error());
 
-  auto queue_res = PathQueue::make(queue_buf, path_max, path_view);
-  if (!queue_res) {
-    return Error(queue_res.error());
-  }
-  PathQueue queue = queue_res.value();
+  ErrorOr<PathComponentQueue> queue =
+      PathComponentQueue::make(queue_buf, path_max, path_view);
+  if (!queue)
+    return Error(queue.error());
 
-  int symlinks_left = 40;
-  auto res = resolve(*builder, queue, link_buf, path_max, symlinks_left);
-  if (!res) {
+  MaybeError res = resolve(*path_builder, *queue, link_buf, path_max);
+  if (!res)
     return Error(res.error());
-  }
 
   malloc_guard.release();
   return out;
@@ -298,7 +297,7 @@ ErrorOr<char *> realpath_impl(const char *__restrict path,
 
 LLVM_LIBC_FUNCTION(char *, realpath,
                    (const char *__restrict path, char *__restrict resolved)) {
-  auto res = realpath_impl(path, resolved);
+  ErrorOr<char *> res = realpath_impl(path, resolved);
   if (!res) {
     libc_errno = res.error();
     return nullptr;

@@ -120,6 +120,24 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfTraversingFile) {
   ASSERT_ERRNO_EQ(ENOTDIR);
 }
 
+TEST_F(LlvmLibcRealpathTest, ErrorsIfTraversingFileNotOnCriticalPath) {
+  TestDir fs = TestDirBuilder(getName())
+                   .add_directory("dir")
+                   .add_file("dir/file")
+                   .build();
+
+  ASSERT_EQ(realpath(fs.absolute_path("dir/file/..")),
+            static_cast<char *>(nullptr));
+  ASSERT_ERRNO_EQ(ENOTDIR);
+}
+
+TEST_F(LlvmLibcRealpathTest, ErrorsIfTrailingSlashOnFile) {
+  TestDir fs = TestDirBuilder(getName()).add_file("file").build();
+
+  ASSERT_EQ(realpath(fs.absolute_path("file/")), static_cast<char *>(nullptr));
+  ASSERT_ERRNO_EQ(ENOTDIR);
+}
+
 TEST_F(LlvmLibcRealpathTest, ErrorsIfTooManySymlinkTraversals) {
   TestDir fs = TestDirBuilder(getName())
                    .add_symlink("a", "b")
