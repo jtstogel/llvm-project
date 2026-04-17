@@ -54,37 +54,9 @@ using MaybeError = ErrorOr<Success>;
 // Path separator.
 constexpr char kPathSep = '/';
 
-// Reads the current working directory into the path buffer,
-// resizing until path_max bytes is met.
-//
-// Consumers may assume the resulting string is null-terminated.
-// Returns the size of the current working dir.
-ErrorOr<size_t> getcwd(PathBuffer &buf, size_t path_max) {
-  ErrorOr<int> res = internal::getcwd(buf.data(), buf.capacity());
-  while (!res && res.error() == ERANGE) {
-    if (buf.capacity() > path_max)
-      return Error(ENAMETOOLONG);
-
-    if (!buf.reserve(2 * buf.capacity()))
-      return Error(ENOMEM);
-
-    res = internal::getcwd(buf.data(), buf.capacity());
-  }
-
-  if (!res)
-    return Error(res.error());
-
-  // TODO: replace with strlen.
-  size_t len = 0;
-  while (buf[len] != '\0') {
-    len++;
-  }
-  return len;
-}
-
 // Whether the provided path starts at the filesystem root.
 LIBC_INLINE bool is_absolute_path(cpp::string_view path) {
-  return path.starts_with("/");
+  return path.starts_with(kPathSep);
 }
 
 // Builder for canonical paths.
@@ -172,12 +144,23 @@ public:
     null_terminate();
   }
 
-  // Resets the builder to point to the current working directory.
+  // Sets the builder to point to the current working directory.
   [[nodiscard]] MaybeError set_to_cwd() {
-    ErrorOr<size_t> cwd_size = getcwd(buf_, path_max_);
-    if (!cwd_size)
-      return Error(cwd_size.error());
-    size_ = *cwd_size;
+    ErrorOr<int> res = internal::getcwd(buf_.data(), buf_.capacity());
+    while (!res && res.error() == ERANGE) {
+      if (buf_.capacity() > path_max_)
+        return Error(ENAMETOOLONG);
+
+      if (!buf_.reserve(2 * buf_.capacity()))
+        return Error(ENOMEM);
+
+      res = internal::getcwd(buf_.data(), buf_.capacity());
+    }
+
+    if (!res)
+      return Error(res.error());
+
+    size_ = internal::string_length(buf_.data());
     return Success{};
   }
 
