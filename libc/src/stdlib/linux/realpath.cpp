@@ -13,10 +13,12 @@
 #include "src/__support/CPP/optional.h"
 #include "src/__support/CPP/string_view.h"
 #include "src/__support/OSUtil/filesystem.h"
+#include "src/__support/char_vector.h"
 #include "src/__support/common.h"
 #include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/sso_buffer.h"
 #include "src/string/memory_utils/inline_memcpy.h"
 #include "src/string/memory_utils/inline_memmove.h"
 #include "src/string/string_length.h"
@@ -27,166 +29,275 @@ namespace LIBC_NAMESPACE_DECL {
 
 namespace {
 
+// A buffer for path strings.
+//
+// Unlikely to have paths with length greater than 256 bytes,
+// so use SSOBuffer, which starts on the stack and spills
+// to the heap when necessary.
+//
+// We don't use static buffers of size PATH_MAX,
+// since some systems allow dynamic sizing for the maximum path length.
+// Futher, there is no restriction that the maximum length on a system
+// is a reasonable size.
+using PathBuffer = SSOBuffer<256>;
+
+// Maximum number of symlinks to follow when resolving a path.
+// TODO: look this up.
 constexpr size_t kMaxSymlinkFollows = 40;
 
-struct monostate {};
+// Sentinel value for error handling.
+struct Success {};
 
-// Type alias for clearer function signatures.
-using MaybeError = ErrorOr<monostate>;
+// A potentially set error value.
+using MaybeError = ErrorOr<Success>;
 
-// Constructor for non-errors.
-MaybeError ok() { return monostate{}; }
+// Path separator.
+constexpr char kPathSep = '/';
+
+// Reads the current working directory into the path buffer,
+// resizing until path_max bytes is met.
+//
+// Consumers may assume the resulting string is null-terminated.
+// Returns the size of the current working dir.
+ErrorOr<size_t> getcwd(PathBuffer &buf, size_t path_max) {
+  ErrorOr<int> res = internal::getcwd(buf.data(), buf.capacity());
+  while (!res && res.error() == ERANGE) {
+    if (buf.capacity() > path_max)
+      return Error(ENAMETOOLONG);
+
+    if (!buf.reserve(2 * buf.capacity()))
+      return Error(ENOMEM);
+
+    res = internal::getcwd(buf.data(), buf.capacity());
+  }
+
+  if (!res)
+    return Error(res.error());
+
+  // TODO: replace with strlen.
+  size_t len = 0;
+  while (buf[len] != '\0') {
+    len++;
+  }
+  return len;
+}
+
+// Whether the provided path starts at the filesystem root.
+LIBC_INLINE bool is_absolute_path(cpp::string_view path) {
+  return path.starts_with("/");
+}
 
 // Builder for canonical paths.
-class PathBuilder {
+//
+// The path held by this class is always:
+// - Absolute (starts at the filesystem root).
+// - Devoid of symlinks.
+// - Without a trailing '/'.
+// - Null terminated.
+// - Shorter than the provided `path_max`.
+class CanonicalPath {
+  size_t size_ = 0;
+  size_t path_max_;
+
+  // Note that the path is not necessarily null terminated,
+  // so best to only access via `view()`.
+  PathBuffer buf_;
+
 public:
-  static ErrorOr<PathBuilder> AtCurrentWorkingDir(char *buffer,
-                                                  size_t capacity) {
-    auto res = internal::getcwd(buffer, capacity);
-    if (!res) {
-      return Error(res.error());
-    }
-    size_t length = internal::string_length(buffer);
-    return PathBuilder(buffer, length, capacity);
+  CanonicalPath(size_t path_max) : path_max_(path_max) {
+    set_to_filesystem_root();
   }
 
-  static ErrorOr<PathBuilder> AtRootDir(char *buffer, size_t capacity) {
-    PathBuilder builder = PathBuilder(buffer, 0, capacity);
-    MaybeError res = builder.reset("/");
-    if (!res) {
-      return Error(res.error());
-    }
-    return builder;
+  cpp::string_view view() const { return cpp::string_view(buf_.data(), size_); }
+
+  size_t size() const { return size_; }
+
+  // Releases the internal buffer.
+  ErrorOr<char *> release() {
+    char *res = buf_.release();
+    size_ = 0;
+    if (res == nullptr)
+      return Error(ENOMEM);
+    return res;
   }
 
-  cpp::string_view view() const { return {buf, len}; }
+  // Adds a path component.
+  // The component must be non-empty and devoid of `/` separators.
+  //
+  // For example, `push_component("component")` mutates PathBuilder
+  // so that `/path/to/dir` -> `/path/to/dir/component`.
+  MaybeError push_component(cpp::string_view component) {
+    // +2 for to account for the separator and null-terminator.
+    size_t required_capacity = size_ + component.size() + 2;
 
-  MaybeError push_component(cpp::string_view comp) {
-    size_t add = (len > 1 ? 1 : 0) + comp.size();
-    if (len + add + 1 > cap) {
+    // POSIX requires failures when an intermediary path exceeds
+    // the maximum path.
+    if (required_capacity > path_max_)
       return Error(ENAMETOOLONG);
-    }
-    if (len > 1) {
-      buf[len++] = '/';
-    }
-    inline_memcpy(buf + len, comp.data(), comp.size());
-    len += comp.size();
-    buf[len] = '\0';
-    return ok();
+
+    if (!buf_.reserve(required_capacity))
+      return Error(ENOMEM);
+
+    buf_[size_] = kPathSep;
+    size_++;
+
+    inline_memcpy(&buf_[size_], component.data(), component.size());
+
+    null_terminate();
+    return Success{};
   }
 
-  // Pops the last component from the path.
-  // For example `/path/to/dir` -> `/path/to`.
+  // Pops the last component from this path.
+  //
+  // For example, mutates PathBuilder
+  // so that `/path/to/dir/component` -> `/path/to/dir`.
   void pop_component() {
-    if (len <= 1) {
+    size_t idx = view().find_last_of(kPathSep);
+    if (idx == 0 || idx == cpp::string_view::npos) {
+      // Don't allow popping past the FS root.
+      set_to_filesystem_root();
       return;
     }
-    while (len > 1 && buf[len - 1] != '/') {
-      --len;
-    }
-    if (len > 1) {
-      --len; // strip the slash itself
-    }
-    buf[len] = '\0';
+
+    // Pop by shrinking size_.
+    size_ = idx;
+    null_terminate();
   }
 
-  // Completely resets the builder.
-  MaybeError reset(cpp::string_view abs_path) {
-    if (abs_path.size() + 1 > cap) {
-      return Error(ENAMETOOLONG);
-    }
-    inline_memcpy(buf, abs_path.data(), abs_path.size());
-    len = abs_path.size();
-    buf[len] = '\0';
-    return ok();
+  // Resets the builder to point to the filesystem's root.
+  void set_to_filesystem_root() {
+    static_assert(PathBuffer::kInitialSize >= 2);
+    buf_[0] = kPathSep;
+    size_ = 1;
+    null_terminate();
+  }
+
+  // Resets the builder to point to the current working directory.
+  [[nodiscard]] MaybeError set_to_cwd() {
+    ErrorOr<size_t> cwd_size = getcwd(buf_, path_max_);
+    if (!cwd_size)
+      return Error(cwd_size.error());
+    size_ = *cwd_size;
+    return Success{};
+  }
+
+  const char *c_str() const {
+    // We maintain that the internal buffer is null-terminated,
+    // so safe to return as-is.
+    return buf_.data();
   }
 
 private:
-  PathBuilder(char *buffer, size_t len, size_t capacity)
-      : buf(buffer), len(len), cap(capacity) {}
-
-  char *buf;
-  size_t len;
-  size_t cap;
+  void null_terminate() { buf_[size_] = '\0'; }
 };
 
-class PathComponentQueue {
-  char *buf;
-  size_t capacity;
-  size_t pos;
-  size_t end;
+// A stack of path components.
+// Used to track unprocessed components of a user's `realpath` query.
+class PathComponentStack {
+  // Start of the next component to return.
+  size_t start_ = 0;
 
-  PathComponentQueue(char *buffer, size_t capacity, size_t length)
-      : buf(buffer), capacity(capacity), pos(0), end(length) {}
+  // End of the current path string in buf_.
+  size_t end_ = 0;
 
-public:
-  static ErrorOr<PathComponentQueue> make(char *buffer, size_t capacity,
-                                          cpp::string_view path) {
-    if (path.size() + 1 > capacity)
-      return Error(ENAMETOOLONG);
+  const size_t path_max_;
 
-    inline_memcpy(buffer, path.data(), path.size());
-    buffer[path.size()] = '\0';
+  // buf_ stores the components in the stack.
+  // It's represented just as a normal POSIX path.
+  //
+  // "popping" from the stack advances start_ past a path component.
+  // "pushing" to the stack prepends the path with new components.
+  //
+  // This could perhaps be made more efficient by storing components
+  // in reverse order so that we never need to prepend to buf_'s data,
+  // which requires a memmove+memcpy.
+  PathBuffer buf_;
 
-    return PathComponentQueue(buffer, capacity, path.size());
+  cpp::string_view active_data() {
+    return start_ >= end_ ? cpp::string_view("")
+                          : cpp::string_view(buf_.data(), start_).substr(end_);
   }
 
-  cpp::optional<cpp::string_view> next() {
-    while (pos < end && buf[pos] == '/') {
-      ++pos;
-    }
-    if (pos >= end) {
+public:
+  PathComponentStack(size_t path_max) : path_max_(path_max) {}
+
+  // Gets the next path component, or cpp::nullopt if empty.
+  cpp::optional<cpp::string_view> pop() {
+    if (start_ >= end_)
       return cpp::nullopt;
-    }
-    size_t start = pos;
-    while (pos < end && buf[pos] != '/') {
-      ++pos;
-    }
-    return cpp::string_view(buf + start, pos - start);
+
+    cpp::string_view v(buf_.data(), end_);
+    size_t slash_idx = v.find_first_of(kPathSep, start_);
+    cpp::string_view result = v.substr(start_, slash_idx);
+
+    // Advance start_ for future calls.
+    start_ = slash_idx == cpp::string_view::npos ? end_ : slash_idx + 1;
+
+    return result;
   }
 
-  bool empty() const { return pos >= end; }
+  // Whether there are no more components in this stack.
+  bool empty() const { return start_ >= end_; }
 
-  MaybeError prepend_path(cpp::string_view p) {
-    size_t remaining = end - pos;
-    size_t sep = (remaining > 0) ? 1 : 0;
-    size_t new_end = p.size() + sep + remaining;
-    if (new_end + 1 > capacity) {
+  // Pushes the components of `path` onto the stack,
+  // with the directory closest to root pushed last.
+  //
+  // `path` is allowed to be absolute or relative.
+  //
+  // For example, if pushing "path/to/dir",
+  // then the next `pop()` operation will yield "path".
+  MaybeError push_components(cpp::string_view path) {
+    cpp::string_view data = active_data();
+    bool requires_sep = !path.empty() && !path.ends_with(kPathSep) &&
+                        !data.empty() && !data.starts_with(kPathSep);
+    size_t required_size = path.size() + (requires_sep ? 1 : 0) + data.size();
+
+    if (required_size > path_max_)
       return Error(ENAMETOOLONG);
-    }
-    inline_memmove(buf + p.size() + sep, buf + pos, remaining);
-    inline_memcpy(buf, p.data(), p.size());
-    if (sep) {
-      buf[p.size()] = '/';
-    }
-    end = new_end;
-    buf[end] = '\0';
-    pos = 0;
-    return ok();
   }
 };
 
-class MallocGuard {
+class ReadlinkBuffer {
+  size_t path_max_;
+  PathBuffer buf_;
+
 public:
-  MallocGuard(char *p) : ptr_(p) {}
-  ~MallocGuard() { ::free(ptr_); }
+  ReadlinkBuffer(size_t path_max) : path_max_(path_max) {}
 
-  void release() { ptr_ = nullptr; }
+  // Reads a symlink, returning a view backed by this buffer.
+  // Future calls to `readlink` will invalidate the view.
+  //
+  // The backing string is _not_ null-terminated.
+  ErrorOr<cpp::string_view> readlink(const char *link) {
+    ErrorOr<ssize_t> size =
+        internal::readlink(link, buf_.data(), buf_.capacity());
 
-  MallocGuard(const MallocGuard &) = delete;
-  MallocGuard &operator=(const MallocGuard &) = delete;
+    // While the target may have been truncated...
+    while (size.has_value() && *size == buf_.capacity()) {
+      if (buf_.capacity() > path_max_)
+        return Error(ENAMETOOLONG);
 
-private:
-  char *ptr_;
+      if (!buf_.reserve(2 * buf_.capacity()))
+        return Error(ENOMEM);
+
+      size = internal::readlink(link, buf_.data(), buf_.capacity());
+    }
+
+    if (!size)
+      return Error(size.error());
+
+    return cpp::string_view(buf_.data(), static_cast<size_t>(*size));
+  }
 };
 
-MaybeError resolve(PathBuilder &builder, PathComponentQueue &queue,
-                   char *link_buf, size_t link_cap) {
+MaybeError resolve(CanonicalPath &builder,
+                   PathComponentStack &unresolved_components,
+                   ReadlinkBuffer &readlink_buffer) {
   size_t symlinks_followed = 0;
 
   while (true) {
-    cpp::optional<cpp::string_view> component = queue.next();
-    if (!component)
+    cpp::optional<cpp::string_view> component = unresolved_components.pop();
+    if (!component.has_value())
       break;
 
     // "//" and "/./" are both treated as the current directory.
@@ -204,93 +315,88 @@ MaybeError resolve(PathBuilder &builder, PathComponentQueue &queue,
       return res;
 
     struct stat st;
-    ErrorOr<int> lstat_res = internal::lstat(builder.view().data(), &st);
+    ErrorOr<int> lstat_res = internal::lstat(builder.c_str(), &st);
     if (!lstat_res)
       return Error(lstat_res.error());
 
     if (S_ISLNK(st.st_mode)) {
-      if (symlinks_followed > kMaxSymlinkFollows)
+      if (symlinks_followed >= kMaxSymlinkFollows)
         return Error(ELOOP);
       symlinks_followed++;
 
-      ErrorOr<ssize_t> readlink_bytes_written =
-          internal::readlink(builder.view().data(), link_buf, link_cap);
-      if (!readlink_bytes_written)
-        return Error(readlink_bytes_written.error());
+      ErrorOr<cpp::string_view> target =
+          readlink_buffer.readlink(builder.c_str());
+      if (!target)
+        return Error(target.error());
 
-      // Check if the name exceeds link_buf's capacity and was truncated.
-      size_t link_len = static_cast<size_t>(*readlink_bytes_written);
-      if (link_len >= link_cap)
-        return Error(ENAMETOOLONG);
-
-      // Construct a string view, as readlink does not null-terminate.
-      cpp::string_view target(link_buf, link_len);
-
-      if (target.starts_with("/")) {
-        MaybeError res = builder.reset("/");
-        if (!res)
-          return res;
+      if (is_absolute_path(*target)) {
+        builder.set_to_filesystem_root();
       } else {
-        // Relative symlink, so just drop the last component.
+        // If link points to a relative path,
+        // pop the last component to continue relative to the link.
         builder.pop_component();
       }
 
-      // Prepend the new target.
-      MaybeError res = queue.prepend_path(target);
+      MaybeError res = unresolved_components.push_components(*target);
       if (!res)
         return res;
 
       continue;
     }
 
-    if (!queue.empty() && !S_ISDIR(st.st_mode))
+    // If there's more to resolve but we're not looking a file,
+    // the traversal should fail, e.g `realpath("/path/to/file.txt/")`
+    // should fail.
+    if (!unresolved_components.empty() && !S_ISDIR(st.st_mode))
       return Error(ENOTDIR);
   }
 
-  return ok();
+  return Success{};
 }
 
-ErrorOr<char *> realpath_impl(const char *__restrict path,
+ErrorOr<char *> realpath_impl(const char *__restrict path_c_str,
                               char *__restrict resolved) {
-  if (path == nullptr)
+  if (path_c_str == nullptr)
     return Error(EINVAL);
 
-  cpp::string_view path_view(path);
-  if (path_view.empty())
+  cpp::string_view path(path_c_str);
+  if (path.empty())
     return Error(ENOENT);
 
   const size_t path_max = PATH_MAX;
 
-  // Allocate memory for the resolved path if `resolved` is null.
-  char *out = resolved;
-  if (resolved == nullptr) {
-    out = reinterpret_cast<char *>(::malloc(path_max));
-    if (out == nullptr)
-      return Error(ENOMEM);
+  // Builder for the final resolved path.
+  // Seed the resolved path with either root or cwd.
+  CanonicalPath resolved_builder(path_max);
+  if (!is_absolute_path(path)) {
+    auto res = resolved_builder.set_to_cwd();
+    if (!res)
+      return Error(res.error());
   }
-  MallocGuard malloc_guard(resolved == nullptr ? out : nullptr);
 
-  char queue_buf[path_max];
-  char link_buf[path_max];
-
-  ErrorOr<PathBuilder> path_builder =
-      path_view.starts_with("/")
-          ? PathBuilder::AtRootDir(out, path_max)
-          : PathBuilder::AtCurrentWorkingDir(out, path_max);
-  if (!path_builder)
-    return Error(path_builder.error());
-
-  ErrorOr<PathComponentQueue> queue =
-      PathComponentQueue::make(queue_buf, path_max, path_view);
-  if (!queue)
-    return Error(queue.error());
-
-  MaybeError res = resolve(*path_builder, *queue, link_buf, path_max);
+  // Temporary storage for walking the components of `path`.
+  PathComponentStack unresolved_components(path_max);
+  auto res = unresolved_components.push_components(path);
   if (!res)
     return Error(res.error());
 
-  malloc_guard.release();
-  return out;
+  // Buffer to allow calls to `readlink`.
+  ReadlinkBuffer readlink_buffer(path_max);
+
+  // Resolution logic.
+  res = resolve(resolved_builder, unresolved_components, readlink_buffer);
+  if (!res)
+    return Error(res.error());
+
+  // If `resolved` was nullptr, just return the allocated string.
+  if (resolved == nullptr) {
+    return resolved_builder.release();
+  }
+
+  // Otherwise, copy into resolved.
+  inline_memcpy(resolved, resolved_builder.c_str(),
+                resolved_builder.size() + 1);
+  return resolved;
 }
 
 } // namespace

@@ -318,14 +318,24 @@ add_header_library(
 )
 
 add_header_library(
-  char_vector
+  sso_buffer
   HDRS
-    char_vector.h
+    sso_buffer.h
   DEPENDS
     libc.hdr.func.free
     libc.hdr.func.malloc
     libc.hdr.func.realloc
     libc.src.__support.common
+)
+
+add_header_library(
+  char_vector
+  HDRS
+    char_vector.h
+  DEPENDS
+    .sso_buffer
+    libc.src.__support.common
+    libc.src.__support.CPP.string_view
 )
 
 add_header_library(
