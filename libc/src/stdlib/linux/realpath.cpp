@@ -98,6 +98,7 @@ public:
   //
   // For example, `push_component("component")` mutates PathBuilder
   // so that `/path/to/dir` -> `/path/to/dir/component`.
+
   MaybeError push_component(cpp::string_view component) {
     // +2 for to account for the separator and null-terminator.
     size_t required_capacity = size_ + component.size() + 2;
@@ -131,12 +132,10 @@ public:
       return;
     }
 
-    // Pop by shrinking size_.
     size_ = idx;
     null_terminate();
   }
 
-  // Resets the builder to point to the filesystem's root.
   void set_to_filesystem_root() {
     static_assert(PathBuffer::kInitialSize >= 2);
     buf_[0] = kPathSep;
@@ -144,8 +143,7 @@ public:
     null_terminate();
   }
 
-  // Sets the builder to point to the current working directory.
-  [[nodiscard]] MaybeError set_to_cwd() {
+  MaybeError set_to_cwd() {
     ErrorOr<int> res = internal::getcwd(buf_.data(), buf_.capacity());
     while (!res && res.error() == ERANGE) {
       if (buf_.capacity() > path_max_)
@@ -229,6 +227,7 @@ public:
   //
   // For example, if pushing "path/to/dir",
   // then the next `pop()` operation will yield "path".
+
   MaybeError push_components(cpp::string_view path) {
     cpp::string_view data = active_data();
     bool requires_sep = !path.empty() && !path.ends_with(kPathSep) &&
