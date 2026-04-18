@@ -34,11 +34,10 @@ public:
 
   // append returns true on success and false on allocation failure.
   LIBC_INLINE bool append(char new_char) {
-    // Subtract 1 for index starting at 0 and another for the null terminator.
-    if (index >= buf.capacity() - 2) {
-      if (!buf.reserve(2 * buf.capacity())) {
-        return false;
-      }
+    // +2 for new character and null-terminator.
+    size_t required_size = index + 2;
+    if (!buf.reserve(required_size)) {
+      return false;
     }
 
     buf[index] = new_char;

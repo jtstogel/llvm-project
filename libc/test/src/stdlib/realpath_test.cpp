@@ -138,6 +138,16 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfTrailingSlashOnFile) {
   ASSERT_ERRNO_EQ(ENOTDIR);
 }
 
+TEST_F(LlvmLibcRealpathTest, ErrorsIfSymlinkWithTrailingSlashOnFile) {
+  TestDir fs = TestDirBuilder(getName())
+                   .add_file("file")
+                   .add_symlink("link", "file/")
+                   .build();
+  ASSERT_STREQ(realpath(fs.absolute_path("link")),
+               static_cast<char *>(nullptr));
+  ASSERT_ERRNO_EQ(ENOTDIR);
+}
+
 TEST_F(LlvmLibcRealpathTest, ErrorsIfTooManySymlinkTraversals) {
   TestDir fs = TestDirBuilder(getName())
                    .add_symlink("a", "b")

@@ -48,6 +48,7 @@ public:
     } else {
       for (size_t i = 0; i < InitialSize; ++i)
         inline_buf[i] = other.inline_buf[i];
+      buf = inline_buf;
     }
   }
 
@@ -59,7 +60,8 @@ public:
 
   // Releases ownership of the internal buffer.
   // Returns `nullptr` if memory allocation fails.
-  [[nodiscard]] LIBC_INLINE char *release() {
+  [[nodiscard]]
+  LIBC_INLINE char *release() {
     if (buf != inline_buf) {
       char *result = buf;
       buf = inline_buf;
@@ -80,22 +82,28 @@ public:
 
   // Ensures capacity is at least `size`. On allocation failure returns
   // false and leaves the buffer untouched.
-  [[nodiscard]] LIBC_INLINE bool reserve(size_t size) {
+  [[nodiscard]]
+  LIBC_INLINE bool reserve(size_t size) {
     if (size <= cap)
       return true;
+    
+    size_t new_cap = cap;
+    while (new_cap < size) {
+      new_cap *= 2;
+    }
 
     // If we already have a heap allocation, grow it.
     if (buf != inline_buf) {
-      char *new_buf = static_cast<char *>(::realloc(buf, size));
+      char *new_buf = static_cast<char *>(::realloc(buf, new_cap));
       if (new_buf == nullptr)
         return false;
       buf = new_buf;
-      cap = size;
+      cap = new_cap;
       return true;
     }
 
     // Transition our local buffer to the heap.
-    char *new_buf = static_cast<char *>(::malloc(size));
+    char *new_buf = static_cast<char *>(::malloc(new_cap));
     if (new_buf == nullptr)
       return false;
 
@@ -103,7 +111,7 @@ public:
       new_buf[i] = inline_buf[i];
 
     buf = new_buf;
-    cap = size;
+    cap = new_cap;
     return true;
   }
 };
