@@ -22,10 +22,17 @@ using LIBC_NAMESPACE::testing::ErrnoCheckingTest;
 using LIBC_NAMESPACE::testing::TestDir;
 using LIBC_NAMESPACE::testing::TestDirBuilder;
 
+constexpr char kLen64Str[] =
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+static_assert(sizeof(kLen64Str) - 1 == 64); // -1 for null terminator
+
 class LlvmLibcRealpathTest : public ErrnoCheckingTest {
 public:
   char *realpath(const char *path) {
-    return LIBC_NAMESPACE::realpath(path, buf);
+    char *result = LIBC_NAMESPACE::realpath(path, buf);
+    // We passed a buffer, check that `realpath` uses it.
+    LIBC_ASSERT(result == nullptr || result == buf);
+    return result;
   }
 
   char *realpath(const LIBC_NAMESPACE::cpp::string &path) {
@@ -172,12 +179,11 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfCurrentWorkingDirNameTooLong) {
       LIBC_NAMESPACE::internal::mkdir(tmpdir.data(), S_IRWXU).has_value());
   ASSERT_TRUE(LIBC_NAMESPACE::internal::chdir(tmpdir.data()).has_value());
 
-  char segment[] =
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   size_t nested_dir_count = 0;
-  for (size_t s = 0; s < PATH_MAX; s += sizeof(segment) - 1) {
-    ASSERT_TRUE(LIBC_NAMESPACE::internal::mkdir(segment, S_IRWXU).has_value());
-    ASSERT_TRUE(LIBC_NAMESPACE::internal::chdir(segment).has_value());
+  for (size_t s = 0; s < PATH_MAX; s += 64) {
+    ASSERT_TRUE(
+        LIBC_NAMESPACE::internal::mkdir(kLen64Str, S_IRWXU).has_value());
+    ASSERT_TRUE(LIBC_NAMESPACE::internal::chdir(kLen64Str).has_value());
     nested_dir_count++;
   }
 
@@ -186,11 +192,20 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfCurrentWorkingDirNameTooLong) {
 
   for (; nested_dir_count > 0; nested_dir_count--) {
     ASSERT_TRUE(LIBC_NAMESPACE::internal::chdir("..").has_value());
-    ASSERT_TRUE(LIBC_NAMESPACE::internal::rmdir(segment).has_value());
+    ASSERT_TRUE(LIBC_NAMESPACE::internal::rmdir(kLen64Str).has_value());
   }
 
   ASSERT_TRUE(LIBC_NAMESPACE::internal::chdir("..").has_value());
   ASSERT_TRUE(LIBC_NAMESPACE::internal::rmdir(tmpdir.data()).has_value());
+}
+
+TEST_F(LlvmLibcRealpathTest, ErrorsIfArgumentTooLong) {
+  LIBC_NAMESPACE::cpp::string s = "";
+  for (size_t i = 0; i < 1 + PATH_MAX; i += 64)
+    s += kLen64Str;
+
+  ASSERT_EQ(realpath(s.data()), static_cast<char *>(nullptr));
+  ASSERT_ERRNO_EQ(ENAMETOOLONG);
 }
 
 TEST_F(LlvmLibcRealpathTest, ErrorsIfPathIsNull) {
