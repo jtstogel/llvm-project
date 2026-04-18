@@ -16,6 +16,7 @@
 #include "src/__support/error_or.h"
 #include "src/__support/libc_errno.h"
 #include "src/__support/macros/config.h"
+#include "src/__support/macros/sanitizer.h"
 #include "src/__support/sso_buffer.h"
 #include "src/string/memory_utils/inline_memcpy.h"
 #include "src/string/memory_utils/inline_memmove.h"
@@ -63,23 +64,17 @@ LIBC_INLINE bool is_absolute_path(cpp::string_view path) {
 class ResolvedPath {
   size_t size_ = 0;
   size_t path_max_;
+  char *user_buf_;
   PathBuffer buf_;
 
 public:
-  ResolvedPath(size_t path_max) : path_max_(path_max) {
+  ResolvedPath(char *resolved, size_t path_max)
+      : path_max_(path_max), user_buf_(resolved) {
     set_to_filesystem_root();
   }
 
-  cpp::string_view view() const { return cpp::string_view(buf_.data(), size_); }
+  cpp::string_view view() const { return cpp::string_view(data(), size_); }
   size_t size() const { return size_; }
-
-  ErrorOr<char *> release() {
-    char *res = buf_.release();
-    size_ = 0;
-    if (res == nullptr)
-      return Error(ENOMEM);
-    return res;
-  }
 
   // Adds a path component.
   // The component must be non-empty and devoid of `/` separators.
@@ -96,15 +91,15 @@ public:
     if (required_capacity > path_max_)
       return Error(ENAMETOOLONG);
 
-    if (!buf_.reserve(required_capacity))
+    if (!reserve(required_capacity))
       return Error(ENOMEM);
 
     if (needs_sep) {
-      buf_[size_] = kPathSep;
+      data()[size_] = kPathSep;
       size_++;
     }
 
-    inline_memcpy(&buf_[size_], component.data(), component.size());
+    inline_memcpy(data() + size_, component.data(), component.size());
     size_ += component.size();
 
     null_terminate();
@@ -127,39 +122,69 @@ public:
   }
 
   void set_to_filesystem_root() {
-    static_assert(PathBuffer::kInitialSize >= 2);
-    buf_[0] = kPathSep;
+    data()[0] = kPathSep;
     size_ = 1;
     null_terminate();
   }
 
   MaybeError set_to_cwd() {
-    ErrorOr<int> res = internal::getcwd(buf_.data(), buf_.capacity());
+    ErrorOr<int> res = internal::getcwd(data(), capacity());
     while (!res && res.error() == ERANGE) {
-      if (buf_.capacity() >= path_max_)
+      if (capacity() >= path_max_)
         return Error(ENAMETOOLONG);
 
-      if (!buf_.reserve(2 * buf_.capacity()))
+      if (!reserve(2 * capacity()))
         return Error(ENOMEM);
 
-      res = internal::getcwd(buf_.data(), buf_.capacity());
+      res = internal::getcwd(data(), capacity());
     }
 
     if (!res)
       return Error(res.error());
-
-    size_ = internal::string_length(buf_.data());
+    
+    size_t bytes_written = static_cast<size_t>(*res);
+    MSAN_UNPOISON(data(), bytes_written);
+    size_ = bytes_written - 1;
     return Success{};
   }
 
   const char *c_str() const {
     // We maintain that the internal buffer is null-terminated,
     // so safe to return as-is.
-    return buf_.data();
+    return data();
+  }
+
+  ErrorOr<char *> release() {
+    size_ = 0;
+
+    if (user_buf_ != nullptr) {
+      char *res = user_buf_;
+      user_buf_ = nullptr;
+      return res;
+    }
+
+    char *res = buf_.release();
+    if (res == nullptr)
+      return Error(ENOMEM);
+
+    return res;
   }
 
 private:
-  void null_terminate() { buf_[size_] = '\0'; }
+  void null_terminate() { data()[size_] = '\0'; }
+
+  size_t capacity() const {
+    return user_buf_ != nullptr ? path_max_ : buf_.capacity();
+  }
+
+  char *data() const { return user_buf_ != nullptr ? user_buf_ : buf_.data(); }
+
+  bool reserve(size_t size) {
+    if (user_buf_ != nullptr)
+      return size <= path_max_;
+
+    return buf_.reserve(size);
+  }
 };
 
 // Path that has yet to be resolved.
@@ -252,23 +277,25 @@ public:
 // Reads `link` and returns its target as a string_view backed by `buf`.
 ErrorOr<cpp::string_view> readlink(const char *link, PathBuffer &buf,
                                    size_t path_max) {
-  ErrorOr<ssize_t> size = internal::readlink(link, buf.data(), buf.capacity());
+  ErrorOr<ssize_t> ssize = internal::readlink(link, buf.data(), buf.capacity());
 
   // While the target may have been truncated...
-  while (size.has_value() && static_cast<size_t>(*size) == buf.capacity()) {
+  while (ssize.has_value() && static_cast<size_t>(*ssize) == buf.capacity()) {
     if (buf.capacity() > path_max)
       return Error(ENAMETOOLONG);
 
     if (!buf.reserve(2 * buf.capacity()))
       return Error(ENOMEM);
 
-    size = internal::readlink(link, buf.data(), buf.capacity());
+    ssize = internal::readlink(link, buf.data(), buf.capacity());
   }
 
-  if (!size)
-    return Error(size.error());
+  if (!ssize)
+    return Error(ssize.error());
 
-  return cpp::string_view(buf.data(), static_cast<size_t>(*size));
+  size_t size = static_cast<size_t>(*ssize);
+  MSAN_UNPOISON(buf.data(), size);
+  return cpp::string_view(buf.data(), size);
 }
 
 MaybeError resolve(ResolvedPath &out, PendingPath &pending_path,
@@ -293,6 +320,7 @@ MaybeError resolve(ResolvedPath &out, PendingPath &pending_path,
     if (!res)
       return res;
 
+    // TODO: Check if accessible?
     struct stat st;
     ErrorOr<int> lstat_res = internal::lstat(out.c_str(), &st);
     if (!lstat_res)
@@ -343,10 +371,10 @@ ErrorOr<char *> realpath_impl(const char *__restrict path_c_str,
     return Error(ENOENT);
 
   // TODO: initialize with `pathconf` if needed.
-  const size_t path_max = PATH_MAX;
+  size_t path_max = PATH_MAX;
 
   // A builder for the resolved path.
-  ResolvedPath resolved_path(path_max);
+  ResolvedPath resolved_path(resolved, path_max);
   if (!is_absolute_path(path)) {
     auto res = resolved_path.set_to_cwd();
     if (!res)
@@ -363,14 +391,7 @@ ErrorOr<char *> realpath_impl(const char *__restrict path_c_str,
   if (!res)
     return Error(res.error());
 
-  // If `resolved` was nullptr, just return the allocated string.
-  if (resolved == nullptr) {
-    return resolved_path.release();
-  }
-
-  // Otherwise, copy into resolved.
-  inline_memcpy(resolved, resolved_path.c_str(), resolved_path.size() + 1);
-  return resolved;
+  return resolved_path.release();
 }
 
 } // namespace
