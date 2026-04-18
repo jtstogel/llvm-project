@@ -44,22 +44,18 @@ public:
       buf = other.buf;
 
       other.buf = other.inline_buf;
-      other.capacity = InitialSize;
+      other.cap = InitialSize;
     } else {
       for (size_t i = 0; i < InitialSize; ++i)
         inline_buf[i] = other.inline_buf[i];
     }
   }
 
-  SSOBuffer &operator=(const SSOBuffer &) = delete;
-
   LIBC_INLINE char *data() const { return buf; }
 
   LIBC_INLINE size_t capacity() const { return cap; }
 
   LIBC_INLINE char &operator[](size_t index) const { return buf[index]; }
-
-  LIBC_INLINE char operator[](size_t index) const { return buf[index]; }
 
   // Releases ownership of the internal buffer.
   // Returns `nullptr` if memory allocation fails.
@@ -71,7 +67,7 @@ public:
       return result;
     }
 
-    char *result = static_cast<char *>(::malloc(size));
+    char *result = static_cast<char *>(::malloc(cap));
     if (result == nullptr) {
       return nullptr;
     }

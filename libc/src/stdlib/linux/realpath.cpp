@@ -227,15 +227,19 @@ public:
   //
   // For example, if pushing "path/to/dir",
   // then the next `pop()` operation will yield "path".
-
   MaybeError push_components(cpp::string_view path) {
-    cpp::string_view data = active_data();
+    cpp::string_view active = active_data();
     bool requires_sep = !path.empty() && !path.ends_with(kPathSep) &&
-                        !data.empty() && !data.starts_with(kPathSep);
-    size_t required_size = path.size() + (requires_sep ? 1 : 0) + data.size();
+                        !active.empty() && !active.starts_with(kPathSep);
+    size_t required_size = path.size() + (requires_sep ? 1 : 0) + active.size();
 
     if (required_size > path_max_)
       return Error(ENAMETOOLONG);
+
+    inline_memmove(&buf_.data()[path.size() + 1], active.data(), active.size());
+    inline_memcpy(buf_.data(), path.data(), path.size());
+    buf_[path.size()] = kPathSep;
+    return Success{};
   }
 };
 
@@ -255,7 +259,7 @@ public:
         internal::readlink(link, buf_.data(), buf_.capacity());
 
     // While the target may have been truncated...
-    while (size.has_value() && *size == buf_.capacity()) {
+    while (size.has_value() && static_cast<size_t>(*size) == buf_.capacity()) {
       if (buf_.capacity() > path_max_)
         return Error(ENAMETOOLONG);
 
