@@ -19,7 +19,6 @@
 namespace {
 using LIBC_NAMESPACE::testing::ChangeDirGuard;
 using LIBC_NAMESPACE::testing::ErrnoCheckingTest;
-using LIBC_NAMESPACE::testing::libc_make_test_file_path_func;
 using LIBC_NAMESPACE::testing::TestDir;
 using LIBC_NAMESPACE::testing::TestDirBuilder;
 
@@ -76,6 +75,15 @@ TEST_F(LlvmLibcRealpathABCTest, ExtraSlashesAreRemoved) {
 TEST_F(LlvmLibcRealpathABCTest, UsesCurrentWorkingDirForRelativePaths) {
   ChangeDirGuard chdir_guard(test_dir().get_root());
   ASSERT_STREQ(realpath("./a//b//c//"), abspath("a/b/c").c_str());
+}
+
+TEST_F(LlvmLibcRealpathTest, AllowsRootCurrentWorkingDir) {
+  ChangeDirGuard chdir_guard("/");
+  ASSERT_STREQ(realpath("."), "/");
+}
+
+TEST_F(LlvmLibcRealpathTest, RealpathOfRootIsRoot) {
+  ASSERT_STREQ(realpath("/"), "/");
 }
 
 TEST_F(LlvmLibcRealpathTest, MovingBackwardsAtRootYieldsRoot) {
@@ -154,21 +162,22 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfTooManySymlinkTraversals) {
                    .add_symlink("b", "a")
                    .build();
 
-  // Test error -- ELOOP.
   ASSERT_EQ(realpath(fs.absolute_path("a")), static_cast<char *>(nullptr));
   ASSERT_ERRNO_EQ(ELOOP);
 }
 
-TEST_F(LlvmLibcRealpathTest, ErrorsIfNameTooLong) {
-  LIBC_NAMESPACE::cpp::string root(libc_make_test_file_path(getName()));
-  ChangeDirGuard chdir_guard(root.c_str());
+TEST_F(LlvmLibcRealpathTest, ErrorsIfCurrentWorkingDirNameTooLong) {
+  LIBC_NAMESPACE::cpp::string tmpdir(libc_make_test_file_path(getName()));
+  ASSERT_TRUE(
+      LIBC_NAMESPACE::internal::mkdir(tmpdir.data(), S_IRWXU).has_value());
+  ASSERT_TRUE(LIBC_NAMESPACE::internal::chdir(tmpdir.data()).has_value());
 
-  LIBC_NAMESPACE::cpp::string segment =
+  char segment[] =
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   size_t nested_dir_count = 0;
-  for (size_t s = 0; s < PATH_MAX; s += segment.size()) {
-    LIBC_NAMESPACE::internal::mkdir(segment.data(), S_IRWXU);
-    LIBC_NAMESPACE::internal::chdir(segment.data());
+  for (size_t s = 0; s < PATH_MAX; s += sizeof(segment) - 1) {
+    ASSERT_TRUE(LIBC_NAMESPACE::internal::mkdir(segment, S_IRWXU).has_value());
+    ASSERT_TRUE(LIBC_NAMESPACE::internal::chdir(segment).has_value());
     nested_dir_count++;
   }
 
@@ -176,9 +185,12 @@ TEST_F(LlvmLibcRealpathTest, ErrorsIfNameTooLong) {
   ASSERT_ERRNO_EQ(ENAMETOOLONG);
 
   for (; nested_dir_count > 0; nested_dir_count--) {
-    LIBC_NAMESPACE::internal::chdir("..");
-    LIBC_NAMESPACE::internal::rmdir(segment.data());
+    ASSERT_TRUE(LIBC_NAMESPACE::internal::chdir("..").has_value());
+    ASSERT_TRUE(LIBC_NAMESPACE::internal::rmdir(segment).has_value());
   }
+
+  ASSERT_TRUE(LIBC_NAMESPACE::internal::chdir("..").has_value());
+  ASSERT_TRUE(LIBC_NAMESPACE::internal::rmdir(tmpdir.data()).has_value());
 }
 
 TEST_F(LlvmLibcRealpathTest, ErrorsIfPathIsNull) {
