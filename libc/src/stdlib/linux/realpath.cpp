@@ -111,6 +111,10 @@ public:
     return Success{};
   }
 
+  // Pops a path component.
+  //
+  // For example, may mutate `/path/to/component` -> `/path/to`.
+  // If the path is at filesystem root, this is a no-op.
   void pop_component() {
     size_t idx = view().find_last_of(kPathSep);
     if (idx == 0 || idx == cpp::string_view::npos) {
@@ -151,13 +155,33 @@ public:
   const char *c_str() const { return buf_.data(); }
 
 private:
-  void null_terminate() { buf_[size_] = '\0'; }
+  void null_terminate() {
+    // We maintain that the internal buffer is null-terminated,
+    // so safe to return as-is.
+    buf_[size_] = '\0';
+  }
 };
 
+// A stack of path components.
+// Used to track unprocessed components of a user's `realpath` query.
 class PathComponentStack {
+  // Start of the next component to return
   size_t start_ = 0;
+
+  // End of the current components in buf_.
   size_t end_ = 0;
+
   const size_t path_max_;
+
+  // buf_ stores the components in the stack.
+  // It's represented just as a normal POSIX path.
+  //
+  // "popping" from the stack advances start_ past a path component.
+  // "pushing" to the stack prepends the path with new components.
+  //
+  // This could perhaps be made more efficient by storing components
+  // in reverse order so that we never need to prepend to buf_'s data,
+  // which requires a memmove+memcpy.
   PathBuffer buf_;
 
   cpp::string_view active_data() {
@@ -167,7 +191,6 @@ class PathComponentStack {
 public:
   PathComponentStack(size_t path_max) : path_max_(path_max) {}
 
-  // Returned exactly to your original, clean design.
   cpp::string_view pop() {
     cpp::string_view active = active_data();
     size_t slash_idx = active.find_first_of(kPathSep);
@@ -183,6 +206,11 @@ public:
 
   bool empty() const { return start_ == end_; }
 
+  // Pushes the components of `path` onto the stack,
+  // with the directory closest to root pushed last.
+  //
+  // For example, if pushing "path/to/dir",
+  // then the next `pop()` operation will yield "path".
   MaybeError push_components(const cpp::string_view path) {
     if (path.empty())
       return Success{};
@@ -191,14 +219,10 @@ public:
     bool requires_sep = !path.ends_with(kPathSep) && !active.empty() &&
                         !active.starts_with(kPathSep);
 
-    // FIX 3: If pushing a path with a trailing slash onto an empty stack,
-    // append a virtual "." to trigger the directory check in the resolve loop.
-    bool add_dot = path.ends_with(kPathSep) && active.empty();
-
     size_t sep_size = (requires_sep ? 1 : 0);
-    size_t dot_size = (add_dot ? 1 : 0);
-    size_t new_size = path.size() + sep_size + dot_size + active.size();
+    size_t new_size = path.size() + sep_size + active.size();
 
+    // TODO: should we fail here? or is this intermediary path ok?
     if (new_size > path_max_)
       return Error(ENAMETOOLONG);
 
@@ -207,16 +231,11 @@ public:
 
     active = active_data(); // Re-validate view
 
-    inline_memmove(&buf_[path.size() + sep_size + dot_size], active.data(),
-                   active.size());
+    inline_memmove(&buf_[path.size() + sep_size], active.data(), active.size());
     inline_memcpy(buf_.data(), path.data(), path.size());
 
-    if (add_dot) {
-      buf_[path.size()] = '.';
-    }
-
     if (requires_sep) {
-      buf_[path.size() + dot_size] = kPathSep;
+      buf_[path.size() + sep_size] = kPathSep;
     }
 
     start_ = 0;
@@ -233,10 +252,13 @@ class ReadlinkBuffer {
 public:
   ReadlinkBuffer(size_t path_max) : path_max_(path_max) {}
 
+  // Reads `link` and returns its target
+  // as a string_view backed by this ReadlinkBuffer.
   ErrorOr<cpp::string_view> readlink(const char *link) {
     ErrorOr<ssize_t> size =
         internal::readlink(link, buf_.data(), buf_.capacity());
 
+    // While the target may have been truncated...
     while (size.has_value() && static_cast<size_t>(*size) == buf_.capacity()) {
       if (buf_.capacity() > path_max_)
         return Error(ENAMETOOLONG);
@@ -306,6 +328,9 @@ MaybeError resolve(CanonicalPath &builder,
       continue;
     }
 
+    // If there's more to resolve but we're not looking a file,
+    // the traversal should fail, e.g `realpath("/path/to/file.txt/")`
+    // should fail.
     if (!unresolved_components.empty() && !S_ISDIR(st.st_mode))
       return Error(ENOTDIR);
   }
@@ -322,8 +347,10 @@ ErrorOr<char *> realpath_impl(const char *__restrict path_c_str,
   if (path.empty())
     return Error(ENOENT);
 
+  // TODO: initialize with `pathconf` if needed.
   const size_t path_max = PATH_MAX;
 
+  // A builder for the resolved path.
   CanonicalPath resolved_builder(path_max);
   if (!is_absolute_path(path)) {
     auto res = resolved_builder.set_to_cwd();
@@ -331,11 +358,13 @@ ErrorOr<char *> realpath_impl(const char *__restrict path_c_str,
       return Error(res.error());
   }
 
+  // Stack for resolving each component in `path`.
   PathComponentStack unresolved_components(path_max);
   auto res = unresolved_components.push_components(path);
   if (!res)
     return Error(res.error());
 
+  // Buffer to store the result of calling `readlink` syscall.
   ReadlinkBuffer readlink_buffer(path_max);
 
   res = resolve(resolved_builder, unresolved_components, readlink_buffer);
