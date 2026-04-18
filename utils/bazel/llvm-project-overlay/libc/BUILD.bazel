@@ -1141,14 +1141,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "__support_sso_buffer",
+    hdrs = ["src/__support/sso_buffer.h"],
+    deps = [
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":func_free",
+        ":func_malloc",
+        ":func_realloc",
+    ],
+)
+
+libc_support_library(
     name = "__support_char_vector",
     hdrs = ["src/__support/char_vector.h"],
     deps = [
         ":__support_common",
         ":__support_macros_config",
-        ":func_free",
-        ":func_malloc",
-        ":func_realloc",
+        ":__support_sso_buffer",
     ],
 )
 
@@ -9609,6 +9619,7 @@ libc_function(
         ":__support_macros_config",
         ":__support_osutil_filesystem",
         ":__support_osutil_vdso",
+        ":__support_sso_buffer",
         ":errno",
         ":func_free",
         ":func_malloc",

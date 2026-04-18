@@ -17,7 +17,7 @@ add_entrypoint_object(
     ../realpath.h
   DEPENDS
     libc.hdr.func.malloc
-    libc.src.__support.char_vector
+    libc.src.__support.sso_buffer
     libc.src.__support.common
     libc.src.__support.error_or
     libc.src.__support.macros.config
