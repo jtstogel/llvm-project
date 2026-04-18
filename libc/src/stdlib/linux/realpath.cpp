@@ -165,46 +165,42 @@ private:
 // A stack of path components.
 // Used to track unprocessed components of a user's `realpath` query.
 class PathComponentStack {
-  // Start of the next component to return
-  size_t start_ = 0;
+  // Path components is stored in buf_[start_ ... buf_.capacity() - 1].
+  size_t start_;
 
-  // End of the current components in buf_.
-  size_t end_ = 0;
-
-  const size_t path_max_;
-
-  // buf_ stores the components in the stack.
+  // buf_ stores the components that need to be processed.
   // It's represented just as a normal POSIX path.
   //
   // "popping" from the stack advances start_ past a path component.
   // "pushing" to the stack prepends the path with new components.
-  //
-  // This could perhaps be made more efficient by storing components
-  // in reverse order so that we never need to prepend to buf_'s data,
-  // which requires a memmove+memcpy.
   PathBuffer buf_;
 
-  cpp::string_view active_data() {
-    return cpp::string_view(buf_.data(), end_).substr(start_);
+  const size_t path_max_;
+
+  cpp::string_view active_data() const {
+    return cpp::string_view(buf_.data() + start_, buf_.capacity() - start_);
   }
 
 public:
-  PathComponentStack(size_t path_max) : path_max_(path_max) {}
+  PathComponentStack(size_t path_max)
+      : start_(buf_.capacity()), path_max_(path_max) {}
 
   cpp::string_view pop() {
     cpp::string_view active = active_data();
-    size_t slash_idx = active.find_first_of(kPathSep);
+    if (active.empty())
+      return active;
 
+    size_t slash_idx = active.find_first_of(kPathSep);
     if (slash_idx == cpp::string_view::npos) {
-      start_ = end_;
-    } else {
-      start_ += slash_idx + 1;
+      start_ = buf_.capacity();
+      return active;
     }
 
+    start_ += slash_idx + 1;
     return active.substr(0, slash_idx);
   }
 
-  bool empty() const { return start_ == end_; }
+  bool empty() const { return start_ == buf_.capacity(); }
 
   // Pushes the components of `path` onto the stack,
   // with the directory closest to root pushed last.
@@ -220,26 +216,31 @@ public:
                         !active.starts_with(kPathSep);
 
     size_t sep_size = (requires_sep ? 1 : 0);
-    size_t new_size = path.size() + sep_size + active.size();
+    size_t added_size = path.size() + sep_size;
+    size_t new_size = added_size + active.size();
 
-    // TODO: should we fail here? or is this intermediary path ok?
     if (new_size > path_max_)
       return Error(ENAMETOOLONG);
 
-    if (!buf_.reserve(new_size))
-      return Error(ENOMEM);
+    if (new_size > buf_.capacity()) {
+      size_t old_start = start_;
+      size_t active_size = active.size();
+      if (!buf_.reserve(new_size))
+        return Error(ENOMEM);
 
-    active = active_data(); // Re-validate view
-
-    inline_memmove(&buf_[path.size() + sep_size], active.data(), active.size());
-    inline_memcpy(buf_.data(), path.data(), path.size());
-
-    if (requires_sep) {
-      buf_[path.size() + sep_size] = kPathSep;
+      // Move data to the end of the new buffer.
+      size_t new_cap = buf_.capacity();
+      inline_memmove(buf_.data() + (new_cap - active_size),
+                     buf_.data() + old_start, active_size);
+      start_ = new_cap - active_size;
     }
 
-    start_ = 0;
-    end_ = new_size;
+    start_ -= added_size;
+    inline_memcpy(buf_.data() + start_, path.data(), path.size());
+
+    if (requires_sep) {
+      buf_[start_ + path.size()] = kPathSep;
+    }
 
     return Success{};
   }
