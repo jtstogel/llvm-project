@@ -65,9 +65,9 @@ export float TestLoadWithStatus() {
 
 // CHECK: define {{.*}} float @TestLoadWithStatus()()
 // CHECK: call {{.*}} i32 @hlsl::ByteAddressBuffer::Load(unsigned int, unsigned int&)(ptr {{.*}} @Buf, i32 noundef 0, ptr {{.*}} %tmp)
-// CHECK: call {{.*}} <4 x i32> @hlsl::RWByteAddressBuffer::Load4(unsigned int, unsigned int&)(ptr {{.*}} @RWBuf, i32 noundef 4, ptr {{.*}} %tmp1)
-// CHECK: call {{.*}} float @float hlsl::ByteAddressBuffer::Load<float>(unsigned int, unsigned int&)(ptr {{.*}} @Buf, i32 noundef 20, ptr {{.*}} %tmp4)
-// CHECK: call {{.*}} <4 x float> @float vector[4] hlsl::RWByteAddressBuffer::Load<float vector[4]>(unsigned int, unsigned int&)(ptr {{.*}} @RWBuf, i32 noundef 24, ptr {{.*}} %tmp7)
+// CHECK: call {{.*}} <4 x i32> @hlsl::RWByteAddressBuffer::Load4(unsigned int, unsigned int&)(ptr {{.*}} @RWBuf, i32 noundef 4, ptr {{.*}} %[[TMP1:.*]])
+// CHECK: call {{.*}} float @float hlsl::ByteAddressBuffer::Load<float>(unsigned int, unsigned int&)(ptr {{.*}} @Buf, i32 noundef 20, ptr {{.*}} %[[TMP2:.*]])
+// CHECK: call {{.*}} <4 x float> @float vector[4] hlsl::RWByteAddressBuffer::Load<float vector[4]>(unsigned int, unsigned int&)(ptr {{.*}} @RWBuf, i32 noundef 24, ptr {{.*}} %[[TMP3:.*]])
 // CHECK: add
 // CHECK: ret float
 
@@ -188,16 +188,16 @@ export uint TestGetDimensions() {
 // CHECK: define {{.*}} void @hlsl::ByteAddressBuffer::GetDimensions(unsigned int&)(ptr {{.*}} %this, {{.*}} %dim)
 // CHECK: %[[HANDLE_PTR:.*]] = getelementptr inbounds nuw %"class.hlsl::ByteAddressBuffer", ptr %{{.*}}, i32 0, i32 0
 // CHECK-NEXT: %[[HANDLE:.*]] = load target("dx.RawBuffer", i8, 0, 0), ptr %[[HANDLE_PTR]]
-// CHECK-NEXT: %[[DIMPTR:.*]] = load ptr, ptr %dim.addr
 // DXIL-NEXT: %[[DIM:.*]] = call i32 @llvm.dx.resource.getdimensions.x.tdx.RawBuffer_i8_0_0t(target("dx.RawBuffer", i8, 0, 0) %[[HANDLE]])
+// CHECK-NEXT: %[[DIMPTR:.*]] = load ptr, ptr %dim.addr
 // CHECK-NEXT: store i32 %[[DIM]], ptr %[[DIMPTR]]
 // CHECK-NEXT: ret void
 
 // CHECK: define {{.*}} void @hlsl::RWByteAddressBuffer::GetDimensions(unsigned int&)(ptr {{.*}} %this, ptr noalias {{.*}} %dim)
 // CHECK: %[[HANDLE_PTR:.*]] = getelementptr inbounds nuw %"class.hlsl::RWByteAddressBuffer", ptr %{{.*}}, i32 0, i32 0
 // CHECK-NEXT: %[[HANDLE:.*]] = load target("dx.RawBuffer", i8, 1, 0), ptr %[[HANDLE_PTR]]
-// CHECK-NEXT: %[[DIMPTR:.*]] = load ptr, ptr %dim.addr
 // DXIL-NEXT: %[[DIM:.*]] = call i32 @llvm.dx.resource.getdimensions.x.tdx.RawBuffer_i8_1_0t(target("dx.RawBuffer", i8, 1, 0) %[[HANDLE]])
+// CHECK-NEXT: %[[DIMPTR:.*]] = load ptr, ptr %dim.addr
 // CHECK-NEXT: store i32 %[[DIM]], ptr %[[DIMPTR]]
 // CHECK-NEXT: ret void
 

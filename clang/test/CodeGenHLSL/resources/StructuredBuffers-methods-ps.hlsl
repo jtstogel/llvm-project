@@ -74,7 +74,7 @@ export float TestLoadWithStatus() {
 
 // CHECK: define {{.*}} float @TestLoadWithStatus()()
 // CHECK: call {{.*}} float @hlsl::RasterizerOrderedStructuredBuffer<float>::Load(unsigned int, unsigned int&)(ptr {{.*}} @ROSB1, i32 noundef 10, ptr {{.*}} %tmp)
-// CHECK: call {{.*}} <2 x i32> @hlsl::RasterizerOrderedStructuredBuffer<int vector[2]>::Load(unsigned int, unsigned int&)(ptr {{.*}} @ROSB2, i32 noundef 20, ptr {{.*}} %tmp2)
+// CHECK: call {{.*}} <2 x i32> @hlsl::RasterizerOrderedStructuredBuffer<int vector[2]>::Load(unsigned int, unsigned int&)(ptr {{.*}} @ROSB2, i32 noundef 20, ptr {{.*}} %[[TMP0:.*]])
 // CHECK: ret
 
 // CHECK: define {{.*}} float @hlsl::RasterizerOrderedStructuredBuffer<float>::Load(unsigned int, unsigned int&)(ptr {{.*}} %this, i32 noundef %Index, ptr {{.*}} %Status)
@@ -117,8 +117,8 @@ export uint TestGetDimensions() {
 // CHECK: define {{.*}} void @hlsl::RasterizerOrderedStructuredBuffer<float>::GetDimensions(unsigned int&, unsigned int&)(ptr {{.*}}, ptr {{.*}} %numStructs, ptr {{.*}} %stride)
 // CHECK: %__handle = getelementptr inbounds nuw %"class.hlsl::RasterizerOrderedStructuredBuffer", ptr %{{.*}}, i32 0, i32 0
 // DXIL-NEXT: %[[HANDLE:.*]] = load target("dx.RawBuffer", float, 1, 1), ptr %__handle
-// CHECK-NEXT: %[[NUMSTRUCTS_PTR:.*]] = load ptr, ptr %numStructs.addr
 // DXIL-NEXT: %[[NUMSTRUCTS:.*]] = call i32 @llvm.dx.resource.getdimensions.x.tdx.RawBuffer_f32_1_1t(target("dx.RawBuffer", float, 1, 1) %[[HANDLE]])
+// CHECK-NEXT: %[[NUMSTRUCTS_PTR:.*]] = load ptr, ptr %numStructs.addr
 // CHECK-NEXT: store i32 %[[NUMSTRUCTS]], ptr %[[NUMSTRUCTS_PTR]]
 // CHECK-NEXT: %[[STRIDEPTR:.*]] = load ptr, ptr %stride.addr
 // CHECK-NEXT: store i32 4, ptr %[[STRIDEPTR]]
@@ -127,8 +127,8 @@ export uint TestGetDimensions() {
 // CHECK: define {{.*}} void @hlsl::RasterizerOrderedStructuredBuffer<int vector[2]>::GetDimensions(unsigned int&, unsigned int&)(ptr {{.*}}, ptr {{.*}} %numStructs, ptr {{.*}} %stride)
 // CHECK: %__handle = getelementptr inbounds nuw %"class.hlsl::RasterizerOrderedStructuredBuffer.0", ptr %{{.*}}, i32 0, i32 0
 // DXIL-NEXT: %[[HANDLE:.*]] = load target("dx.RawBuffer", <2 x i32>, 1, 1), ptr %__handle
-// CHECK-NEXT: %[[NUMSTRUCTS_PTR:.*]] = load ptr, ptr %numStructs.addr
 // DXIL-NEXT: %[[NUMSTRUCTS:.*]] = call i32 @llvm.dx.resource.getdimensions.x.tdx.RawBuffer_v2i32_1_1t(target("dx.RawBuffer", <2 x i32>, 1, 1) %[[HANDLE]])
+// CHECK-NEXT: %[[NUMSTRUCTS_PTR:.*]] = load ptr, ptr %numStructs.addr
 // CHECK-NEXT: store i32 %[[NUMSTRUCTS]], ptr %[[NUMSTRUCTS_PTR]]
 // CHECK-NEXT: %[[STRIDEPTR:.*]] = load ptr, ptr %stride.addr
 // CHECK-NEXT: store i32 8, ptr %[[STRIDEPTR]]
