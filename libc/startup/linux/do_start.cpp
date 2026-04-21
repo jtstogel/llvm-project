@@ -39,6 +39,8 @@ extern uintptr_t __fini_array_end[];
 // on how the program is loaded exactly.
 [[gnu::weak,
   gnu::visibility("hidden")]] extern const ElfW(Dyn) _DYNAMIC[]; // NOLINT
+
+void *__dso_handle = nullptr;
 }
 
 namespace LIBC_NAMESPACE_DECL {
