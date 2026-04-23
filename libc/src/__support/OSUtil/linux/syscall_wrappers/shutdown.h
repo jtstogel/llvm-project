@@ -33,7 +33,7 @@ LIBC_INLINE ErrorOr<int> shutdown(int sockfd, int how) {
 #endif
 
   if (ret < 0)
-    return Error(-static_cast<int>(ret));
+    return errno_err(-static_cast<int>(ret));
   return ret;
 }
 

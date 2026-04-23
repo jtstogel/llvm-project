@@ -17,7 +17,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(::FILE *, fdopen, (int fd, const char *mode)) {
   auto result = LIBC_NAMESPACE::create_file_from_fd(fd, mode);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return nullptr;
   }
   return reinterpret_cast<::FILE *>(result.value());

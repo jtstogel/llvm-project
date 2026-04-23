@@ -27,7 +27,7 @@ LIBC_INLINE ErrorOr<int> open(const char *path, int flags, mode_t mode_flags) {
   int fd = syscall_impl<int>(SYS_openat, AT_FDCWD, path, flags, mode_flags);
 #endif
   if (fd < 0)
-    return Error(-fd);
+    return errno_err(-fd);
   return fd;
 }
 

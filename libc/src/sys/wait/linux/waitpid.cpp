@@ -18,7 +18,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(pid_t, waitpid, (pid_t pid, int *wait_status, int options)) {
   auto result = internal::wait4impl(pid, wait_status, options, 0);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return result.value();

@@ -41,7 +41,7 @@ LLVM_LIBC_FUNCTION(int, snprintf,
   auto ret_val = printf_core::printf_main(&writer, format, args);
 #endif
   if (!ret_val.has_value()) {
-    libc_errno = printf_core::internal_error_to_errno(ret_val.error());
+    libc_errno = printf_core::internal_error_to_errno(ret_val.error().errno_value());
     return -1;
   }
   if (buffsz > 0) // if the buffsz is 0 the buffer may be a null pointer.

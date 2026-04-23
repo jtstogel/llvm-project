@@ -33,7 +33,7 @@ LLVM_LIBC_FUNCTION(int, asprintf,
   auto ret_val = printf_core::vasprintf_internal(buffer, format, args);
 #endif
   if (!ret_val.has_value()) {
-    libc_errno = printf_core::internal_error_to_errno(ret_val.error());
+    libc_errno = printf_core::internal_error_to_errno(ret_val.error().errno_value());
     return -1;
   }
   if (ret_val.value() > static_cast<size_t>(cpp::numeric_limits<int>::max())) {

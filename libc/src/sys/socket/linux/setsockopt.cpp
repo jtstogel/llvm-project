@@ -21,7 +21,7 @@ LLVM_LIBC_FUNCTION(int, setsockopt,
   auto result =
       linux_syscalls::setsockopt(sockfd, level, optname, optval, optlen);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
 

@@ -22,7 +22,7 @@ namespace linux_syscalls {
 LIBC_INLINE ErrorOr<ssize_t> write(int fd, const void *buf, size_t count) {
   ssize_t ret = syscall_impl<ssize_t>(SYS_write, fd, buf, count);
   if (ret < 0)
-    return Error(-static_cast<int>(ret));
+    return errno_err(-static_cast<int>(ret));
   return ret;
 }
 

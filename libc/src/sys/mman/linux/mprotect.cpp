@@ -23,7 +23,7 @@ LLVM_LIBC_FUNCTION(int, mprotect, (void *addr, size_t size, int prot)) {
   ErrorOr<int> result =
       LIBC_NAMESPACE::mprotect_common::mprotect_impl(addr, size, prot);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return result.value();

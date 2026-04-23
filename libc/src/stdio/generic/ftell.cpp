@@ -17,7 +17,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(long, ftell, (::FILE * stream)) {
   auto result = reinterpret_cast<LIBC_NAMESPACE::File *>(stream)->tell();
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   // tell() returns an off_t (64-bit signed integer), but this function returns

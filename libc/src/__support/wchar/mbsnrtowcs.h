@@ -29,7 +29,7 @@ mbsnrtowcs(wchar_t *__restrict dst, const char **__restrict src,
   LIBC_CRASH_ON_NULLPTR(src);
   CharacterConverter char_conv(ps);
   if (!char_conv.isValidState())
-    return Error(EINVAL);
+    return errno_err(EINVAL);
 
   StringConverter<char8_t> str_conv(reinterpret_cast<const char8_t *>(*src), ps,
                                     max_dst_chars, max_src_bytes);
@@ -54,7 +54,7 @@ mbsnrtowcs(wchar_t *__restrict dst, const char **__restrict src,
     return dst_idx;
   }
 
-  return Error(converted.error());
+  return errno_err(converted.error());
 }
 
 } // namespace internal

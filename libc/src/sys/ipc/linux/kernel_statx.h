@@ -25,7 +25,7 @@ LIBC_INLINE ErrorOr<int> statx_for_ftok(const char *path, struct statx &xbuf) {
                                               STATX_BASIC_STATS, &xbuf);
 
   if (ret < 0)
-    return Error(-ret);
+    return errno_err(-ret);
   return 0;
 }
 

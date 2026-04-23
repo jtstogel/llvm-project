@@ -19,7 +19,7 @@ LLVM_LIBC_FUNCTION(int, clock_gettime,
                    (clockid_t clockid, struct timespec *ts)) {
   auto result = internal::clock_gettime(clockid, ts);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return 0;

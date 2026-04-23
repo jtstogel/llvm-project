@@ -21,7 +21,7 @@ namespace linux_syscalls {
 LIBC_INLINE ErrorOr<int> close(int fd) {
   int ret = syscall_impl<int>(SYS_close, fd);
   if (ret < 0)
-    return Error(-static_cast<int>(ret));
+    return errno_err(-static_cast<int>(ret));
   return ret;
 }
 

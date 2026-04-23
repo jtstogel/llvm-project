@@ -45,7 +45,7 @@ ErrorOr<int> clock_settime(clockid_t clockid, const timespec *ts) {
 #error "SYS_clock_settime and SYS_clock_settime64 syscalls not available."
 #endif
   if (ret < 0)
-    return Error(-ret);
+    return errno_err(-ret);
   return ret;
 }
 

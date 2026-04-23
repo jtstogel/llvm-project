@@ -37,13 +37,13 @@ private:
          ++num_pushed) {
       int err = cr.push(src[src_idx + num_pushed]);
       if (err != 0)
-        return Error(err);
+        return errno_err(err);
     }
 
     // if we aren't able to read a full character from the source string
     if (src_idx + num_pushed == src_len && !cr.isFull()) {
       src_idx += num_pushed;
-      return Error(-1);
+      return errno_err(-1);
     }
 
     return num_pushed;
@@ -56,7 +56,7 @@ public:
 
   template <typename CharType> LIBC_INLINE ErrorOr<CharType> pop() {
     if (num_to_write == 0)
-      return Error(-1);
+      return errno_err(-1);
 
     if (cr.isEmpty() || src_idx == 0) {
       auto src_elements_read = pushFullCharacter();
@@ -65,7 +65,7 @@ public:
 
       if (cr.sizeAs<CharType>() > num_to_write) {
         cr.clear();
-        return Error(-1);
+        return errno_err(-1);
       }
 
       src_idx += src_elements_read.value();

@@ -174,7 +174,7 @@ TEST(LlvmLibcWcsnrtombs, InvalidState) {
   // n parameter ignored when dest is null
   auto res = LIBC_NAMESPACE::internal::wcsnrtombs(nullptr, &cur, 5, 1, &state);
   ASSERT_FALSE(res.has_value());
-  ASSERT_EQ(res.error(), EINVAL);
+  ASSERT_EQ(res.error().errno_value(), EINVAL);
 }
 
 TEST(LlvmLibcWcsnrtombs, InvalidCharacter) {
@@ -196,7 +196,7 @@ TEST(LlvmLibcWcsnrtombs, InvalidCharacter) {
   cur = src;
   res = LIBC_NAMESPACE::internal::wcsnrtombs(mbs, &cur, 5, 11, &state2);
   ASSERT_FALSE(res.has_value());
-  ASSERT_EQ(res.error(), EILSEQ);
+  ASSERT_EQ(res.error().errno_value(), EILSEQ);
 }
 
 #if defined(LIBC_ADD_NULL_CHECKS) && !defined(LIBC_HAS_SANITIZER)

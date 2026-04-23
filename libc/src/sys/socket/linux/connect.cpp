@@ -21,7 +21,7 @@ LLVM_LIBC_FUNCTION(int, connect,
                     socklen_t addrlen)) {
   auto result = linux_syscalls::connect(sockfd, addr, addrlen);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
 

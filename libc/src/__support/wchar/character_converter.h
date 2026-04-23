@@ -146,7 +146,7 @@ LIBC_INLINE ErrorOr<char32_t> CharacterConverter::pop_utf32() {
   // If pop is called too early, do not reset the state, use error to determine
   // whether enough bytes have been pushed
   if (!isFull())
-    return Error(-1);
+    return errno_err(-1);
   char32_t utf32 = state->partial;
   // reset if successful pop
   clear();
@@ -155,7 +155,7 @@ LIBC_INLINE ErrorOr<char32_t> CharacterConverter::pop_utf32() {
 
 LIBC_INLINE ErrorOr<char8_t> CharacterConverter::pop_utf8() {
   if (isEmpty())
-    return Error(-1);
+    return errno_err(-1);
 
   constexpr char8_t FIRST_BYTE_HEADERS[] = {0, 0xC0, 0xE0, 0xF0};
   constexpr char8_t CONTINUING_BYTE_HEADER = 0x80;

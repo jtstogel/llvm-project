@@ -34,7 +34,7 @@ ErrorOr<size_t> strftime_main(printf_core::Writer<write_mode> *writer,
       result = writer->write(cur_section.raw_string);
 
     if (result < 0)
-      return Error(-result);
+      return errno_err(-result);
   }
 
   return writer->get_chars_written();

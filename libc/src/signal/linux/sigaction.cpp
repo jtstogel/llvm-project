@@ -22,7 +22,7 @@ LLVM_LIBC_FUNCTION(int, sigaction,
   if (ret)
     return ret.value();
 
-  libc_errno = ret.error();
+  libc_errno = ret.error().errno_value();
   return -1;
 }
 

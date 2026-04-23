@@ -21,7 +21,7 @@ LLVM_LIBC_FUNCTION(key_t, ftok, (const char *path, int id)) {
   ErrorOr<int> err = statx_for_ftok(path, xbuf);
 
   if (!err.has_value()) {
-    libc_errno = err.error();
+    libc_errno = err.error().errno_value();
     return -1;
   }
 

@@ -173,7 +173,7 @@ unchecked_sigaction(int signal, const struct sigaction *__restrict libc_new,
       SYS_rt_sigaction, signal, libc_new ? &kernel_new : nullptr,
       libc_old ? &kernel_old : nullptr, sizeof(sigset_t));
   if (ret)
-    return Error(-ret);
+    return errno_err(-ret);
 
   if (libc_old)
     *libc_old = kernel_old;
@@ -184,7 +184,7 @@ LIBC_INLINE ErrorOr<int>
 checked_sigaction(int signal, const struct sigaction *__restrict libc_new,
                   struct sigaction *__restrict libc_old) {
   if (signal <= 0 || signal >= NSIG)
-    return Error(EINVAL);
+    return errno_err(EINVAL);
   if (signal == SIGABRT) {
     SigAbortGuard guard(true);
     return unchecked_sigaction(signal, libc_new, libc_old);

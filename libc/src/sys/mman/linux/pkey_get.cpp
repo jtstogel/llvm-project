@@ -20,7 +20,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, pkey_get, (int pkey)) {
   ErrorOr<int> ret = LIBC_NAMESPACE::pkey_common::pkey_get(pkey);
   if (!ret.has_value()) {
-    libc_errno = ret.error();
+    libc_errno = ret.error().errno_value();
     return -1;
   }
   return ret.value();

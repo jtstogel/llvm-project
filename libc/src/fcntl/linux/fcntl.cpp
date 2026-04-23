@@ -27,7 +27,7 @@ LLVM_LIBC_FUNCTION(int, fcntl, (int fd, int cmd, ...)) {
   auto result = LIBC_NAMESPACE::internal::fcntl(fd, cmd, arg);
 
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return result.value();

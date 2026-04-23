@@ -23,7 +23,7 @@ ErrorOr<size_t> mbrtowc(wchar_t *__restrict pwc, const char *__restrict src_ptr,
                         size_t max_src_bytes, mbstate *__restrict ps) {
   CharacterConverter char_conv(ps);
   if (!char_conv.isValidState())
-    return Error(EINVAL);
+    return errno_err(EINVAL);
   if (src_ptr == nullptr)
     return 0;
   size_t i = 0;
@@ -32,7 +32,7 @@ ErrorOr<size_t> mbrtowc(wchar_t *__restrict pwc, const char *__restrict src_ptr,
     int err = char_conv.push(static_cast<char8_t>(src_ptr[i]));
     // Encoding error
     if (err == EILSEQ)
-      return Error(err);
+      return errno_err(err);
   }
   auto wc = char_conv.pop_utf32();
   if (wc.has_value()) {

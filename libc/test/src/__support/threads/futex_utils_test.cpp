@@ -20,18 +20,18 @@ TEST(LlvmLibcSupportThreadsFutexUtilsTest, RequeueSmokeTest) {
   if (no_requeue.has_value())
     ASSERT_EQ(*no_requeue, 0);
   else
-    ASSERT_EQ(no_requeue.error(), ENOSYS);
+    ASSERT_EQ(no_requeue.error().errno_value(), ENOSYS);
 
   auto no_wake = source.requeue_to(destination, 1, 0, 1);
   if (no_wake.has_value())
     ASSERT_EQ(*no_wake, 0);
   else
-    ASSERT_EQ(no_wake.error(), ENOSYS);
+    ASSERT_EQ(no_wake.error().errno_value(), ENOSYS);
 
   auto cmp_mismatch = source.requeue_to(destination, 0, 0, 1);
   if (cmp_mismatch.has_value())
     ASSERT_EQ(*cmp_mismatch, 0);
   else
-    ASSERT_TRUE(cmp_mismatch.error() == ENOSYS ||
-                cmp_mismatch.error() == EAGAIN);
+    ASSERT_TRUE(cmp_mismatch.error().errno_value() == ENOSYS ||
+                cmp_mismatch.error().errno_value() == EAGAIN);
 }

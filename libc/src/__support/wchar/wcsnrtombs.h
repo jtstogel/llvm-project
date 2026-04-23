@@ -30,7 +30,7 @@ wcsnrtombs(char *__restrict dest, const wchar_t **__restrict ptr_to_src,
 
   CharacterConverter cr(ps);
   if (!cr.isValidState())
-    return Error(EINVAL);
+    return errno_err(EINVAL);
 
   if (dest == nullptr)
     dest_len = SIZE_MAX;
@@ -57,7 +57,7 @@ wcsnrtombs(char *__restrict dest, const wchar_t **__restrict ptr_to_src,
   if (dest != nullptr)
     *ptr_to_src += str_conv.getSourceIndex();
 
-  if (converted.error() == -1) // if we hit conversion limit
+  if (converted.error().errno_value() == -1) // if we hit conversion limit
     return dst_idx;
 
   return Error(converted.error());

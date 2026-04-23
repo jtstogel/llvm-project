@@ -27,7 +27,7 @@ LIBC_INLINE ErrorOr<off_t> lseekimpl(int fd, off_t offset, int whence) {
 #ifdef SYS_lseek
   result = LIBC_NAMESPACE::syscall_impl<off_t>(SYS_lseek, fd, offset, whence);
   if (result < 0)
-    return Error(-static_cast<int>(result));
+    return errno_err(-static_cast<int>(result));
 #elif defined(SYS_llseek) || defined(SYS__llseek)
   static_assert(sizeof(size_t) == 4, "size_t must be 32 bits.");
 #ifdef SYS_llseek
@@ -39,7 +39,7 @@ LIBC_INLINE ErrorOr<off_t> lseekimpl(int fd, off_t offset, int whence) {
   int ret = LIBC_NAMESPACE::syscall_impl<int>(
       LLSEEK_SYSCALL_NO, fd, offset_64 >> 32, offset_64, &result, whence);
   if (ret < 0)
-    return Error(-ret);
+    return errno_err(-ret);
 #else
 #error "lseek, llseek and _llseek syscalls not available."
 #endif

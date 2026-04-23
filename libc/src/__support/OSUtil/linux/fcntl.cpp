@@ -48,7 +48,7 @@ ErrorOr<int> fcntl(int fd, int cmd, void *arg) {
     int ret =
         LIBC_NAMESPACE::syscall_impl<int>(FCNTL_SYSCALL_ID, fd, cmd, &flk64);
     if (ret < 0)
-      return Error(-ret);
+      return errno_err(-ret);
     return ret;
   }
   case F_OFD_GETLK:
@@ -66,12 +66,12 @@ ErrorOr<int> fcntl(int fd, int cmd, void *arg) {
         LIBC_NAMESPACE::syscall_impl<int>(FCNTL_SYSCALL_ID, fd, cmd, &flk64);
     // On failure, return
     if (ret < 0)
-      return Error(-ret);
+      return errno_err(-ret);
     // Check for overflow, i.e. the offsets are not the same when cast
     // to off_t from off64_t.
     if (static_cast<off_t>(flk64.l_len) != flk64.l_len ||
         static_cast<off_t>(flk64.l_start) != flk64.l_start)
-      return Error(EOVERFLOW);
+      return errno_err(EOVERFLOW);
 
     // Now copy back into flk, in case flk64 got modified
     flk->l_type = flk64.l_type;
@@ -86,7 +86,7 @@ ErrorOr<int> fcntl(int fd, int cmd, void *arg) {
     int ret = LIBC_NAMESPACE::syscall_impl<int>(FCNTL_SYSCALL_ID, fd,
                                                 F_GETOWN_EX, &fex);
     if (ret < 0)
-      return Error(-ret);
+      return errno_err(-ret);
     return fex.type == F_OWNER_PGRP ? -fex.pid : fex.pid;
   }
 #ifdef SYS_fcntl64
@@ -112,7 +112,7 @@ ErrorOr<int> fcntl(int fd, int cmd, void *arg) {
   int ret = LIBC_NAMESPACE::syscall_impl<int>(FCNTL_SYSCALL_ID, fd, cmd,
                                               reinterpret_cast<void *>(arg));
   if (ret < 0)
-    return Error(-ret);
+    return errno_err(-ret);
   return ret;
 }
 

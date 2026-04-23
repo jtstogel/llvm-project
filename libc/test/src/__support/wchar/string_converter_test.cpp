@@ -61,7 +61,7 @@ TEST(LlvmLibcStringConverterTest, UTF8To32) {
 
   res = sc.pop<char32_t>();
   ASSERT_FALSE(res.has_value());
-  ASSERT_EQ(res.error(), -1);
+  ASSERT_EQ(res.error().errno_value(), -1);
   ASSERT_EQ(static_cast<int>(sc.getSourceIndex()), 11);
 }
 
@@ -136,7 +136,7 @@ TEST(LlvmLibcStringConverterTest, UTF32To8) {
 
   res = sc.pop<char8_t>();
   ASSERT_FALSE(res.has_value());
-  ASSERT_EQ(res.error(), -1);
+  ASSERT_EQ(res.error().errno_value(), -1);
   ASSERT_EQ(static_cast<int>(sc.getSourceIndex()), 5);
 }
 
@@ -171,7 +171,7 @@ TEST(LlvmLibcStringConverterTest, UTF32To8PartialRead) {
   // can only read 1 character from source string, so error on next pop
   res = sc.pop<char8_t>();
   ASSERT_FALSE(res.has_value());
-  ASSERT_EQ(res.error(), -1);
+  ASSERT_EQ(res.error().errno_value(), -1);
 }
 
 TEST(LlvmLibcStringConverterTest, UTF8To32PartialRead) {
@@ -188,7 +188,7 @@ TEST(LlvmLibcStringConverterTest, UTF8To32PartialRead) {
 
   res = sc.pop<char32_t>();
   ASSERT_FALSE(res.has_value());
-  ASSERT_EQ(static_cast<int>(res.error()), -1);
+  ASSERT_EQ(static_cast<int>(res.error().errno_value()), -1);
   ASSERT_EQ(static_cast<int>(sc.getSourceIndex()), 5);
 }
 
@@ -222,7 +222,7 @@ TEST(LlvmLibcStringConverterTest, UTF32To8ErrorHandling) {
 
   res = sc.pop<char8_t>();
   ASSERT_FALSE(res.has_value());
-  ASSERT_EQ(static_cast<int>(res.error()), EILSEQ);
+  ASSERT_EQ(static_cast<int>(res.error().errno_value()), EILSEQ);
   ASSERT_EQ(static_cast<int>(sc.getSourceIndex()), 1);
 }
 
@@ -241,7 +241,7 @@ TEST(LlvmLibcStringConverterTest, UTF8To32ErrorHandling) {
 
   res = sc.pop<char32_t>();
   ASSERT_FALSE(res.has_value());
-  ASSERT_EQ(static_cast<int>(res.error()), EILSEQ);
+  ASSERT_EQ(static_cast<int>(res.error().errno_value()), EILSEQ);
   ASSERT_EQ(static_cast<int>(sc.getSourceIndex()), 4);
 }
 
@@ -265,7 +265,7 @@ TEST(LlvmLibcStringConverterTest, InvalidCharacterOutsideBounds) {
   res1 = sc1.pop<char32_t>();
   ASSERT_FALSE(res1.has_value());
   // no space to write error NOT invalid character error (EILSEQ)
-  ASSERT_EQ(static_cast<int>(res1.error()), -1);
+  ASSERT_EQ(static_cast<int>(res1.error().errno_value()), -1);
   ASSERT_EQ(static_cast<int>(sc1.getSourceIndex()), 4);
 
   const wchar_t src2[] = {
@@ -298,7 +298,7 @@ TEST(LlvmLibcStringConverterTest, InvalidCharacterOutsideBounds) {
   res2 = sc2.pop<char8_t>();
   ASSERT_FALSE(res2.has_value());
   // no space to write error NOT invalid character error (EILSEQ)
-  ASSERT_EQ(static_cast<int>(res2.error()), -1);
+  ASSERT_EQ(static_cast<int>(res2.error().errno_value()), -1);
   ASSERT_EQ(static_cast<int>(sc2.getSourceIndex()), 1);
 }
 
@@ -359,7 +359,7 @@ TEST(LlvmLibcStringConverterTest, MultipleStringConverters8To32) {
 
   auto res = sc1.pop<char32_t>();
   ASSERT_FALSE(res.has_value());
-  ASSERT_EQ(static_cast<int>(res.error()), -1);
+  ASSERT_EQ(static_cast<int>(res.error().errno_value()), -1);
   ASSERT_EQ(static_cast<int>(sc1.getSourceIndex()), 2);
 
   // sc2 should pick up where sc1 left off and continue the conversion

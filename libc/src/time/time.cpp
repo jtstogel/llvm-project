@@ -21,7 +21,7 @@ LLVM_LIBC_FUNCTION(time_t, time, (time_ptr_t tp)) {
   struct timespec ts;
   auto result = internal::clock_gettime(CLOCK_REALTIME, &ts);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
 

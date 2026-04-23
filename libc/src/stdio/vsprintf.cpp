@@ -39,7 +39,7 @@ LLVM_LIBC_FUNCTION(int, vsprintf,
   auto ret_val = printf_core::printf_main(&writer, format, args);
 #endif
   if (!ret_val.has_value()) {
-    libc_errno = printf_core::internal_error_to_errno(ret_val.error());
+    libc_errno = printf_core::internal_error_to_errno(ret_val.error().errno_value());
     return -1;
   }
   wb.buff[wb.buff_cur] = '\0';

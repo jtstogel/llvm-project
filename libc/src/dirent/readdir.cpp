@@ -21,7 +21,7 @@ LLVM_LIBC_FUNCTION(struct ::dirent *, readdir, (::DIR * dir)) {
   auto *d = reinterpret_cast<LIBC_NAMESPACE::Dir *>(dir);
   auto dirent_val = d->read();
   if (!dirent_val) {
-    libc_errno = dirent_val.error();
+    libc_errno = dirent_val.error().errno_value();
     return nullptr;
   }
   return dirent_val.value();

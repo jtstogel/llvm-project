@@ -14,9 +14,24 @@
 
 namespace LIBC_NAMESPACE_DECL {
 
-template <class T> using ErrorOr = cpp::expected<T, int>;
+class ErrnoValue {
+private:
+    int val;
 
-using Error = cpp::unexpected<int>;
+public:
+    explicit constexpr ErrnoValue(int errno_value) : val(errno_value) {}
+    inline int errno_value() { return val; }
+};
+
+template <class T>
+using ErrorOr = cpp::expected<T, ErrnoValue>;
+
+using Error = cpp::unexpected<ErrnoValue>;
+
+inline constexpr Error errno_err(int errno_value) {
+    return Error(ErrnoValue(errno_value));
+}
+using ErrorErrno = cpp::unexpected<ErrnoValue>;
 
 // template <typename T> struct ErrorOr {
 //   union {

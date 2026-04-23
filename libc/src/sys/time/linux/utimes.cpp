@@ -68,7 +68,7 @@ LLVM_LIBC_FUNCTION(int, utimes,
   // flags=0 means follow symlinks (same as utimes)
   auto result = linux_syscalls::utimensat(AT_FDCWD, path, ts_ptr, 0);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
 

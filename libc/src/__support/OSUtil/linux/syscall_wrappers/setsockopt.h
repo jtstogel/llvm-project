@@ -38,7 +38,7 @@ LIBC_INLINE ErrorOr<int> setsockopt(int sockfd, int level, int optname,
 #endif
 
   if (ret < 0)
-    return Error(-static_cast<int>(ret));
+    return errno_err(-static_cast<int>(ret));
   return ret;
 }
 

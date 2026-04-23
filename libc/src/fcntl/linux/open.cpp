@@ -32,7 +32,7 @@ LLVM_LIBC_FUNCTION(int, open, (const char *path, int flags, ...)) {
   auto result = linux_syscalls::open(path, flags, mode_flags);
 
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return result.value();

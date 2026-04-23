@@ -30,7 +30,7 @@ ErrorOr<int> platform_opendir(const char *name) {
 #endif
 
   if (fd < 0) {
-    return LIBC_NAMESPACE::Error(-fd);
+    return LIBC_NAMESPACE::errno_err(-fd);
   }
   return fd;
 }
@@ -44,7 +44,7 @@ ErrorOr<size_t> platform_fetch_dirents(int fd, cpp::span<uint8_t> buffer) {
 #endif
 
   if (size < 0) {
-    return LIBC_NAMESPACE::Error(static_cast<int>(-size));
+    return LIBC_NAMESPACE::errno_err(static_cast<int>(-size));
   }
   return size;
 }

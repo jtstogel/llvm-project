@@ -19,7 +19,7 @@ LLVM_LIBC_FUNCTION(int, close, (int fd)) {
   auto result = linux_syscalls::close(fd);
 
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return result.value();

@@ -32,7 +32,7 @@ LIBC_INLINE ErrorOr<int> utimensat(int dirfd, const char *path,
 
   int ret = syscall_impl<int>(UTIMENSAT_SYSCALL_ID, dirfd, path, times, flags);
   if (ret < 0)
-    return Error(-static_cast<int>(ret));
+    return errno_err(-static_cast<int>(ret));
   return ret;
 }
 

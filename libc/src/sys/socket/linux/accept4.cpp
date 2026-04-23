@@ -21,7 +21,7 @@ LLVM_LIBC_FUNCTION(int, accept4,
                     socklen_t *__restrict addrlen, int flags)) {
   auto result = linux_syscalls::accept4(sockfd, addr, addrlen, flags);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
 

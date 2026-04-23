@@ -20,7 +20,7 @@ LLVM_LIBC_FUNCTION(int, utimensat,
                     int flags)) {
   auto result = linux_syscalls::utimensat(dirfd, path, times, flags);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return result.value();

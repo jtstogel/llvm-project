@@ -38,7 +38,7 @@ LIBC_INLINE ErrorOr<int> connect(int sockfd, const struct sockaddr *addr,
 #endif
 
   if (ret < 0)
-    return Error(-static_cast<int>(ret));
+    return errno_err(-static_cast<int>(ret));
   return ret;
 }
 

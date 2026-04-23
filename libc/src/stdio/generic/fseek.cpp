@@ -18,7 +18,7 @@ LLVM_LIBC_FUNCTION(int, fseek, (::FILE * stream, long offset, int whence)) {
   auto result =
       reinterpret_cast<LIBC_NAMESPACE::File *>(stream)->seek(offset, whence);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return 0;

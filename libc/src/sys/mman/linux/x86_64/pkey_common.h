@@ -32,7 +32,7 @@ constexpr int BITS_PER_KEY = 2;
 [[gnu::target("pku")]]
 LIBC_INLINE ErrorOr<int> pkey_get(int pkey) {
   if (pkey < 0 || pkey >= KEY_COUNT) {
-    return Error(EINVAL);
+    return errno_err(EINVAL);
   }
 
   uint32_t pkru = _rdpkru_u32();
@@ -44,7 +44,7 @@ LIBC_INLINE ErrorOr<int> pkey_get(int pkey) {
 [[gnu::target("pku")]]
 LIBC_INLINE ErrorOr<int> pkey_set(int pkey, unsigned int access_rights) {
   if (pkey < 0 || pkey >= KEY_COUNT || access_rights > KEY_MASK) {
-    return Error(EINVAL);
+    return errno_err(EINVAL);
   }
 
   uint32_t pkru = _rdpkru_u32();

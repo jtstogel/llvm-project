@@ -20,7 +20,7 @@ LLVM_LIBC_FUNCTION(int, accept,
                    (int sockfd, struct sockaddr *addr, socklen_t *addrlen)) {
   auto result = linux_syscalls::accept(sockfd, addr, addrlen);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
 

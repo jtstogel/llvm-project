@@ -59,7 +59,7 @@ FileIOResult CookieFile::cookie_read(File *f, void *data, size_t size) {
 ErrorOr<off_t> CookieFile::cookie_seek(File *f, off_t offset, int whence) {
   auto cookie_file = reinterpret_cast<CookieFile *>(f);
   if (cookie_file->ops.seek == nullptr) {
-    return Error(EINVAL);
+    return errno_err(EINVAL);
   }
   off64_t offset64 = offset;
   int result = cookie_file->ops.seek(cookie_file->cookie, &offset64, whence);

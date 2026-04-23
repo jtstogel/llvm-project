@@ -20,7 +20,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(::DIR *, opendir, (const char *name)) {
   auto dir = Dir::open(name);
   if (!dir) {
-    libc_errno = dir.error();
+    libc_errno = dir.error().errno_value();
     return nullptr;
   }
   return reinterpret_cast<DIR *>(dir.value());

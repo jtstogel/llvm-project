@@ -20,12 +20,12 @@ namespace LIBC_NAMESPACE_DECL {
 ErrorOr<Dir *> Dir::open(const char *path) {
   auto fd = platform_opendir(path);
   if (!fd)
-    return LIBC_NAMESPACE::Error(fd.error());
+    return LIBC_NAMESPACE::errno_err(fd.error());
 
   LIBC_NAMESPACE::AllocChecker ac;
   Dir *dir = new (ac) Dir(fd.value());
   if (!ac)
-    return LIBC_NAMESPACE::Error(ENOMEM);
+    return LIBC_NAMESPACE::errno_err(ENOMEM);
   return dir;
 }
 
@@ -34,7 +34,7 @@ ErrorOr<struct ::dirent *> Dir::read() {
   if (readptr >= fillsize) {
     auto readsize = platform_fetch_dirents(fd, buffer);
     if (!readsize)
-      return LIBC_NAMESPACE::Error(readsize.error());
+      return LIBC_NAMESPACE::errno_err(readsize.error());
     fillsize = readsize.value();
     readptr = 0;
   }

@@ -22,7 +22,7 @@ LLVM_LIBC_FUNCTION(void, rewind, (::FILE * stream)) {
   FilePtr->clearerr();
 
   if (!Result.has_value())
-    libc_errno = Result.error();
+    libc_errno = Result.error().errno_value();
 }
 
 } // namespace LIBC_NAMESPACE_DECL

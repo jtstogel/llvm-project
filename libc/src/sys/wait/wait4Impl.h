@@ -78,7 +78,7 @@ LIBC_INLINE ErrorOr<pid_t> wait4impl(pid_t pid, int *wait_status, int options,
 #error "wait4 and waitid syscalls not available."
 #endif
   if (pid < 0)
-    return Error(-pid);
+    return errno_err(-pid);
   return pid;
 }
 

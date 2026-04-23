@@ -27,14 +27,14 @@ LIBC_INLINE ErrorOr<SHMPath> translate_name(cpp::string_view name) {
   // trim leading slashes
   size_t offset = name.find_first_not_of('/');
   if (offset == cpp::string_view::npos)
-    return Error(EINVAL);
+    return errno_err(EINVAL);
   name = name.substr(offset);
 
   // check the name
   if (name.size() > NAME_MAX)
-    return Error(ENAMETOOLONG);
+    return errno_err(ENAMETOOLONG);
   if (name == "." || name == ".." || name.contains('/'))
-    return Error(EINVAL);
+    return errno_err(EINVAL);
 
   // prepend the prefix
   SHMPath buffer;

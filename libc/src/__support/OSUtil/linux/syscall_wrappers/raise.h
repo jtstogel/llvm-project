@@ -36,7 +36,7 @@ LIBC_INLINE ErrorOr<int> raise(int sig) {
             syscall_impl<int>(SYS_rt_sigprocmask, SIG_SETMASK, &old_set,
                               nullptr, sizeof(sigset_t));
         if (restore_result < 0)
-          status = Error(-restore_result);
+          status = errno_err(-restore_result);
       }
     }
   };
@@ -49,15 +49,15 @@ LIBC_INLINE ErrorOr<int> raise(int sig) {
 
     long pid = syscall_impl<long>(SYS_getpid);
     if (pid < 0)
-      return Error(-static_cast<int>(pid));
+      return errno_err(-static_cast<int>(pid));
 
     long tid = syscall_impl<long>(SYS_gettid);
     if (tid < 0)
-      return Error(-static_cast<int>(tid));
+      return errno_err(-static_cast<int>(tid));
 
     int result = syscall_impl<int>(SYS_tgkill, pid, tid, sig);
     if (result < 0)
-      return Error(-result);
+      return errno_err(-result);
   }
   return status;
 }

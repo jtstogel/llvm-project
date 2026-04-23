@@ -33,11 +33,11 @@ LIBC_INLINE ErrorOr<size_t> wcrtomb(char *__restrict dest_ptr, wchar_t wc,
   CharacterConverter cr(ps);
 
   if (!cr.isValidState())
-    return Error(EINVAL);
+    return errno_err(EINVAL);
 
   int status = cr.push(static_cast<char32_t>(wc));
   if (status != 0)
-    return Error(status);
+    return errno_err(status);
 
   size_t count = 0;
   while (!cr.isEmpty()) {

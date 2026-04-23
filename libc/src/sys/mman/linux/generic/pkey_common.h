@@ -17,12 +17,12 @@ namespace LIBC_NAMESPACE_DECL {
 namespace pkey_common {
 
 LIBC_INLINE ErrorOr<int> pkey_get([[maybe_unused]] int pkey) {
-  return Error(ENOSYS);
+  return errno_err(ENOSYS);
 }
 
 LIBC_INLINE ErrorOr<int> pkey_set([[maybe_unused]] int pkey,
                                   [[maybe_unused]] unsigned int access_rights) {
-  return Error(ENOSYS);
+  return errno_err(ENOSYS);
 }
 
 } // namespace pkey_common

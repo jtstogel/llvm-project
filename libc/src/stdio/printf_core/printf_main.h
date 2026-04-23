@@ -36,7 +36,7 @@ ErrorOr<size_t> printf_main_modular(Writer<write_mode> *writer,
     else
       result = writer->write(cur_section.raw_string);
     if (result < 0)
-      return Error(-result);
+      return errno_err(-result);
   }
 
   return writer->get_chars_written();

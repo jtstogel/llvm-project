@@ -97,7 +97,7 @@ LIBC_INLINE ErrorOr<size_t> vfprintf_internal(::FILE *__restrict stream,
   }
   int flushval = wb.flush_to_stream();
   if (flushval != WRITE_OK)
-    retval = Error(-flushval);
+    retval = errno_err(-flushval);
   internal::funlockfile(stream);
   return retval;
 }

@@ -359,7 +359,7 @@ ErrorOr<int> File::seek(off_t offset, int whence) {
     FileIOResult buf_result = platform_write(this, buf, pos);
     if (buf_result.has_error() || buf_result.value < pos) {
       err = true;
-      return Error(buf_result.error);
+      return errno_err(buf_result.error);
     }
   } else if (prev_op == FileOp::READ && whence == SEEK_CUR) {
     // More data could have been read out from the platform file than was

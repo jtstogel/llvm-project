@@ -28,7 +28,7 @@ LLVM_LIBC_FUNCTION(size_t, wcstombs,
   auto result =
       internal::wcsnrtombs(s, &wcs_ptr_copy, SIZE_MAX, n, &internal_mbstate);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
 

@@ -30,7 +30,7 @@ LLVM_LIBC_FUNCTION(size_t, mbsnrtowcs,
                     : reinterpret_cast<internal::mbstate *>(ps));
   if (!ret.has_value()) {
     // Encoding failure
-    libc_errno = ret.error();
+    libc_errno = ret.error().errno_value();
     return -1;
   }
   return ret.value();

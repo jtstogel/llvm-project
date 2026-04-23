@@ -22,14 +22,14 @@ static constexpr int DEFAULT_OFLAGS = O_NOFOLLOW | O_CLOEXEC | O_NONBLOCK;
 LLVM_LIBC_FUNCTION(int, shm_open, (const char *name, int oflags, mode_t mode)) {
   auto path_result = shm_common::translate_name(name);
   if (!path_result.has_value()) {
-    libc_errno = path_result.error();
+    libc_errno = path_result.error().errno_value();
     return -1;
   }
 
   auto open_result =
       linux_syscalls::open(path_result->data(), oflags | DEFAULT_OFLAGS, mode);
   if (!open_result.has_value()) {
-    libc_errno = open_result.error();
+    libc_errno = open_result.error().errno_value();
     return -1;
   }
   return open_result.value();

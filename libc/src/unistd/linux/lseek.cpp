@@ -22,7 +22,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(off_t, lseek, (int fd, off_t offset, int whence)) {
   auto result = internal::lseekimpl(fd, offset, whence);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return result.value();

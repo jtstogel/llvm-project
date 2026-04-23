@@ -49,7 +49,7 @@ ErrorOr<off_t> linux_file_seek(File *f, off_t offset, int whence) {
   auto *lf = reinterpret_cast<LinuxFile *>(f);
   auto result = internal::lseekimpl(lf->get_fd(), offset, whence);
   if (!result.has_value())
-    return result.error();
+    return Error(result.error());
   return result.value();
 }
 
@@ -69,7 +69,7 @@ ErrorOr<File *> openfile(const char *path, const char *mode) {
   auto modeflags = File::mode_flags(mode);
   if (modeflags == 0) {
     // return {nullptr, EINVAL};
-    return Error(EINVAL);
+    return errno_err(EINVAL);
   }
   long open_flags = 0;
   if (modeflags & ModeFlags(File::OpenMode::APPEND)) {
@@ -106,20 +106,20 @@ ErrorOr<File *> openfile(const char *path, const char *mode) {
 #endif
 
   if (fd < 0)
-    return Error(-fd);
+    return errno_err(-fd);
 
   uint8_t *buffer;
   {
     AllocChecker ac;
     buffer = new (ac) uint8_t[File::DEFAULT_BUFFER_SIZE];
     if (!ac)
-      return Error(ENOMEM);
+      return errno_err(ENOMEM);
   }
   AllocChecker ac;
   auto *file = new (ac)
       LinuxFile(fd, buffer, File::DEFAULT_BUFFER_SIZE, _IOFBF, true, modeflags);
   if (!ac)
-    return Error(ENOMEM);
+    return errno_err(ENOMEM);
   File::add_file(file);
   return file;
 }
@@ -128,12 +128,12 @@ ErrorOr<LinuxFile *> create_file_from_fd(int fd, const char *mode) {
   using ModeFlags = File::ModeFlags;
   ModeFlags modeflags = File::mode_flags(mode);
   if (modeflags == 0) {
-    return Error(EINVAL);
+    return errno_err(EINVAL);
   }
 
   auto result = internal::fcntl(fd, F_GETFL);
   if (!result.has_value()) {
-    return Error(EBADF);
+    return errno_err(EBADF);
   }
   int fd_flags = result.value();
 
@@ -142,7 +142,7 @@ ErrorOr<LinuxFile *> create_file_from_fd(int fd, const char *mode) {
        !(modeflags & static_cast<ModeFlags>(OpenMode::READ))) ||
       ((fd_flags & O_ACCMODE) == O_WRONLY &&
        !(modeflags & static_cast<ModeFlags>(OpenMode::WRITE)))) {
-    return Error(EINVAL);
+    return errno_err(EINVAL);
   }
 
   bool do_seek = false;
@@ -152,7 +152,7 @@ ErrorOr<LinuxFile *> create_file_from_fd(int fd, const char *mode) {
     if (!internal::fcntl(fd, F_SETFL,
                          reinterpret_cast<void *>(fd_flags | O_APPEND))
              .has_value()) {
-      return Error(EBADF);
+      return errno_err(EBADF);
     }
   }
 
@@ -161,14 +161,14 @@ ErrorOr<LinuxFile *> create_file_from_fd(int fd, const char *mode) {
     AllocChecker ac;
     buffer = new (ac) uint8_t[File::DEFAULT_BUFFER_SIZE];
     if (!ac) {
-      return Error(ENOMEM);
+      return errno_err(ENOMEM);
     }
   }
   AllocChecker ac;
   auto *file = new (ac)
       LinuxFile(fd, buffer, File::DEFAULT_BUFFER_SIZE, _IOFBF, true, modeflags);
   if (!ac) {
-    return Error(ENOMEM);
+    return errno_err(ENOMEM);
   }
   File::add_file(file);
   if (do_seek) {

@@ -22,7 +22,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(int, shm_unlink, (const char *name)) {
   auto path_result = shm_common::translate_name(name);
   if (!path_result.has_value()) {
-    libc_errno = path_result.error();
+    libc_errno = path_result.error().errno_value();
     return -1;
   }
 #ifdef SYS_unlink

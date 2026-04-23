@@ -36,7 +36,7 @@ LLVM_LIBC_FUNCTION(int, timespec_get, (timespec * ts, int base)) {
 
   auto result = internal::clock_gettime(clockid, ts);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return 0;
   }
   return base;

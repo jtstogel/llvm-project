@@ -27,7 +27,7 @@ LIBC_INLINE ErrorOr<int> mprotect_impl(void *addr, size_t size, int prot) {
   // A negative return value indicates an error with the magnitude of the
   // value being the error code.
   if (ret < 0) {
-    return Error(-ret);
+    return errno_err(-ret);
   }
 
   return 0;

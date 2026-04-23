@@ -17,7 +17,7 @@ namespace LIBC_NAMESPACE_DECL {
 LLVM_LIBC_FUNCTION(off_t, ftello, (::FILE * stream)) {
   auto result = reinterpret_cast<LIBC_NAMESPACE::File *>(stream)->tell();
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return result.value();

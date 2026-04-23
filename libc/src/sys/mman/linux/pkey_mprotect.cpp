@@ -31,12 +31,12 @@ LIBC_INLINE ErrorOr<int> pkey_mprotect_impl(void *addr, size_t len, int prot,
   }
 
 #if !defined(SYS_pkey_mprotect)
-  return Error(ENOSYS);
+  return errno_err(ENOSYS);
 #else
   int ret = LIBC_NAMESPACE::syscall_impl<int>(SYS_pkey_mprotect, addr, len,
                                               prot, pkey);
   if (ret < 0) {
-    return Error(-ret);
+    return errno_err(-ret);
   }
   return 0;
 #endif
@@ -49,7 +49,7 @@ LLVM_LIBC_FUNCTION(int, pkey_mprotect,
   ErrorOr<int> ret =
       LIBC_NAMESPACE::internal::pkey_mprotect_impl(addr, len, prot, pkey);
   if (!ret.has_value()) {
-    libc_errno = ret.error();
+    libc_errno = ret.error().errno_value();
     return -1;
   }
   return ret.value();

@@ -54,7 +54,7 @@ ErrorOr<int> clock_gettime(clockid_t clockid, timespec *ts) {
 #error "SYS_clock_gettime and SYS_clock_gettime64 syscalls not available."
 #endif
   if (ret < 0)
-    return Error(-ret);
+    return errno_err(-ret);
   return ret;
 }
 

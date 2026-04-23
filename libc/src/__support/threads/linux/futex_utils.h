@@ -58,7 +58,7 @@ public:
         continue;
 
       if (ret < 0)
-        return cpp::unexpected(-ret);
+        return errno_err(-ret);
       return ret;
     }
   }
@@ -72,7 +72,7 @@ public:
         /*ignored=*/nullptr,
         /* ignored */ 0);
     if (ret < 0)
-      return cpp::unexpected(-ret);
+      return errno_err(-ret);
     return ret;
   }
   LIBC_INLINE ErrorOr<int> notify_all(bool is_shared = false) {
@@ -85,7 +85,7 @@ public:
         /*ignored=*/nullptr,
         /*ignored=*/0);
     if (ret < 0)
-      return cpp::unexpected(-ret);
+      return errno_err(-ret);
     return ret;
   }
   LIBC_INLINE ErrorOr<int> requeue_to(Futex &other,
@@ -111,7 +111,7 @@ public:
           /*requeue_limit=*/requeue_limit,
           /*requeue_addr=*/&other);
     if (ret < 0)
-      return cpp::unexpected<int>(-ret);
+      return errno_err(-ret);
     return static_cast<int>(ret);
   }
 };

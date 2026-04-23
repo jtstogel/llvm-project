@@ -20,7 +20,7 @@ LLVM_LIBC_FUNCTION(pid_t, wait4,
                     struct rusage *usage)) {
   auto result = internal::wait4impl(pid, wait_status, options, usage);
   if (!result.has_value()) {
-    libc_errno = result.error();
+    libc_errno = result.error().errno_value();
     return -1;
   }
   return result.value();
