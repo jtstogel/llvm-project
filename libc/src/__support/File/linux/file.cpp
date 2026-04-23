@@ -47,10 +47,7 @@ FileIOResult linux_file_read(File *f, void *buf, size_t size) {
 
 ErrorOr<off_t> linux_file_seek(File *f, off_t offset, int whence) {
   auto *lf = reinterpret_cast<LinuxFile *>(f);
-  auto result = internal::lseekimpl(lf->get_fd(), offset, whence);
-  if (!result.has_value())
-    return result.error();
-  return result.value();
+  return internal::lseekimpl(lf->get_fd(), offset, whence);
 }
 
 int linux_file_close(File *f) {
