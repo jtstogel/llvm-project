@@ -2,6 +2,7 @@
 // Standard C++20 modules.
 
 // RUN: split-file %s %t
+// RUN: cd %t
 
 // RUN: %clang -c -std=c++23 \
 // RUN:   -fmodules-driver -Rmodules-driver -Rmodule-import \

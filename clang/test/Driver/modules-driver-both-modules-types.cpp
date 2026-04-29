@@ -3,6 +3,7 @@
 // Importing a Standard C++20 module into Clang module is not supported yet.
 
 // RUN: split-file %s %t
+// RUN: cd %t
 // RUN: rm -rf %t/modules-cache
 
 // RUN: %clang -c -std=c++23 \

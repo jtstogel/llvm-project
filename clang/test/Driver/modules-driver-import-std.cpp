@@ -7,6 +7,7 @@
 // relative to the installed C++ standard library runtime libraries
 // We need to create them in order for Clang to find the manifest.
 // RUN: rm -rf %t && split-file %s %t
+// RUN: cd %t
 // RUN: mkdir -p %t/FakeSysroot/usr/lib/x86_64-linux-gnu
 // RUN: touch %t/FakeSysroot/usr/lib/x86_64-linux-gnu/libc++.so
 // RUN: touch %t/FakeSysroot/usr/lib/x86_64-linux-gnu/libc++.a
