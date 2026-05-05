@@ -23,6 +23,8 @@ def math_test(name, hdrs = [], deps = [], **kwargs):
     libc_test(
         name = test_name,
         srcs = [test_name + ".cpp"] + hdrs,
+        # These tests require gmp, which depends on C++.
+        target = "//libc:full_build_disable",
         deps = ["//libc:func_name".replace("func_name", name)] + [
             "//libc:__support_cpp_algorithm",
             "//libc:__support_cpp_bit",

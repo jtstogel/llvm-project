@@ -63,6 +63,7 @@ licenses(["notice"])
             "//libc:hdr_math_macros",
             "//libc/test/UnitTest:fp_test_helpers",
         ] + (["//libc/utils/MPCWrapper:mpc_wrapper"] if func_name == "cprojf" else []),
+        target = ("//libc:full_build_disable" if func_name == "cprojf" else None),
     )
     for func_name in [
         "cproj",

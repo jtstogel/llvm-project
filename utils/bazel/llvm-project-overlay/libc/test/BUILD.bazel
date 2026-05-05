@@ -23,6 +23,8 @@ libc_release_library(
     ],
 )
 
+filegroup(name = "skipped_cc", srcs = ["skipped.cc"])
+
 build_test(
     name = "libc_release_build_test",
     targets = [":libc_release_test"],

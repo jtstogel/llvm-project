@@ -25,9 +25,11 @@ _FULL_BUILD_COPTS = [
 
 def libc_test(
         name,
+        srcs = [],
         copts = [],
         deps = [],
         local_defines = [],
+        target = None,
         use_test_framework = True,
         full_build = False,
         **kwargs):
@@ -35,16 +37,21 @@ def libc_test(
 
     Args:
       name: Test target name
+      srcs: Sources.
       copts: The list of options to add to the C++ compilation command.
       deps: The list of libc functions and libraries to be linked in.
       local_defines: The list of target local_defines if any.
+      target: Condition to enable this test for.
       use_test_framework: Whether to use the libc unit test `main` function.
       full_build: Whether to compile with LIBC_FULL_BUILD and disallow
           use of system headers. This is useful for tests that include both
           LLVM libc headers and proxy headers to avoid conflicting definitions.
       **kwargs: Attributes relevant for a cc_test.
     """
-    deps = deps + [
+    deps = (deps if not target else select({
+            target: deps,
+            "//conditions:default": [],
+    })) + [
         "//libc:hdr_stdint_proxy",
         "//libc:__support_macros_config",
         "//libc:__support_libc_errno",
@@ -62,6 +69,10 @@ def libc_test(
     cc_test(
         name = name,
         local_defines = local_defines + LIBC_CONFIGURE_OPTIONS,
+        srcs = srcs if not target else select({
+            target: srcs,
+            "//conditions:default": ["//libc/test:skipped_cc"],
+        }),
         deps = deps + select({
             "//libc:full_build_enable": [
                 "//libc:public_headers",

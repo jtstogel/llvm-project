@@ -125,6 +125,11 @@ config_setting(
     flag_values = {":build_mode": "full"},
 )
 
+config_setting(
+    name = "full_build_disable",
+    flag_values = {":build_mode": "overlay"},
+)
+
 ######################### Entrypoint generation ################################
 
 filegroup(

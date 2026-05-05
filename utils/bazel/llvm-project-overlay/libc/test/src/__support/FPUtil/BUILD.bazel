@@ -26,6 +26,7 @@ libc_test(
 libc_test(
     name = "bfloat16_test",
     srcs = ["bfloat16_test.cpp"],
+    target = "//libc:full_build_disable",
     deps = [
         "//libc:__support_fputil_bfloat16",
         "//libc/test/UnitTest:fp_test_helpers",
@@ -37,6 +38,7 @@ libc_test(
 libc_test(
     name = "dyadic_float_test",
     srcs = ["dyadic_float_test.cpp"],
+    target = "//libc:full_build_disable",
     copts = ["-frounding-math"],
     deps = [
         "//libc:__support_big_int",
@@ -51,6 +53,7 @@ libc_test(
 libc_test(
     name = "rounding_mode_test",
     srcs = ["rounding_mode_test.cpp"],
+    target = "//libc:full_build_disable",
     deps = [
         "//libc:__support_fputil_rounding_mode",
         "//libc:__support_uint128",
