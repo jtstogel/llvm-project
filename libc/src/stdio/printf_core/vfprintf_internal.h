@@ -12,6 +12,7 @@
 #include "src/__support/File/file.h"
 #include "src/__support/arg_list.h"
 #include "src/__support/error_or.h"
+#include "src/__support/libc_errno.h"
 #include "src/__support/macros/attributes.h" // For LIBC_INLINE
 #include "src/__support/macros/config.h"
 #include "src/stdio/printf_core/core_structs.h"
@@ -55,7 +56,7 @@ LIBC_INLINE FileIOResult fwrite_unlocked(const void *ptr, size_t size,
   // if there was an error, and errno may have previously been nonzero. Only
   // return errno if there was an error.
   size_t members_written = ::fwrite_unlocked(ptr, size, nmemb, f);
-  return {members_written, members_written == nmemb ? 0 : errno};
+  return {members_written, members_written == nmemb ? 0 : libc_errno};
 }
 #endif // LIBC_COPT_STDIO_USE_SYSTEM_FILE
 } // namespace internal

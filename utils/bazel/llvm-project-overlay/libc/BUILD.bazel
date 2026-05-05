@@ -432,7 +432,7 @@ libc_support_library(
     hdrs = ["hdr/fenv_macros.h"],
 )
 
-libc_support_library_overlay_only(
+libc_support_library(
     name = "hdr_fcntl_macros",
     hdrs = ["hdr/fcntl_macros.h"],
     deps = [":hdr_fcntl_overlay"],
@@ -579,7 +579,10 @@ libc_support_library(
 libc_support_library(
     name = "func_aligned_alloc",
     hdrs = ["hdr/func/aligned_alloc.h"],
-    deps = [":hdr_stdlib_overlay"],
+    deps = [
+        ":hdr_stdlib_overlay",
+        ":types_size_t",
+    ],
 )
 
 libc_support_library(
@@ -591,13 +594,19 @@ libc_support_library(
 libc_support_library(
     name = "func_malloc",
     hdrs = ["hdr/func/malloc.h"],
-    deps = [":hdr_stdlib_overlay"],
+    deps = [
+        ":hdr_stdlib_overlay",
+        ":types_size_t",
+    ],
 )
 
 libc_support_library(
     name = "func_realloc",
     hdrs = ["hdr/func/realloc.h"],
-    deps = [":hdr_stdlib_overlay"],
+    deps = [
+        ":hdr_stdlib_overlay",
+        ":types_size_t",
+    ],
 )
 
 libc_support_library(
@@ -2450,9 +2459,34 @@ libc_support_library(
     deps = [
         ":__support_macros_optimization",
         ":__support_osutil_syscall",
+        ":__support_threads_thread",
         ":types_pid_t",
     ],
 )
+
+libc_support_library(
+    name = "__support_threads_thread",
+    hdrs = ["src/__support/threads/thread.h"],
+    deps = [
+        ":__support_cpp_atomic",
+        ":__support_cpp_optional",
+        ":__support_cpp_string_view",
+        ":__support_cpp_stringstream",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+#include "hdr/stdint_proxy.h"
+#include "src/__support/CPP/atomic.h"
+#include "src/__support/CPP/optional.h"
+#include "src/__support/CPP/string_view.h"
+#include "src/__support/CPP/stringstream.h"
+#include "src/__support/macros/attributes.h"
+#include "src/__support/macros/config.h"
+#include "src/__support/macros/properties/architectures.h"
 
 libc_support_library(
     name = "__support_threads_mutex_common",
@@ -2652,21 +2686,21 @@ libc_support_library(
 
 ########################## externally shared targets ###########################
 
-libc_header_library(
-    name = "libcxx_shared_headers",
-    hdrs = [
-        "shared/fp_bits.h",
-        "shared/libc_common.h",
-        "shared/str_to_float.h",
-        "shared/str_to_integer.h",
-    ],
-    deps = [
-        ":__support_common",
-        ":__support_fputil_fp_bits",
-        ":__support_str_to_float",
-        ":__support_str_to_integer",
-    ],
-)
+# libc_header_library(
+#     name = "libcxx_shared_headers",
+#     hdrs = [
+#         "shared/fp_bits.h",
+#         "shared/libc_common.h",
+#         "shared/str_to_float.h",
+#         "shared/str_to_integer.h",
+#     ],
+#     deps = [
+#         ":__support_common",
+#         ":__support_fputil_fp_bits",
+#         ":__support_str_to_float",
+#         ":__support_str_to_integer",
+#     ],
+# )
 
 ############################### errno ########################################
 
@@ -14274,6 +14308,7 @@ libc_support_library(
         ":__support_arg_list",
         ":__support_error_or",
         ":__support_file_file",
+        ":__support_libc_errno",
         ":__support_macros_attributes",
         ":__support_macros_config",
         ":printf_core_structs",

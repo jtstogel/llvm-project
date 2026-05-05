@@ -14,7 +14,7 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "kernel_headers",
-    hdrs = glob(["kernel_include/**/*.h"]),
+    textual_hdrs = glob(["kernel_include/**/*.h"]),
     includes = ["kernel_include"],
 )
 """
