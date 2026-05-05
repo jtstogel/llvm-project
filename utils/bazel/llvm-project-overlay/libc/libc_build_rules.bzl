@@ -18,7 +18,18 @@ def libc_common_copts():
         "-I" + libc_include_path,
         "-I" + paths.join(libc_include_path, "include"),
         "-DLIBC_NAMESPACE=" + LIBC_NAMESPACE,
-    ]
+    ] + select({
+        "//libc:full_build_enable": [
+            "-nostdlib++",
+            "-nostdlib",
+            "-nostdlibinc",
+            "-nostdinc++",
+            # For generated headers.
+            "-I" + paths.join(libc_include_path, "staging"),
+            "-I" + paths.join(libc_include_path, "staging", "include"),
+        ],
+        "//conditions:default": [],
+    })
 
 def libc_release_copts():
     copts = [
@@ -42,11 +53,12 @@ def libc_release_copts():
     })
     return copts + platform_copts
 
-def _libc_library(name, **kwargs):
+def _libc_library(name, deps = [], **kwargs):
     """Internal macro to serve as a base for all other libc library rules.
 
     Args:
       name: Target name.
+      deps: Dependencies required for the cc_library rule.
       **kwargs: All other attributes relevant for the cc_library rule.
     """
 
@@ -57,6 +69,13 @@ def _libc_library(name, **kwargs):
         name = name,
         copts = libc_common_copts(),
         local_defines = LIBC_CONFIGURE_OPTIONS,
+        deps = deps + select({
+            "//libc:full_build_enable": [
+                "//libc:public_headers",
+                "@libc_headers//:kernel_headers",
+            ],
+            "//conditions:default": [],
+        }),
         linkstatic = 1,
         **kwargs
     )
@@ -81,7 +100,10 @@ def libc_function(name, **kwargs):
     # Builds "internal" library with a function, exposed as a C++ function in
     # the "LIBC_NAMESPACE" namespace. This allows us to test the function in the
     # presence of another libc.
-    _libc_library(name = name, **kwargs)
+    _libc_library(
+        name = name,
+        **kwargs,
+    )
 
 LibcLibraryInfo = provider(
     "All source files and textual headers for building a particular library.",

@@ -22,6 +22,7 @@ llvm_repos_extension = use_extension(":extensions.bzl", "llvm_repos_extension")
 use_repo(
     llvm_repos_extension,
     "gmp",
+    "libc_headers",
     "llvm-raw",
     "mpc",
     "mpfr",

@@ -101,6 +101,23 @@ config_setting(
     flag_values = {":modular_format": "enable"},
 )
 
+# A flag to pick whether libc is built hermetically in full build mode.
+# Usage: `--@llvm-project//libc:full_build={full,overlay}`.
+# Flag documentation: https://bazel.build/extending/config
+string_flag(
+    name = "build_mode",
+    build_setting_default = "overlay",
+    values = [
+        "overlay",
+        "full",
+    ],
+)
+
+config_setting(
+    name = "full_build_enable",
+    flag_values = {":build_mode": "full"},
+)
+
 ########################### Header Generation ##################################
 
 py_binary(
@@ -259,7 +276,12 @@ STATIC_AND_CONDITIONAL_HEADERS = STATIC_HEADERS + ["include/llvm-libc-macros/_LI
 cc_library(
     name = "public_headers",
     hdrs = [header.target_name for header in LLVM_LIBC_HEADERS],
-    includes = ["staging/include"],
+    includes = [
+        "staging/include",
+        # TODO: can we remove references to "include/llvm-libc-types" etc and just pick one form?
+        # When installed on a system, they'll only be accessible from <llvm-libc-types/...> etc.
+        "staging",
+    ],
     textual_hdrs = ["staging/" + f for f in STATIC_AND_CONDITIONAL_HEADERS],
     deps = [
         ":copy_llvm_libc_static_headers",

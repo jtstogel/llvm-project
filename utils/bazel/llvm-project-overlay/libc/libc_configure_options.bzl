@@ -11,8 +11,7 @@ is discoverable with the following command:
 > git grep -hoE '\bLIBC_COPT_\\w*'  -- '*.h' '*.cpp' | sort -u
 """
 
-# This list of definitions is used to customize LLVM libc.
-LIBC_CONFIGURE_OPTIONS = [
+_LIBC_COMMON_CONFIGURE_OPTIONS = [
     # Documentation in libc/docs/dev/printf_behavior.rst
     # "LIBC_COPT_FLOAT_TO_STR_NO_SPECIALIZE_LD",
     # "LIBC_COPT_FLOAT_TO_STR_NO_TABLE",
@@ -49,12 +48,27 @@ LIBC_CONFIGURE_OPTIONS = [
     # Documentation in libc/src/__support/libc_assert.h
     # "LIBC_COPT_USE_C_ASSERT",
 
+    # Documentation in libc/src/__support/time/monotonicity.h
+    "LIBC_COPT_TIMEOUT_ENSURE_MONOTONICITY",
+]
+
+# This list of definitions is used to customize LLVM libc overlay builds.
+LIBC_OVERLAY_CONFIGURE_OPTIONS = _LIBC_COMMON_CONFIGURE_OPTIONS + [
     # Documentation in libc/docs/configure.rst
     "LIBC_THREAD_MODE=LIBC_THREAD_MODE_PLATFORM",
 
     # Documentation in libc/src/__support/libc_errno.h
     "LIBC_ERRNO_MODE=LIBC_ERRNO_MODE_SYSTEM_INLINE",
-
-    # Documentation in libc/src/__support/time/monotonicity.h
-    "LIBC_COPT_TIMEOUT_ENSURE_MONOTONICITY",
 ]
+
+# This list of definitions is used to customize LLVM libc full-build mode.
+LIBC_FULL_BUILD_CONFIGURE_OPTIONS = _LIBC_COMMON_CONFIGURE_OPTIONS + [
+    "LIBC_FULL_BUILD",
+    "LIBC_COPT_USE_C_ASSERT",
+    "LIBC_ERRNO_MODE=LIBC_ERRNO_MODE_THREAD_LOCAL",
+]
+
+LIBC_CONFIGURE_OPTIONS = select({
+    "//libc:full_build_enable": LIBC_FULL_BUILD_CONFIGURE_OPTIONS,
+    "//conditions:default": LIBC_OVERLAY_CONFIGURE_OPTIONS,
+})

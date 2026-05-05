@@ -7,6 +7,7 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
 load(":vulkan_sdk.bzl", "vulkan_sdk_setup")
+load(":llvm-project-overlay/libc/libc_configure.bzl", "libc_configure")
 
 def _llvm_repos_extension_impl(module_ctx):
     if any([m.is_root and m.name == "llvm-project-overlay" for m in module_ctx.modules]):
@@ -15,6 +16,8 @@ def _llvm_repos_extension_impl(module_ctx):
             build_file_content = "# empty",
             path = "../../",
         )
+
+    libc_configure(name = "libc_headers")
 
     http_archive(
         name = "vulkan_headers",
