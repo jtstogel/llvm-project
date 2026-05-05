@@ -519,7 +519,10 @@ libc_support_library(
 
 libc_support_library(
     name = "hdr_stdio_overlay",
-    hdrs = ["hdr/stdio_overlay.h"],
+    hdrs = select({
+        ":full_build_enable": [],
+        "//conditions:default": ["hdr/stdio_overlay.h"],
+    }),
 )
 
 libc_support_library(
@@ -532,12 +535,18 @@ libc_support_library(
 
 libc_support_library(
     name = "hdr_stdlib_overlay",
-    hdrs = ["hdr/stdlib_overlay.h"],
+    hdrs = select({
+        ":full_build_enable": [],
+        "//conditions:default": ["hdr/stdlib_overlay.h"],
+    }),
 )
 
 libc_support_library(
     name = "hdr_unistd_overlay",
-    hdrs = ["hdr/unistd_overlay.h"],
+    hdrs = select({
+        ":full_build_enable": [],
+        "//conditions:default": ["hdr/unistd_overlay.h"],
+    }),
 )
 
 libc_support_library(
@@ -1160,6 +1169,7 @@ libc_support_library(
     hdrs = ["src/__support/c_string.h"],
     deps = [
         ":__support_cpp_string",
+        ":__support_cpp_string_view",
         ":__support_macros_attributes",
         ":__support_macros_config",
     ],

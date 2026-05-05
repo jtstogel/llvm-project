@@ -234,7 +234,7 @@
   "moduleExtensions": {
     "//:extensions.bzl%llvm_repos_extension": {
       "general": {
-        "bzlTransitiveDigest": "U04YpkF8O57q4/RMbquX2d9deILXnvNplAZC9NQTTaU=",
+        "bzlTransitiveDigest": "b3WQl8vMbiAZHgcjDPPGk6/WytLl497Xcyqc9sQasUA=",
         "usagesDigest": "X0yUkkWyxQ2Y5oZVDkRSE/K4YkDWo1IjhHsL+1weKyU=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -341,11 +341,6 @@
           }
         },
         "recordedRepoMappingEntries": [
-          [
-            "",
-            "bazel_skylib",
-            "bazel_skylib+"
-          ],
           [
             "",
             "bazel_tools",
