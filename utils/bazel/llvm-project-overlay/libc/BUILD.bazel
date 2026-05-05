@@ -304,7 +304,7 @@ cc_library(
     ],
     textual_hdrs = ["staging/" + f for f in STATIC_AND_CONDITIONAL_HEADERS],
     deps = [
-        ":copy_llvm_libc_static_headers",
+        # ":copy_llvm_libc_static_headers", <- removed, since these should be textual, else we error on darwin etc.
         ":copy_modular_format_header",
     ],
 )

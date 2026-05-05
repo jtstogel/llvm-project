@@ -1,4 +1,4 @@
-CMAKE_LIBC_ENTRYPOINTS = [
+LIBC_ENTRYPOINTS = [
     "isalnum",  # libc.src.ctype
     "isalpha",  # libc.src.ctype
     "isascii",  # libc.src.ctype
@@ -15,29 +15,29 @@ CMAKE_LIBC_ENTRYPOINTS = [
     "toascii",  # libc.src.ctype
     "tolower",  # libc.src.ctype
     "toupper",  # libc.src.ctype
-    "dladdr",  # libc.src.dlfcn
-    "dlclose",  # libc.src.dlfcn
-    "dlerror",  # libc.src.dlfcn
-    "dlopen",  # libc.src.dlfcn
-    "dlsym",  # libc.src.dlfcn
+    # "dladdr",  # missing bazel rule  # libc.src.dlfcn
+    # "dlclose",  # missing bazel rule  # libc.src.dlfcn
+    # "dlerror",  # missing bazel rule  # libc.src.dlfcn
+    # "dlopen",  # missing bazel rule  # libc.src.dlfcn
+    # "dlsym",  # missing bazel rule  # libc.src.dlfcn
     "errno",  # libc.src.errno
     "creat",  # libc.src.fcntl
     "fcntl",  # libc.src.fcntl
     "open",  # libc.src.fcntl
     "openat",  # libc.src.fcntl
-    "poll",  # libc.src.poll
-    "getcpu",  # libc.src.sched
-    "sched_get_priority_max",  # libc.src.sched
-    "sched_get_priority_min",  # libc.src.sched
-    "sched_getaffinity",  # libc.src.sched
-    "sched_getcpu",  # libc.src.sched
-    "sched_getparam",  # libc.src.sched
-    "sched_getscheduler",  # libc.src.sched
-    "sched_rr_get_interval",  # libc.src.sched
-    "sched_setaffinity",  # libc.src.sched
-    "sched_setparam",  # libc.src.sched
-    "sched_setscheduler",  # libc.src.sched
-    "sched_yield",  # libc.src.sched
+    # "poll",  # missing bazel rule  # libc.src.poll
+    # "getcpu",  # missing bazel rule  # libc.src.sched
+    # "sched_get_priority_max",  # missing bazel rule  # libc.src.sched
+    # "sched_get_priority_min",  # missing bazel rule  # libc.src.sched
+    # "sched_getaffinity",  # missing bazel rule  # libc.src.sched
+    # "sched_getcpu",  # missing bazel rule  # libc.src.sched
+    # "sched_getparam",  # missing bazel rule  # libc.src.sched
+    # "sched_getscheduler",  # missing bazel rule  # libc.src.sched
+    # "sched_rr_get_interval",  # missing bazel rule  # libc.src.sched
+    # "sched_setaffinity",  # missing bazel rule  # libc.src.sched
+    # "sched_setparam",  # missing bazel rule  # libc.src.sched
+    # "sched_setscheduler",  # missing bazel rule  # libc.src.sched
+    # "sched_yield",  # missing bazel rule  # libc.src.sched
     "memccpy",  # libc.src.string
     "memchr",  # libc.src.string
     "memcmp",  # libc.src.string
@@ -55,36 +55,36 @@ CMAKE_LIBC_ENTRYPOINTS = [
     "strchr",  # libc.src.string
     "strchrnul",  # libc.src.string
     "strcmp",  # libc.src.string
-    "strcoll",  # libc.src.string
+    # "strcoll",  # missing bazel rule  # libc.src.string
     "strcpy",  # libc.src.string
     "strcspn",  # libc.src.string
-    "strdup",  # libc.src.string
-    "strerror",  # libc.src.string
-    "strerror_r",  # libc.src.string
+    # "strdup",  # missing bazel rule  # libc.src.string
+    # "strerror",  # missing bazel rule  # libc.src.string
+    # "strerror_r",  # missing bazel rule  # libc.src.string
     "strlcat",  # libc.src.string
     "strlcpy",  # libc.src.string
     "strlen",  # libc.src.string
     "strncat",  # libc.src.string
     "strncmp",  # libc.src.string
     "strncpy",  # libc.src.string
-    "strndup",  # libc.src.string
+    # "strndup",  # missing bazel rule  # libc.src.string
     "strnlen",  # libc.src.string
-    "strnlen_s",  # libc.src.string
+    # "strnlen_s",  # missing bazel rule  # libc.src.string
     "strpbrk",  # libc.src.string
     "strrchr",  # libc.src.string
     "strsep",  # libc.src.string
-    "strsignal",  # libc.src.string
+    # "strsignal",  # missing bazel rule  # libc.src.string
     "strspn",  # libc.src.string
     "strstr",  # libc.src.string
     "strtok",  # libc.src.string
     "strtok_r",  # libc.src.string
-    "strxfrm",  # libc.src.string
+    # "strxfrm",  # missing bazel rule  # libc.src.string
     "bcmp",  # libc.src.strings
     "bcopy",  # libc.src.strings
     "bzero",  # libc.src.strings
-    "ffs",  # libc.src.strings
-    "ffsl",  # libc.src.strings
-    "ffsll",  # libc.src.strings
+    # "ffs",  # missing bazel rule  # libc.src.strings
+    # "ffsl",  # missing bazel rule  # libc.src.strings
+    # "ffsll",  # missing bazel rule  # libc.src.strings
     "index",  # libc.src.strings
     "rindex",  # libc.src.strings
     "strcasecmp",  # libc.src.strings
@@ -93,77 +93,77 @@ CMAKE_LIBC_ENTRYPOINTS = [
     "imaxdiv",  # libc.src.inttypes
     "strtoimax",  # libc.src.inttypes
     "strtoumax",  # libc.src.inttypes
-    # "stdc_bit_ceil_uc",  # libc.src.stdbit
-    # "stdc_bit_ceil_ui",  # libc.src.stdbit
-    # "stdc_bit_ceil_ul",  # libc.src.stdbit
-    # "stdc_bit_ceil_ull",  # libc.src.stdbit
-    # "stdc_bit_ceil_us",  # libc.src.stdbit
-    # "stdc_bit_floor_uc",  # libc.src.stdbit
-    # "stdc_bit_floor_ui",  # libc.src.stdbit
-    # "stdc_bit_floor_ul",  # libc.src.stdbit
-    # "stdc_bit_floor_ull",  # libc.src.stdbit
-    # "stdc_bit_floor_us",  # libc.src.stdbit
-    # "stdc_bit_width_uc",  # libc.src.stdbit
-    # "stdc_bit_width_ui",  # libc.src.stdbit
-    # "stdc_bit_width_ul",  # libc.src.stdbit
-    # "stdc_bit_width_ull",  # libc.src.stdbit
-    # "stdc_bit_width_us",  # libc.src.stdbit
-    # "stdc_count_ones_uc",  # libc.src.stdbit
-    # "stdc_count_ones_ui",  # libc.src.stdbit
-    # "stdc_count_ones_ul",  # libc.src.stdbit
-    # "stdc_count_ones_ull",  # libc.src.stdbit
-    # "stdc_count_ones_us",  # libc.src.stdbit
-    # "stdc_count_zeros_uc",  # libc.src.stdbit
-    # "stdc_count_zeros_ui",  # libc.src.stdbit
-    # "stdc_count_zeros_ul",  # libc.src.stdbit
-    # "stdc_count_zeros_ull",  # libc.src.stdbit
-    # "stdc_count_zeros_us",  # libc.src.stdbit
-    # "stdc_first_leading_one_uc",  # libc.src.stdbit
-    # "stdc_first_leading_one_ui",  # libc.src.stdbit
-    # "stdc_first_leading_one_ul",  # libc.src.stdbit
-    # "stdc_first_leading_one_ull",  # libc.src.stdbit
-    # "stdc_first_leading_one_us",  # libc.src.stdbit
-    # "stdc_first_leading_zero_uc",  # libc.src.stdbit
-    # "stdc_first_leading_zero_ui",  # libc.src.stdbit
-    # "stdc_first_leading_zero_ul",  # libc.src.stdbit
-    # "stdc_first_leading_zero_ull",  # libc.src.stdbit
-    # "stdc_first_leading_zero_us",  # libc.src.stdbit
-    # "stdc_first_trailing_one_uc",  # libc.src.stdbit
-    # "stdc_first_trailing_one_ui",  # libc.src.stdbit
-    # "stdc_first_trailing_one_ul",  # libc.src.stdbit
-    # "stdc_first_trailing_one_ull",  # libc.src.stdbit
-    # "stdc_first_trailing_one_us",  # libc.src.stdbit
-    # "stdc_first_trailing_zero_uc",  # libc.src.stdbit
-    # "stdc_first_trailing_zero_ui",  # libc.src.stdbit
-    # "stdc_first_trailing_zero_ul",  # libc.src.stdbit
-    # "stdc_first_trailing_zero_ull",  # libc.src.stdbit
-    # "stdc_first_trailing_zero_us",  # libc.src.stdbit
-    # "stdc_has_single_bit_uc",  # libc.src.stdbit
-    # "stdc_has_single_bit_ui",  # libc.src.stdbit
-    # "stdc_has_single_bit_ul",  # libc.src.stdbit
-    # "stdc_has_single_bit_ull",  # libc.src.stdbit
-    # "stdc_has_single_bit_us",  # libc.src.stdbit
-    # "stdc_leading_ones_uc",  # libc.src.stdbit
-    # "stdc_leading_ones_ui",  # libc.src.stdbit
-    # "stdc_leading_ones_ul",  # libc.src.stdbit
-    # "stdc_leading_ones_ull",  # libc.src.stdbit
-    # "stdc_leading_ones_us",  # libc.src.stdbit
-    # "stdc_leading_zeros_uc",  # libc.src.stdbit
-    # "stdc_leading_zeros_ui",  # libc.src.stdbit
-    # "stdc_leading_zeros_ul",  # libc.src.stdbit
-    # "stdc_leading_zeros_ull",  # libc.src.stdbit
-    # "stdc_leading_zeros_us",  # libc.src.stdbit
-    # "stdc_trailing_ones_uc",  # libc.src.stdbit
-    # "stdc_trailing_ones_ui",  # libc.src.stdbit
-    # "stdc_trailing_ones_ul",  # libc.src.stdbit
-    # "stdc_trailing_ones_ull",  # libc.src.stdbit
-    # "stdc_trailing_ones_us",  # libc.src.stdbit
-    # "stdc_trailing_zeros_uc",  # libc.src.stdbit
-    # "stdc_trailing_zeros_ui",  # libc.src.stdbit
-    # "stdc_trailing_zeros_ul",  # libc.src.stdbit
-    # "stdc_trailing_zeros_ull",  # libc.src.stdbit
-    # "stdc_trailing_zeros_us",  # libc.src.stdbit
-    "a64l",  # libc.src.stdlib
+    "stdc_bit_ceil_uc",  # libc.src.stdbit
+    "stdc_bit_ceil_ui",  # libc.src.stdbit
+    "stdc_bit_ceil_ul",  # libc.src.stdbit
+    "stdc_bit_ceil_ull",  # libc.src.stdbit
+    "stdc_bit_ceil_us",  # libc.src.stdbit
+    "stdc_bit_floor_uc",  # libc.src.stdbit
+    "stdc_bit_floor_ui",  # libc.src.stdbit
+    "stdc_bit_floor_ul",  # libc.src.stdbit
+    "stdc_bit_floor_ull",  # libc.src.stdbit
+    "stdc_bit_floor_us",  # libc.src.stdbit
+    "stdc_bit_width_uc",  # libc.src.stdbit
+    "stdc_bit_width_ui",  # libc.src.stdbit
+    "stdc_bit_width_ul",  # libc.src.stdbit
+    "stdc_bit_width_ull",  # libc.src.stdbit
+    "stdc_bit_width_us",  # libc.src.stdbit
+    "stdc_count_ones_uc",  # libc.src.stdbit
+    "stdc_count_ones_ui",  # libc.src.stdbit
+    "stdc_count_ones_ul",  # libc.src.stdbit
+    "stdc_count_ones_ull",  # libc.src.stdbit
+    "stdc_count_ones_us",  # libc.src.stdbit
+    "stdc_count_zeros_uc",  # libc.src.stdbit
+    "stdc_count_zeros_ui",  # libc.src.stdbit
+    "stdc_count_zeros_ul",  # libc.src.stdbit
+    "stdc_count_zeros_ull",  # libc.src.stdbit
+    "stdc_count_zeros_us",  # libc.src.stdbit
+    "stdc_first_leading_one_uc",  # libc.src.stdbit
+    "stdc_first_leading_one_ui",  # libc.src.stdbit
+    "stdc_first_leading_one_ul",  # libc.src.stdbit
+    "stdc_first_leading_one_ull",  # libc.src.stdbit
+    "stdc_first_leading_one_us",  # libc.src.stdbit
+    "stdc_first_leading_zero_uc",  # libc.src.stdbit
+    "stdc_first_leading_zero_ui",  # libc.src.stdbit
+    "stdc_first_leading_zero_ul",  # libc.src.stdbit
+    "stdc_first_leading_zero_ull",  # libc.src.stdbit
+    "stdc_first_leading_zero_us",  # libc.src.stdbit
+    "stdc_first_trailing_one_uc",  # libc.src.stdbit
+    "stdc_first_trailing_one_ui",  # libc.src.stdbit
+    "stdc_first_trailing_one_ul",  # libc.src.stdbit
+    "stdc_first_trailing_one_ull",  # libc.src.stdbit
+    "stdc_first_trailing_one_us",  # libc.src.stdbit
+    "stdc_first_trailing_zero_uc",  # libc.src.stdbit
+    "stdc_first_trailing_zero_ui",  # libc.src.stdbit
+    "stdc_first_trailing_zero_ul",  # libc.src.stdbit
+    "stdc_first_trailing_zero_ull",  # libc.src.stdbit
+    "stdc_first_trailing_zero_us",  # libc.src.stdbit
+    "stdc_has_single_bit_uc",  # libc.src.stdbit
+    "stdc_has_single_bit_ui",  # libc.src.stdbit
+    "stdc_has_single_bit_ul",  # libc.src.stdbit
+    "stdc_has_single_bit_ull",  # libc.src.stdbit
+    "stdc_has_single_bit_us",  # libc.src.stdbit
+    "stdc_leading_ones_uc",  # libc.src.stdbit
+    "stdc_leading_ones_ui",  # libc.src.stdbit
+    "stdc_leading_ones_ul",  # libc.src.stdbit
+    "stdc_leading_ones_ull",  # libc.src.stdbit
+    "stdc_leading_ones_us",  # libc.src.stdbit
+    "stdc_leading_zeros_uc",  # libc.src.stdbit
+    "stdc_leading_zeros_ui",  # libc.src.stdbit
+    "stdc_leading_zeros_ul",  # libc.src.stdbit
+    "stdc_leading_zeros_ull",  # libc.src.stdbit
+    "stdc_leading_zeros_us",  # libc.src.stdbit
+    "stdc_trailing_ones_uc",  # libc.src.stdbit
+    "stdc_trailing_ones_ui",  # libc.src.stdbit
+    "stdc_trailing_ones_ul",  # libc.src.stdbit
+    "stdc_trailing_ones_ull",  # libc.src.stdbit
+    "stdc_trailing_ones_us",  # libc.src.stdbit
+    "stdc_trailing_zeros_uc",  # libc.src.stdbit
+    "stdc_trailing_zeros_ui",  # libc.src.stdbit
+    "stdc_trailing_zeros_ul",  # libc.src.stdbit
+    "stdc_trailing_zeros_ull",  # libc.src.stdbit
+    "stdc_trailing_zeros_us",  # libc.src.stdbit
+    # "a64l",  # missing bazel rule  # libc.src.stdlib
     "abs",  # libc.src.stdlib
     "atof",  # libc.src.stdlib
     "atoi",  # libc.src.stdlib
@@ -171,12 +171,12 @@ CMAKE_LIBC_ENTRYPOINTS = [
     "atoll",  # libc.src.stdlib
     "bsearch",  # libc.src.stdlib
     "div",  # libc.src.stdlib
-    "l64a",  # libc.src.stdlib
+    # "l64a",  # missing bazel rule  # libc.src.stdlib
     "labs",  # libc.src.stdlib
     "ldiv",  # libc.src.stdlib
     "llabs",  # libc.src.stdlib
     "lldiv",  # libc.src.stdlib
-    "memalignment",  # libc.src.stdlib
+    # "memalignment",  # missing bazel rule  # libc.src.stdlib
     "qsort",  # libc.src.stdlib
     "qsort_r",  # libc.src.stdlib
     "rand",  # libc.src.stdlib
@@ -191,40 +191,40 @@ CMAKE_LIBC_ENTRYPOINTS = [
     "strtoll",  # libc.src.stdlib
     "strtoul",  # libc.src.stdlib
     "strtoull",  # libc.src.stdlib
-    "aligned_alloc",  # libc.src.stdlib
-    "calloc",  # libc.src.stdlib
-    "free",  # libc.src.stdlib
-    "malloc",  # libc.src.stdlib
-    "posix_memalign",  # libc.src.stdlib
-    "realloc",  # libc.src.stdlib
-    "fprintf",  # libc.src.stdio
-    "fscanf",  # libc.src.stdio
-    "vfscanf",  # libc.src.stdio
-    "printf",  # libc.src.stdio
-    "remove",  # libc.src.stdio
-    "rename",  # libc.src.stdio
-    "scanf",  # libc.src.stdio
-    "vscanf",  # libc.src.stdio
-    "snprintf",  # libc.src.stdio
-    "sprintf",  # libc.src.stdio
-    "asprintf",  # libc.src.stdio
-    "sscanf",  # libc.src.stdio
-    "stderr",  # libc.src.stdio
-    "stdin",  # libc.src.stdio
-    "stdout",  # libc.src.stdio
-    "vsscanf",  # libc.src.stdio
-    "vfprintf",  # libc.src.stdio
-    "vprintf",  # libc.src.stdio
-    "vsnprintf",  # libc.src.stdio
-    "vsprintf",  # libc.src.stdio
-    "vasprintf",  # libc.src.stdio
+    # "aligned_alloc",  # missing bazel rule  # libc.src.stdlib
+    # "calloc",  # missing bazel rule  # libc.src.stdlib
+    # "free",  # missing bazel rule  # libc.src.stdlib
+    # "malloc",  # missing bazel rule  # libc.src.stdlib
+    # "posix_memalign",  # missing bazel rule  # libc.src.stdlib
+    # "realloc",  # missing bazel rule  # libc.src.stdlib
+    # "fprintf",  # libc.src.stdio
+    # "fscanf",  # libc.src.stdio
+    # "vfscanf",  # libc.src.stdio
+    # "printf",  # libc.src.stdio
+    # "remove",  # libc.src.stdio
+    # "rename",  # libc.src.stdio
+    # "scanf",  # libc.src.stdio
+    # "vscanf",  # libc.src.stdio
+    # "snprintf",  # libc.src.stdio
+    # "sprintf",  # libc.src.stdio
+    # "asprintf",  # libc.src.stdio
+    # "sscanf",  # libc.src.stdio
+    # "stderr",  # libc.src.stdio
+    # "stdin",  # libc.src.stdio
+    # "stdout",  # libc.src.stdio
+    # "vsscanf",  # libc.src.stdio
+    # "vfprintf",  # libc.src.stdio
+    # "vprintf",  # libc.src.stdio
+    # "vsnprintf",  # libc.src.stdio
+    # "vsprintf",  # libc.src.stdio
+    # "vasprintf",  # libc.src.stdio
     "epoll_create",  # libc.src.sys.epoll
     "epoll_create1",  # libc.src.sys.epoll
     "epoll_ctl",  # libc.src.sys.epoll
     "epoll_pwait",  # libc.src.sys.epoll
     "epoll_wait",  # libc.src.sys.epoll
-    "ioctl",  # libc.src.sys.ioctl
-    "ftok",  # libc.src.sys.ipc
+    # "ioctl",  # missing bazel rule  # libc.src.sys.ioctl
+    # "ftok",  # missing bazel rule  # libc.src.sys.ipc
     "madvise",  # libc.src.sys.mman
     "mincore",  # libc.src.sys.mman
     "mlock",  # libc.src.sys.mman
@@ -246,98 +246,98 @@ CMAKE_LIBC_ENTRYPOINTS = [
     "posix_madvise",  # libc.src.sys.mman
     "shm_open",  # libc.src.sys.mman
     "shm_unlink",  # libc.src.sys.mman
-    "getrandom",  # libc.src.sys.random
+    # "getrandom",  # missing bazel rule  # libc.src.sys.random
     "getrlimit",  # libc.src.sys.resource
     "setrlimit",  # libc.src.sys.resource
-    "semget",  # libc.src.sys.sem
-    "semctl",  # libc.src.sys.sem
-    "semop",  # libc.src.sys.sem
-    "sendfile",  # libc.src.sys.sendfile
-    "accept",  # libc.src.sys.socket
-    "accept4",  # libc.src.sys.socket
-    "bind",  # libc.src.sys.socket
-    "connect",  # libc.src.sys.socket
+    # "semget",  # missing bazel rule  # libc.src.sys.sem
+    # "semctl",  # missing bazel rule  # libc.src.sys.sem
+    # "semop",  # missing bazel rule  # libc.src.sys.sem
+    # "sendfile",  # missing bazel rule  # libc.src.sys.sendfile
+    # "accept",  # missing bazel rule  # libc.src.sys.socket
+    # "accept4",  # missing bazel rule  # libc.src.sys.socket
+    # "bind",  # missing bazel rule  # libc.src.sys.socket
+    # "connect",  # missing bazel rule  # libc.src.sys.socket
     "getsockopt",  # libc.src.sys.socket
-    "listen",  # libc.src.sys.socket
+    # "listen",  # missing bazel rule  # libc.src.sys.socket
     "recv",  # libc.src.sys.socket
     "recvfrom",  # libc.src.sys.socket
     "send",  # libc.src.sys.socket
     "sendto",  # libc.src.sys.socket
-    "setsockopt",  # libc.src.sys.socket
-    "shutdown",  # libc.src.sys.socket
+    # "setsockopt",  # missing bazel rule  # libc.src.sys.socket
+    # "shutdown",  # missing bazel rule  # libc.src.sys.socket
     "socket",  # libc.src.sys.socket
     "socketpair",  # libc.src.sys.socket
     "recvmsg",  # libc.src.sys.socket
     "sendmsg",  # libc.src.sys.socket
-    "chmod",  # libc.src.sys.stat
-    "fchmod",  # libc.src.sys.stat
-    "fchmodat",  # libc.src.sys.stat
-    "fstat",  # libc.src.sys.stat
-    "lstat",  # libc.src.sys.stat
+    # "chmod",  # missing bazel rule  # libc.src.sys.stat
+    # "fchmod",  # missing bazel rule  # libc.src.sys.stat
+    # "fchmodat",  # missing bazel rule  # libc.src.sys.stat
+    # "fstat",  # missing bazel rule  # libc.src.sys.stat
+    # "lstat",  # missing bazel rule  # libc.src.sys.stat
     "mkdir",  # libc.src.sys.stat
     "mkdirat",  # libc.src.sys.stat
-    "stat",  # libc.src.sys.stat
-    "utimensat",  # libc.src.sys.stat
-    "fstatvfs",  # libc.src.sys.statvfs
-    "statvfs",  # libc.src.sys.statvfs
-    "utimes",  # libc.src.sys.time
-    "uname",  # libc.src.sys.utsname
-    "wait",  # libc.src.sys.wait
-    "wait4",  # libc.src.sys.wait
-    "waitpid",  # libc.src.sys.wait
-    "prctl",  # libc.src.sys.prctl
-    "personality",  # libc.src.sys.personality
-    "getauxval",  # libc.src.sys.auxv
-    # "cfgetispeed",  # libc.src.termios
-    # "cfgetospeed",  # libc.src.termios
-    # "cfsetispeed",  # libc.src.termios
-    # "cfsetospeed",  # libc.src.termios
-    # "tcdrain",  # libc.src.termios
-    # "tcflow",  # libc.src.termios
-    # "tcflush",  # libc.src.termios
-    # "tcgetattr",  # libc.src.termios
-    # "tcgetsid",  # libc.src.termios
-    # "tcsendbreak",  # libc.src.termios
-    # "tcsetattr",  # libc.src.termios
+    # "stat",  # missing bazel rule  # libc.src.sys.stat
+    # "utimensat",  # missing bazel rule  # libc.src.sys.stat
+    # "fstatvfs",  # missing bazel rule  # libc.src.sys.statvfs
+    # "statvfs",  # missing bazel rule  # libc.src.sys.statvfs
+    # "utimes",  # missing bazel rule  # libc.src.sys.time
+    # "uname",  # missing bazel rule  # libc.src.sys.utsname
+    # "wait",  # missing bazel rule  # libc.src.sys.wait
+    # "wait4",  # missing bazel rule  # libc.src.sys.wait
+    # "waitpid",  # missing bazel rule  # libc.src.sys.wait
+    # "prctl",  # missing bazel rule  # libc.src.sys.prctl
+    # "personality",  # missing bazel rule  # libc.src.sys.personality
+    # "getauxval",  # missing bazel rule  # libc.src.sys.auxv
+    # "cfgetispeed",  # missing bazel rule  # libc.src.termios
+    # "cfgetospeed",  # missing bazel rule  # libc.src.termios
+    # "cfsetispeed",  # missing bazel rule  # libc.src.termios
+    # "cfsetospeed",  # missing bazel rule  # libc.src.termios
+    # "tcdrain",  # missing bazel rule  # libc.src.termios
+    # "tcflow",  # missing bazel rule  # libc.src.termios
+    # "tcflush",  # missing bazel rule  # libc.src.termios
+    # "tcgetattr",  # missing bazel rule  # libc.src.termios
+    # "tcgetsid",  # missing bazel rule  # libc.src.termios
+    # "tcsendbreak",  # missing bazel rule  # libc.src.termios
+    # "tcsetattr",  # missing bazel rule  # libc.src.termios
     "access",  # libc.src.unistd
     "chdir",  # libc.src.unistd
-    "chown",  # libc.src.unistd
+    # "chown",  # missing bazel rule  # libc.src.unistd
     "close",  # libc.src.unistd
     "dup",  # libc.src.unistd
     "dup2",  # libc.src.unistd
     "dup3",  # libc.src.unistd
-    "execve",  # libc.src.unistd
-    "faccessat",  # libc.src.unistd
+    # "execve",  # missing bazel rule  # libc.src.unistd
+    # "faccessat",  # missing bazel rule  # libc.src.unistd
     "fchdir",  # libc.src.unistd
-    "fchown",  # libc.src.unistd
-    "fpathconf",  # libc.src.unistd
+    # "fchown",  # missing bazel rule  # libc.src.unistd
+    # "fpathconf",  # missing bazel rule  # libc.src.unistd
     "fsync",  # libc.src.unistd
     "ftruncate",  # libc.src.unistd
-    "getcwd",  # libc.src.unistd
-    "getentropy",  # libc.src.unistd
+    # "getcwd",  # missing bazel rule  # libc.src.unistd
+    # "getentropy",  # missing bazel rule  # libc.src.unistd
     "geteuid",  # libc.src.unistd
-    "gethostname",  # libc.src.unistd
+    # "gethostname",  # missing bazel rule  # libc.src.unistd
     "getpagesize",  # libc.src.unistd
-    "getpid",  # libc.src.unistd
+    # "getpid",  # missing bazel rule  # libc.src.unistd
     "getppid",  # libc.src.unistd
-    "getsid",  # libc.src.unistd
-    "gettid",  # libc.src.unistd
-    "getgid",  # libc.src.unistd
+    # "getsid",  # missing bazel rule  # libc.src.unistd
+    # "gettid",  # missing bazel rule  # libc.src.unistd
+    # "getgid",  # missing bazel rule  # libc.src.unistd
     "getuid",  # libc.src.unistd
     "isatty",  # libc.src.unistd
     "link",  # libc.src.unistd
     "linkat",  # libc.src.unistd
     "lseek",  # libc.src.unistd
-    "pathconf",  # libc.src.unistd
+    # "pathconf",  # missing bazel rule  # libc.src.unistd
     "pipe",  # libc.src.unistd
-    "pipe2",  # libc.src.unistd
+    # "pipe2",  # missing bazel rule  # libc.src.unistd
     "pread",  # libc.src.unistd
     "pwrite",  # libc.src.unistd
     "read",  # libc.src.unistd
     "readlink",  # libc.src.unistd
     "readlinkat",  # libc.src.unistd
     "rmdir",  # libc.src.unistd
-    "setsid",  # libc.src.unistd
+    # "setsid",  # missing bazel rule  # libc.src.unistd
     "symlink",  # libc.src.unistd
     "symlinkat",  # libc.src.unistd
     "sysconf",  # libc.src.unistd
@@ -347,20 +347,20 @@ CMAKE_LIBC_ENTRYPOINTS = [
     "write",  # libc.src.unistd
     "btowc",  # libc.src.wchar
     "wcslen",  # libc.src.wchar
-    "wcsnlen",  # libc.src.wchar
+    # "wcsnlen",  # missing bazel rule  # libc.src.wchar
     "wctob",  # libc.src.wchar
     "wmemmove",  # libc.src.wchar
     "wmemset",  # libc.src.wchar
     "wcschr",  # libc.src.wchar
     "wcsncmp",  # libc.src.wchar
-    "wcsxfrm",  # libc.src.wchar
+    # "wcsxfrm",  # missing bazel rule  # libc.src.wchar
     "wcscmp",  # libc.src.wchar
-    "wcscoll",  # libc.src.wchar
+    # "wcscoll",  # missing bazel rule  # libc.src.wchar
     "wcspbrk",  # libc.src.wchar
     "wcsrchr",  # libc.src.wchar
     "wcsspn",  # libc.src.wchar
     "wcscspn",  # libc.src.wchar
-    "wcsdup",  # libc.src.wchar
+    # "wcsdup",  # missing bazel rule  # libc.src.wchar
     "wmemcmp",  # libc.src.wchar
     "wmempcpy",  # libc.src.wchar
     "wmemcpy",  # libc.src.wchar
@@ -374,312 +374,312 @@ CMAKE_LIBC_ENTRYPOINTS = [
     "wmemchr",  # libc.src.wchar
     "wcpcpy",  # libc.src.wchar
     "wcpncpy",  # libc.src.wchar
-    "wcstod",  # libc.src.wchar
-    "wcstof",  # libc.src.wchar
-    "wcstok",  # libc.src.wchar
-    "wcstol",  # libc.src.wchar
-    "wcstold",  # libc.src.wchar
-    "wcstoll",  # libc.src.wchar
-    "wcstoul",  # libc.src.wchar
-    "wcstoull",  # libc.src.wchar
-    "iswalpha",  # libc.src.wctype
-    "iswgraph",  # libc.src.wctype
-    "iswcntrl",  # libc.src.wctype
-    "iswdigit",  # libc.src.wctype
-    "iswupper",  # libc.src.wctype
-    "iswalnum",  # libc.src.wctype
-    "iswlower",  # libc.src.wctype
-    "iswspace",  # libc.src.wctype
-    "iswblank",  # libc.src.wctype
-    "iswxdigit",  # libc.src.wctype
-    "iswpunct",  # libc.src.wctype
-    "iswprint",  # libc.src.wctype
-    "iswctype",  # libc.src.wctype
-    "wctype",  # libc.src.wctype
-    "writev",  # libc.src.sys.uio
-    "readv",  # libc.src.sys.uio
-    "setitimer",  # libc.src.sys.time
-    "getitimer",  # libc.src.sys.time
-    "isalnum_l",  # libc.src.ctype
-    "isalpha_l",  # libc.src.ctype
-    "isblank_l",  # libc.src.ctype
-    "iscntrl_l",  # libc.src.ctype
-    "isdigit_l",  # libc.src.ctype
-    "isgraph_l",  # libc.src.ctype
-    "islower_l",  # libc.src.ctype
-    "isprint_l",  # libc.src.ctype
-    "ispunct_l",  # libc.src.ctype
-    "isspace_l",  # libc.src.ctype
-    "isupper_l",  # libc.src.ctype
-    "isxdigit_l",  # libc.src.ctype
-    "tolower_l",  # libc.src.ctype
-    "toupper_l",  # libc.src.ctype
-    "strtod_l",  # libc.src.stdlib
-    "strtof_l",  # libc.src.stdlib
-    "strtol_l",  # libc.src.stdlib
-    "strtold_l",  # libc.src.stdlib
-    "strtoll_l",  # libc.src.stdlib
-    "strtoul_l",  # libc.src.stdlib
-    "strtoull_l",  # libc.src.stdlib
-    "strcoll_l",  # libc.src.string
-    "strxfrm_l",  # libc.src.string
-    "strcasecmp_l",  # libc.src.strings
-    "strncasecmp_l",  # libc.src.strings
-    "__assert_fail",  # libc.src.assert
-    "__stack_chk_fail",  # libc.src.compiler
-    "closedir",  # libc.src.dirent
-    "dirfd",  # libc.src.dirent
-    "opendir",  # libc.src.dirent
-    "readdir",  # libc.src.dirent
-    "htonl",  # libc.src.arpa.inet
-    "htons",  # libc.src.arpa.inet
-    "inet_addr",  # libc.src.arpa.inet
-    "inet_aton",  # libc.src.arpa.inet
-    "ntohl",  # libc.src.arpa.inet
-    "ntohs",  # libc.src.arpa.inet
-    "pthread_atfork",  # libc.src.pthread
-    "pthread_attr_destroy",  # libc.src.pthread
-    "pthread_attr_getdetachstate",  # libc.src.pthread
-    "pthread_attr_getguardsize",  # libc.src.pthread
-    "pthread_attr_getstack",  # libc.src.pthread
-    "pthread_attr_getstacksize",  # libc.src.pthread
-    "pthread_attr_init",  # libc.src.pthread
-    "pthread_attr_setdetachstate",  # libc.src.pthread
-    "pthread_attr_setguardsize",  # libc.src.pthread
-    "pthread_attr_setstack",  # libc.src.pthread
-    "pthread_attr_setstacksize",  # libc.src.pthread
-    "pthread_condattr_destroy",  # libc.src.pthread
-    "pthread_condattr_getclock",  # libc.src.pthread
-    "pthread_condattr_getpshared",  # libc.src.pthread
-    "pthread_condattr_init",  # libc.src.pthread
-    "pthread_condattr_setclock",  # libc.src.pthread
-    "pthread_condattr_setpshared",  # libc.src.pthread
-    "pthread_cond_broadcast",  # libc.src.pthread
-    "pthread_cond_clockwait",  # libc.src.pthread
-    "pthread_cond_destroy",  # libc.src.pthread
-    "pthread_cond_init",  # libc.src.pthread
-    "pthread_cond_signal",  # libc.src.pthread
-    "pthread_cond_timedwait",  # libc.src.pthread
-    "pthread_cond_wait",  # libc.src.pthread
-    "pthread_create",  # libc.src.pthread
-    "pthread_detach",  # libc.src.pthread
-    "pthread_equal",  # libc.src.pthread
-    "pthread_exit",  # libc.src.pthread
-    "pthread_getname_np",  # libc.src.pthread
-    "pthread_getspecific",  # libc.src.pthread
-    "pthread_join",  # libc.src.pthread
-    "pthread_key_create",  # libc.src.pthread
-    "pthread_key_delete",  # libc.src.pthread
-    "pthread_barrier_init",  # libc.src.pthread
-    "pthread_barrier_wait",  # libc.src.pthread
-    "pthread_barrier_destroy",  # libc.src.pthread
-    "pthread_mutex_destroy",  # libc.src.pthread
-    "pthread_mutex_init",  # libc.src.pthread
-    "pthread_mutex_lock",  # libc.src.pthread
-    "pthread_mutex_trylock",  # libc.src.pthread
-    "pthread_mutex_unlock",  # libc.src.pthread
-    "pthread_mutexattr_destroy",  # libc.src.pthread
-    "pthread_mutexattr_getpshared",  # libc.src.pthread
-    "pthread_mutexattr_getrobust",  # libc.src.pthread
-    "pthread_mutexattr_gettype",  # libc.src.pthread
-    "pthread_mutexattr_init",  # libc.src.pthread
-    "pthread_mutexattr_setpshared",  # libc.src.pthread
-    "pthread_mutexattr_setrobust",  # libc.src.pthread
-    "pthread_mutexattr_settype",  # libc.src.pthread
-    "pthread_once",  # libc.src.pthread
-    "pthread_rwlock_clockrdlock",  # libc.src.pthread
-    "pthread_rwlock_clockwrlock",  # libc.src.pthread
-    "pthread_rwlock_destroy",  # libc.src.pthread
-    "pthread_rwlock_init",  # libc.src.pthread
-    "pthread_rwlock_rdlock",  # libc.src.pthread
-    "pthread_rwlock_timedrdlock",  # libc.src.pthread
-    "pthread_rwlock_timedwrlock",  # libc.src.pthread
-    "pthread_rwlock_tryrdlock",  # libc.src.pthread
-    "pthread_rwlock_trywrlock",  # libc.src.pthread
-    "pthread_rwlock_unlock",  # libc.src.pthread
-    "pthread_rwlock_wrlock",  # libc.src.pthread
-    "pthread_rwlockattr_destroy",  # libc.src.pthread
-    "pthread_rwlockattr_getkind_np",  # libc.src.pthread
-    "pthread_rwlockattr_getpshared",  # libc.src.pthread
-    "pthread_rwlockattr_init",  # libc.src.pthread
-    "pthread_rwlockattr_setkind_np",  # libc.src.pthread
-    "pthread_rwlockattr_setpshared",  # libc.src.pthread
-    "pthread_spin_destroy",  # libc.src.pthread
-    "pthread_spin_init",  # libc.src.pthread
-    "pthread_spin_lock",  # libc.src.pthread
-    "pthread_spin_trylock",  # libc.src.pthread
-    "pthread_spin_unlock",  # libc.src.pthread
-    "pthread_self",  # libc.src.pthread
-    "pthread_setname_np",  # libc.src.pthread
-    "pthread_setspecific",  # libc.src.pthread
-    "__sched_getcpucount",  # libc.src.sched
-    "__sched_setcpuzero",  # libc.src.sched
-    "__sched_setcpuset",  # libc.src.sched
-    "__sched_getcpuisset",  # libc.src.sched
-    "longjmp",  # libc.src.setjmp
-    "setjmp",  # libc.src.setjmp
-    "siglongjmp",  # libc.src.setjmp
-    "sigsetjmp",  # libc.src.setjmp
-    "getcontext",  # libc.src.ucontext
-    "setcontext",  # libc.src.ucontext
-    "clearerr",  # libc.src.stdio
-    "clearerr_unlocked",  # libc.src.stdio
-    "fclose",  # libc.src.stdio
-    "fdopen",  # libc.src.stdio
-    "feof",  # libc.src.stdio
-    "feof_unlocked",  # libc.src.stdio
-    "ferror",  # libc.src.stdio
-    "ferror_unlocked",  # libc.src.stdio
-    "fflush",  # libc.src.stdio
-    "fgetc",  # libc.src.stdio
-    "fgetc_unlocked",  # libc.src.stdio
-    "fgets",  # libc.src.stdio
-    "fileno",  # libc.src.stdio
-    "flockfile",  # libc.src.stdio
-    "fopen",  # libc.src.stdio
-    "fopencookie",  # libc.src.stdio
-    "fputc",  # libc.src.stdio
-    "fputs",  # libc.src.stdio
-    "fread",  # libc.src.stdio
-    "fread_unlocked",  # libc.src.stdio
-    "fseek",  # libc.src.stdio
-    "fseeko",  # libc.src.stdio
-    "ftell",  # libc.src.stdio
-    "ftello",  # libc.src.stdio
-    "funlockfile",  # libc.src.stdio
-    "fwrite",  # libc.src.stdio
-    "fwrite_unlocked",  # libc.src.stdio
-    "getc",  # libc.src.stdio
-    "getc_unlocked",  # libc.src.stdio
-    "getchar",  # libc.src.stdio
-    "getchar_unlocked",  # libc.src.stdio
-    "perror",  # libc.src.stdio
-    "putc",  # libc.src.stdio
-    "putchar",  # libc.src.stdio
-    "puts",  # libc.src.stdio
-    "rewind",  # libc.src.stdio
-    "setbuf",  # libc.src.stdio
-    "setvbuf",  # libc.src.stdio
-    "stderr",  # libc.src.stdio
-    "stdin",  # libc.src.stdio
-    "stdout",  # libc.src.stdio
-    "ungetc",  # libc.src.stdio
-    "_Exit",  # libc.src.stdlib
-    "abort",  # libc.src.stdlib
-    "at_quick_exit",  # libc.src.stdlib
-    "atexit",  # libc.src.stdlib
-    "exit",  # libc.src.stdlib
-    "getenv",  # libc.src.stdlib
-    "mbstowcs",  # libc.src.stdlib
-    "mbtowc",  # libc.src.stdlib
-    "quick_exit",  # libc.src.stdlib
-    "wcstombs",  # libc.src.stdlib
-    "wctomb",  # libc.src.stdlib
-    "kill",  # libc.src.signal
-    "raise",  # libc.src.signal
-    "sigaction",  # libc.src.signal
-    "sigaddset",  # libc.src.signal
-    "sigaltstack",  # libc.src.signal
-    "sigdelset",  # libc.src.signal
-    "sigemptyset",  # libc.src.signal
-    "sigfillset",  # libc.src.signal
-    "signal",  # libc.src.signal
-    "sigprocmask",  # libc.src.signal
-    "posix_spawn",  # libc.src.spawn
-    "posix_spawn_file_actions_addclose",  # libc.src.spawn
-    "posix_spawn_file_actions_adddup2",  # libc.src.spawn
-    "posix_spawn_file_actions_addopen",  # libc.src.spawn
-    "posix_spawn_file_actions_destroy",  # libc.src.spawn
-    "posix_spawn_file_actions_init",  # libc.src.spawn
-    "hcreate",  # libc.src.search
-    "hcreate_r",  # libc.src.search
-    "hdestroy",  # libc.src.search
-    "hdestroy_r",  # libc.src.search
-    "hsearch",  # libc.src.search
-    "hsearch_r",  # libc.src.search
-    "insque",  # libc.src.search
-    "lfind",  # libc.src.search
-    "lsearch",  # libc.src.search
-    "remque",  # libc.src.search
-    "tdelete",  # libc.src.search
-    "tdestroy",  # libc.src.search
-    "tfind",  # libc.src.search
-    "tsearch",  # libc.src.search
-    "twalk",  # libc.src.search
-    "twalk_r",  # libc.src.search
-    "call_once",  # libc.src.threads
-    "cnd_broadcast",  # libc.src.threads
-    "cnd_destroy",  # libc.src.threads
-    "cnd_init",  # libc.src.threads
-    "cnd_signal",  # libc.src.threads
-    "cnd_wait",  # libc.src.threads
-    "mtx_destroy",  # libc.src.threads
-    "mtx_init",  # libc.src.threads
-    "mtx_lock",  # libc.src.threads
-    "mtx_unlock",  # libc.src.threads
-    "thrd_create",  # libc.src.threads
-    "thrd_current",  # libc.src.threads
-    "thrd_detach",  # libc.src.threads
-    "thrd_equal",  # libc.src.threads
-    "thrd_exit",  # libc.src.threads
-    "thrd_join",  # libc.src.threads
-    "tss_create",  # libc.src.threads
-    "tss_delete",  # libc.src.threads
-    "tss_get",  # libc.src.threads
-    "tss_set",  # libc.src.threads
-    "asctime",  # libc.src.time
-    "asctime_r",  # libc.src.time
-    "ctime",  # libc.src.time
-    "ctime_r",  # libc.src.time
-    "clock",  # libc.src.time
-    "clock_gettime",  # libc.src.time
-    "clock_settime",  # libc.src.time
-    "difftime",  # libc.src.time
-    "gettimeofday",  # libc.src.time
-    "gmtime",  # libc.src.time
-    "gmtime_r",  # libc.src.time
-    "localtime",  # libc.src.time
-    "localtime_r",  # libc.src.time
-    "mktime",  # libc.src.time
-    "nanosleep",  # libc.src.time
-    "strftime",  # libc.src.time
-    "strftime_l",  # libc.src.time
-    "time",  # libc.src.time
-    "timespec_get",  # libc.src.time
-    "localeconv",  # libc.src.locale
-    "duplocale",  # libc.src.locale
-    "freelocale",  # libc.src.locale
-    "localeconv",  # libc.src.locale
-    "newlocale",  # libc.src.locale
-    "setlocale",  # libc.src.locale
-    "uselocale",  # libc.src.locale
-    "__llvm_libc_syscall",  # libc.src.unistd
-    "_exit",  # libc.src.unistd
+    # "wcstod",  # missing bazel rule  # libc.src.wchar
+    # "wcstof",  # missing bazel rule  # libc.src.wchar
+    # "wcstok",  # missing bazel rule  # libc.src.wchar
+    # "wcstol",  # missing bazel rule  # libc.src.wchar
+    # "wcstold",  # missing bazel rule  # libc.src.wchar
+    # "wcstoll",  # missing bazel rule  # libc.src.wchar
+    # "wcstoul",  # missing bazel rule  # libc.src.wchar
+    # "wcstoull",  # missing bazel rule  # libc.src.wchar
+    # "iswalpha",  # missing bazel rule  # libc.src.wctype
+    # "iswgraph",  # missing bazel rule  # libc.src.wctype
+    # "iswcntrl",  # missing bazel rule  # libc.src.wctype
+    # "iswdigit",  # missing bazel rule  # libc.src.wctype
+    # "iswupper",  # missing bazel rule  # libc.src.wctype
+    # "iswalnum",  # missing bazel rule  # libc.src.wctype
+    # "iswlower",  # missing bazel rule  # libc.src.wctype
+    # "iswspace",  # missing bazel rule  # libc.src.wctype
+    # "iswblank",  # missing bazel rule  # libc.src.wctype
+    # "iswxdigit",  # missing bazel rule  # libc.src.wctype
+    # "iswpunct",  # missing bazel rule  # libc.src.wctype
+    # "iswprint",  # missing bazel rule  # libc.src.wctype
+    # "iswctype",  # missing bazel rule  # libc.src.wctype
+    # "wctype",  # missing bazel rule  # libc.src.wctype
+    # "writev",  # missing bazel rule  # libc.src.sys.uio
+    # "readv",  # missing bazel rule  # libc.src.sys.uio
+    # "setitimer",  # missing bazel rule  # libc.src.sys.time
+    # "getitimer",  # missing bazel rule  # libc.src.sys.time
+    # "isalnum_l",  # missing bazel rule  # libc.src.ctype
+    # "isalpha_l",  # missing bazel rule  # libc.src.ctype
+    # "isblank_l",  # missing bazel rule  # libc.src.ctype
+    # "iscntrl_l",  # missing bazel rule  # libc.src.ctype
+    # "isdigit_l",  # missing bazel rule  # libc.src.ctype
+    # "isgraph_l",  # missing bazel rule  # libc.src.ctype
+    # "islower_l",  # missing bazel rule  # libc.src.ctype
+    # "isprint_l",  # missing bazel rule  # libc.src.ctype
+    # "ispunct_l",  # missing bazel rule  # libc.src.ctype
+    # "isspace_l",  # missing bazel rule  # libc.src.ctype
+    # "isupper_l",  # missing bazel rule  # libc.src.ctype
+    # "isxdigit_l",  # missing bazel rule  # libc.src.ctype
+    # "tolower_l",  # missing bazel rule  # libc.src.ctype
+    # "toupper_l",  # missing bazel rule  # libc.src.ctype
+    # "strtod_l",  # missing bazel rule  # libc.src.stdlib
+    # "strtof_l",  # missing bazel rule  # libc.src.stdlib
+    # "strtol_l",  # missing bazel rule  # libc.src.stdlib
+    # "strtold_l",  # missing bazel rule  # libc.src.stdlib
+    # "strtoll_l",  # missing bazel rule  # libc.src.stdlib
+    # "strtoul_l",  # missing bazel rule  # libc.src.stdlib
+    # "strtoull_l",  # missing bazel rule  # libc.src.stdlib
+    # "strcoll_l",  # missing bazel rule  # libc.src.string
+    # "strxfrm_l",  # missing bazel rule  # libc.src.string
+    # "strcasecmp_l",  # missing bazel rule  # libc.src.strings
+    # "strncasecmp_l",  # missing bazel rule  # libc.src.strings
+    # "__assert_fail",  # missing bazel rule  # libc.src.assert
+    # "__stack_chk_fail",  # missing bazel rule  # libc.src.compiler
+    # "closedir",  # missing bazel rule  # libc.src.dirent
+    # "dirfd",  # missing bazel rule  # libc.src.dirent
+    # "opendir",  # missing bazel rule  # libc.src.dirent
+    # "readdir",  # missing bazel rule  # libc.src.dirent
+    # "htonl",  # missing bazel rule  # libc.src.arpa.inet
+    # "htons",  # missing bazel rule  # libc.src.arpa.inet
+    # "inet_addr",  # missing bazel rule  # libc.src.arpa.inet
+    # "inet_aton",  # missing bazel rule  # libc.src.arpa.inet
+    # "ntohl",  # missing bazel rule  # libc.src.arpa.inet
+    # "ntohs",  # missing bazel rule  # libc.src.arpa.inet
+    # "pthread_atfork",  # missing bazel rule  # libc.src.pthread
+    # "pthread_attr_destroy",  # missing bazel rule  # libc.src.pthread
+    # "pthread_attr_getdetachstate",  # missing bazel rule  # libc.src.pthread
+    # "pthread_attr_getguardsize",  # missing bazel rule  # libc.src.pthread
+    # "pthread_attr_getstack",  # missing bazel rule  # libc.src.pthread
+    # "pthread_attr_getstacksize",  # missing bazel rule  # libc.src.pthread
+    # "pthread_attr_init",  # missing bazel rule  # libc.src.pthread
+    # "pthread_attr_setdetachstate",  # missing bazel rule  # libc.src.pthread
+    # "pthread_attr_setguardsize",  # missing bazel rule  # libc.src.pthread
+    # "pthread_attr_setstack",  # missing bazel rule  # libc.src.pthread
+    # "pthread_attr_setstacksize",  # missing bazel rule  # libc.src.pthread
+    # "pthread_condattr_destroy",  # missing bazel rule  # libc.src.pthread
+    # "pthread_condattr_getclock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_condattr_getpshared",  # missing bazel rule  # libc.src.pthread
+    # "pthread_condattr_init",  # missing bazel rule  # libc.src.pthread
+    # "pthread_condattr_setclock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_condattr_setpshared",  # missing bazel rule  # libc.src.pthread
+    # "pthread_cond_broadcast",  # missing bazel rule  # libc.src.pthread
+    # "pthread_cond_clockwait",  # missing bazel rule  # libc.src.pthread
+    # "pthread_cond_destroy",  # missing bazel rule  # libc.src.pthread
+    # "pthread_cond_init",  # missing bazel rule  # libc.src.pthread
+    # "pthread_cond_signal",  # missing bazel rule  # libc.src.pthread
+    # "pthread_cond_timedwait",  # missing bazel rule  # libc.src.pthread
+    # "pthread_cond_wait",  # missing bazel rule  # libc.src.pthread
+    # "pthread_create",  # missing bazel rule  # libc.src.pthread
+    # "pthread_detach",  # missing bazel rule  # libc.src.pthread
+    # "pthread_equal",  # missing bazel rule  # libc.src.pthread
+    # "pthread_exit",  # missing bazel rule  # libc.src.pthread
+    # "pthread_getname_np",  # missing bazel rule  # libc.src.pthread
+    # "pthread_getspecific",  # missing bazel rule  # libc.src.pthread
+    # "pthread_join",  # missing bazel rule  # libc.src.pthread
+    # "pthread_key_create",  # missing bazel rule  # libc.src.pthread
+    # "pthread_key_delete",  # missing bazel rule  # libc.src.pthread
+    # "pthread_barrier_init",  # missing bazel rule  # libc.src.pthread
+    # "pthread_barrier_wait",  # missing bazel rule  # libc.src.pthread
+    # "pthread_barrier_destroy",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutex_destroy",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutex_init",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutex_lock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutex_trylock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutex_unlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutexattr_destroy",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutexattr_getpshared",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutexattr_getrobust",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutexattr_gettype",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutexattr_init",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutexattr_setpshared",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutexattr_setrobust",  # missing bazel rule  # libc.src.pthread
+    # "pthread_mutexattr_settype",  # missing bazel rule  # libc.src.pthread
+    # "pthread_once",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_clockrdlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_clockwrlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_destroy",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_init",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_rdlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_timedrdlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_timedwrlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_tryrdlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_trywrlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_unlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlock_wrlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlockattr_destroy",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlockattr_getkind_np",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlockattr_getpshared",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlockattr_init",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlockattr_setkind_np",  # missing bazel rule  # libc.src.pthread
+    # "pthread_rwlockattr_setpshared",  # missing bazel rule  # libc.src.pthread
+    # "pthread_spin_destroy",  # missing bazel rule  # libc.src.pthread
+    # "pthread_spin_init",  # missing bazel rule  # libc.src.pthread
+    # "pthread_spin_lock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_spin_trylock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_spin_unlock",  # missing bazel rule  # libc.src.pthread
+    # "pthread_self",  # missing bazel rule  # libc.src.pthread
+    # "pthread_setname_np",  # missing bazel rule  # libc.src.pthread
+    # "pthread_setspecific",  # missing bazel rule  # libc.src.pthread
+    # "__sched_getcpucount",  # missing bazel rule  # libc.src.sched
+    # "__sched_setcpuzero",  # missing bazel rule  # libc.src.sched
+    # "__sched_setcpuset",  # missing bazel rule  # libc.src.sched
+    # "__sched_getcpuisset",  # missing bazel rule  # libc.src.sched
+    # "longjmp",  # missing bazel rule  # libc.src.setjmp
+    # "setjmp",  # missing bazel rule  # libc.src.setjmp
+    # "siglongjmp",  # missing bazel rule  # libc.src.setjmp
+    # "sigsetjmp",  # missing bazel rule  # libc.src.setjmp
+    # "getcontext",  # missing bazel rule  # libc.src.ucontext
+    # "setcontext",  # missing bazel rule  # libc.src.ucontext
+    # "clearerr",  # missing bazel rule  # libc.src.stdio
+    # "clearerr_unlocked",  # missing bazel rule  # libc.src.stdio
+    # "fclose",  # missing bazel rule  # libc.src.stdio
+    # "fdopen",  # missing bazel rule  # libc.src.stdio
+    # "feof",  # missing bazel rule  # libc.src.stdio
+    # "feof_unlocked",  # missing bazel rule  # libc.src.stdio
+    # "ferror",  # missing bazel rule  # libc.src.stdio
+    # "ferror_unlocked",  # missing bazel rule  # libc.src.stdio
+    # "fflush",  # missing bazel rule  # libc.src.stdio
+    # "fgetc",  # missing bazel rule  # libc.src.stdio
+    # "fgetc_unlocked",  # missing bazel rule  # libc.src.stdio
+    # "fgets",  # missing bazel rule  # libc.src.stdio
+    # "fileno",  # missing bazel rule  # libc.src.stdio
+    # "flockfile",  # missing bazel rule  # libc.src.stdio
+    # "fopen",  # missing bazel rule  # libc.src.stdio
+    # "fopencookie",  # missing bazel rule  # libc.src.stdio
+    # "fputc",  # missing bazel rule  # libc.src.stdio
+    # "fputs",  # missing bazel rule  # libc.src.stdio
+    # "fread",  # missing bazel rule  # libc.src.stdio
+    # "fread_unlocked",  # missing bazel rule  # libc.src.stdio
+    # "fseek",  # missing bazel rule  # libc.src.stdio
+    # "fseeko",  # missing bazel rule  # libc.src.stdio
+    # "ftell",  # missing bazel rule  # libc.src.stdio
+    # "ftello",  # missing bazel rule  # libc.src.stdio
+    # "funlockfile",  # missing bazel rule  # libc.src.stdio
+    # "fwrite",  # missing bazel rule  # libc.src.stdio
+    # "fwrite_unlocked",  # missing bazel rule  # libc.src.stdio
+    # "getc",  # missing bazel rule  # libc.src.stdio
+    # "getc_unlocked",  # missing bazel rule  # libc.src.stdio
+    # "getchar",  # missing bazel rule  # libc.src.stdio
+    # "getchar_unlocked",  # missing bazel rule  # libc.src.stdio
+    # "perror",  # missing bazel rule  # libc.src.stdio
+    # "putc",  # missing bazel rule  # libc.src.stdio
+    # "putchar",  # missing bazel rule  # libc.src.stdio
+    # "puts",  # missing bazel rule  # libc.src.stdio
+    # "rewind",  # missing bazel rule  # libc.src.stdio
+    # "setbuf",  # missing bazel rule  # libc.src.stdio
+    # "setvbuf",  # missing bazel rule  # libc.src.stdio
+    # "stderr",  # missing bazel rule  # libc.src.stdio
+    # "stdin",  # missing bazel rule  # libc.src.stdio
+    # "stdout",  # missing bazel rule  # libc.src.stdio
+    # "ungetc",  # missing bazel rule  # libc.src.stdio
+    # "_Exit",  # missing bazel rule  # libc.src.stdlib
+    # "abort",  # missing bazel rule  # libc.src.stdlib
+    # "at_quick_exit",  # missing bazel rule  # libc.src.stdlib
+    # "atexit",  # missing bazel rule  # libc.src.stdlib
+    # "exit",  # missing bazel rule  # libc.src.stdlib
+    # "getenv",  # missing bazel rule  # libc.src.stdlib
+    # "mbstowcs",  # missing bazel rule  # libc.src.stdlib
+    # "mbtowc",  # missing bazel rule  # libc.src.stdlib
+    # "quick_exit",  # missing bazel rule  # libc.src.stdlib
+    # "wcstombs",  # missing bazel rule  # libc.src.stdlib
+    # "wctomb",  # missing bazel rule  # libc.src.stdlib
+    # "kill",  # missing bazel rule  # libc.src.signal
+    # "raise",  # missing bazel rule  # libc.src.signal
+    # "sigaction",  # missing bazel rule  # libc.src.signal
+    # "sigaddset",  # missing bazel rule  # libc.src.signal
+    # "sigaltstack",  # missing bazel rule  # libc.src.signal
+    # "sigdelset",  # missing bazel rule  # libc.src.signal
+    # "sigemptyset",  # missing bazel rule  # libc.src.signal
+    # "sigfillset",  # missing bazel rule  # libc.src.signal
+    # "signal",  # missing bazel rule  # libc.src.signal
+    # "sigprocmask",  # missing bazel rule  # libc.src.signal
+    # "posix_spawn",  # missing bazel rule  # libc.src.spawn
+    # "posix_spawn_file_actions_addclose",  # missing bazel rule  # libc.src.spawn
+    # "posix_spawn_file_actions_adddup2",  # missing bazel rule  # libc.src.spawn
+    # "posix_spawn_file_actions_addopen",  # missing bazel rule  # libc.src.spawn
+    # "posix_spawn_file_actions_destroy",  # missing bazel rule  # libc.src.spawn
+    # "posix_spawn_file_actions_init",  # missing bazel rule  # libc.src.spawn
+    # "hcreate",  # missing bazel rule  # libc.src.search
+    # "hcreate_r",  # missing bazel rule  # libc.src.search
+    # "hdestroy",  # missing bazel rule  # libc.src.search
+    # "hdestroy_r",  # missing bazel rule  # libc.src.search
+    # "hsearch",  # missing bazel rule  # libc.src.search
+    # "hsearch_r",  # missing bazel rule  # libc.src.search
+    # "insque",  # missing bazel rule  # libc.src.search
+    # "lfind",  # missing bazel rule  # libc.src.search
+    # "lsearch",  # missing bazel rule  # libc.src.search
+    # "remque",  # missing bazel rule  # libc.src.search
+    # "tdelete",  # missing bazel rule  # libc.src.search
+    # "tdestroy",  # missing bazel rule  # libc.src.search
+    # "tfind",  # missing bazel rule  # libc.src.search
+    # "tsearch",  # missing bazel rule  # libc.src.search
+    # "twalk",  # missing bazel rule  # libc.src.search
+    # "twalk_r",  # missing bazel rule  # libc.src.search
+    # "call_once",  # missing bazel rule  # libc.src.threads
+    # "cnd_broadcast",  # missing bazel rule  # libc.src.threads
+    # "cnd_destroy",  # missing bazel rule  # libc.src.threads
+    # "cnd_init",  # missing bazel rule  # libc.src.threads
+    # "cnd_signal",  # missing bazel rule  # libc.src.threads
+    # "cnd_wait",  # missing bazel rule  # libc.src.threads
+    # "mtx_destroy",  # missing bazel rule  # libc.src.threads
+    # "mtx_init",  # missing bazel rule  # libc.src.threads
+    # "mtx_lock",  # missing bazel rule  # libc.src.threads
+    # "mtx_unlock",  # missing bazel rule  # libc.src.threads
+    # "thrd_create",  # missing bazel rule  # libc.src.threads
+    # "thrd_current",  # missing bazel rule  # libc.src.threads
+    # "thrd_detach",  # missing bazel rule  # libc.src.threads
+    # "thrd_equal",  # missing bazel rule  # libc.src.threads
+    # "thrd_exit",  # missing bazel rule  # libc.src.threads
+    # "thrd_join",  # missing bazel rule  # libc.src.threads
+    # "tss_create",  # missing bazel rule  # libc.src.threads
+    # "tss_delete",  # missing bazel rule  # libc.src.threads
+    # "tss_get",  # missing bazel rule  # libc.src.threads
+    # "tss_set",  # missing bazel rule  # libc.src.threads
+    # "asctime",  # missing bazel rule  # libc.src.time
+    # "asctime_r",  # missing bazel rule  # libc.src.time
+    # "ctime",  # missing bazel rule  # libc.src.time
+    # "ctime_r",  # missing bazel rule  # libc.src.time
+    # "clock",  # missing bazel rule  # libc.src.time
+    # "clock_gettime",  # missing bazel rule  # libc.src.time
+    # "clock_settime",  # missing bazel rule  # libc.src.time
+    # "difftime",  # missing bazel rule  # libc.src.time
+    # "gettimeofday",  # missing bazel rule  # libc.src.time
+    # "gmtime",  # missing bazel rule  # libc.src.time
+    # "gmtime_r",  # missing bazel rule  # libc.src.time
+    # "localtime",  # missing bazel rule  # libc.src.time
+    # "localtime_r",  # missing bazel rule  # libc.src.time
+    # "mktime",  # missing bazel rule  # libc.src.time
+    # "nanosleep",  # missing bazel rule  # libc.src.time
+    # "strftime",  # missing bazel rule  # libc.src.time
+    # "strftime_l",  # missing bazel rule  # libc.src.time
+    # "time",  # missing bazel rule  # libc.src.time
+    # "timespec_get",  # missing bazel rule  # libc.src.time
+    # "localeconv",  # missing bazel rule  # libc.src.locale
+    # "duplocale",  # missing bazel rule  # libc.src.locale
+    # "freelocale",  # missing bazel rule  # libc.src.locale
+    # "localeconv",  # missing bazel rule  # libc.src.locale
+    # "newlocale",  # missing bazel rule  # libc.src.locale
+    # "setlocale",  # missing bazel rule  # libc.src.locale
+    # "uselocale",  # missing bazel rule  # libc.src.locale
+    # "__llvm_libc_syscall",  # missing bazel rule  # libc.src.unistd
+    # "_exit",  # missing bazel rule  # libc.src.unistd
     "environ",  # libc.src.unistd
-    "execv",  # libc.src.unistd
-    "fork",  # libc.src.unistd
-    "getopt",  # libc.src.unistd
-    "optarg",  # libc.src.unistd
-    "opterr",  # libc.src.unistd
-    "optind",  # libc.src.unistd
-    "optopt",  # libc.src.unistd
+    # "execv",  # missing bazel rule  # libc.src.unistd
+    # "fork",  # missing bazel rule  # libc.src.unistd
+    # "getopt",  # missing bazel rule  # libc.src.unistd
+    # "optarg",  # missing bazel rule  # libc.src.unistd
+    # "opterr",  # missing bazel rule  # libc.src.unistd
+    # "optind",  # missing bazel rule  # libc.src.unistd
+    # "optopt",  # missing bazel rule  # libc.src.unistd
     "swab",  # libc.src.unistd
-    "select",  # libc.src.sys.select
-    "mblen",  # libc.src.wchar
-    "mbrlen",  # libc.src.wchar
-    "mbsinit",  # libc.src.wchar
-    "mbrtowc",  # libc.src.wchar
-    "mbsrtowcs",  # libc.src.wchar
-    "mbsnrtowcs",  # libc.src.wchar
-    "wcrtomb",  # libc.src.wchar
-    "wcsrtombs",  # libc.src.wchar
-    "wcsnrtombs",  # libc.src.wchar
-    "catopen",  # libc.src.nl_types
-    "catclose",  # libc.src.nl_types
-    "catgets",  # libc.src.nl_types
+    # "select",  # missing bazel rule  # libc.src.sys.select
+    # "mblen",  # missing bazel rule  # libc.src.wchar
+    # "mbrlen",  # missing bazel rule  # libc.src.wchar
+    # "mbsinit",  # missing bazel rule  # libc.src.wchar
+    # "mbrtowc",  # missing bazel rule  # libc.src.wchar
+    # "mbsrtowcs",  # missing bazel rule  # libc.src.wchar
+    # "mbsnrtowcs",  # missing bazel rule  # libc.src.wchar
+    # "wcrtomb",  # missing bazel rule  # libc.src.wchar
+    # "wcsrtombs",  # missing bazel rule  # libc.src.wchar
+    # "wcsnrtombs",  # missing bazel rule  # libc.src.wchar
+    # "catopen",  # missing bazel rule  # libc.src.nl_types
+    # "catclose",  # missing bazel rule  # libc.src.nl_types
+    # "catgets",  # missing bazel rule  # libc.src.nl_types
 ]
 
-CMAKE_LIBM_ENTRYPOINTS = [
+LIBM_ENTRYPOINTS = [
     "creal",  # libc.src.complex
     "crealf",  # libc.src.complex
     "creall",  # libc.src.complex
@@ -760,7 +760,6 @@ CMAKE_LIBM_ENTRYPOINTS = [
     "fabsl",  # libc.src.math
     "fadd",  # libc.src.math
     "faddl",  # libc.src.math
-    "fadd",  # libc.src.math
     "fdim",  # libc.src.math
     "fdimf",  # libc.src.math
     "fdiml",  # libc.src.math
@@ -1070,7 +1069,7 @@ CMAKE_LIBM_ENTRYPOINTS = [
     "bf16sub",  # libc.src.math
     "bf16subf",  # libc.src.math
     "bf16subl",  # libc.src.math
-    "canonicalizebf16",  # libc.src.math
+    # "canonicalizebf16",  # missing bazel rule  # libc.src.math
     "ceilbf16",  # libc.src.math
     "copysignbf16",  # libc.src.math
     "fabsbf16",  # libc.src.math
@@ -1090,7 +1089,7 @@ CMAKE_LIBM_ENTRYPOINTS = [
     "frexpbf16",  # libc.src.math
     "fromfpbf16",  # libc.src.math
     "fromfpxbf16",  # libc.src.math
-    "getpayloadbf16",  # libc.src.math
+    # "getpayloadbf16",  # missing bazel rule  # libc.src.math
     "hypotbf16",  # libc.src.math
     "ilogbbf16",  # libc.src.math
     "iscanonicalbf16",  # libc.src.math
@@ -1117,8 +1116,8 @@ CMAKE_LIBM_ENTRYPOINTS = [
     "roundevenbf16",  # libc.src.math
     "scalblnbf16",  # libc.src.math
     "scalbnbf16",  # libc.src.math
-    "setpayloadbf16",  # libc.src.math
-    "setpayloadsigbf16",  # libc.src.math
+    # "setpayloadbf16",  # missing bazel rule  # libc.src.math
+    # "setpayloadsigbf16",  # missing bazel rule  # libc.src.math
     "sqrtbf16",  # libc.src.math
     "truncbf16",  # libc.src.math
     "totalorderbf16",  # libc.src.math
@@ -1126,995 +1125,3 @@ CMAKE_LIBM_ENTRYPOINTS = [
     "ufromfpbf16",  # libc.src.math
     "ufromfpxbf16",  # libc.src.math
 ]
-
-ENTRYPOINTS_WITH_EXISTING_BAZEL_RULES = [
-    "abs",
-    "access",
-    "acos",
-    "acosf",
-    "acosf16",
-    "acoshf",
-    "acoshf16",
-    "acospif",
-    "acospif16",
-    "asin",
-    "asinbf16",
-    "asinf",
-    "asinf16",
-    "asinhf",
-    "asinhf16",
-    "asinpi",
-    "asinpif",
-    "asinpif16",
-    "asprintf",
-    "atan",
-    "atan2",
-    "atan2f",
-    "atan2f128",
-    "atan2f16",
-    "atanbf16",
-    "atanf",
-    "atanf16",
-    "atanhf",
-    "atanhf16",
-    "atanpif16",
-    "atof",
-    "atoi",
-    "atol",
-    "atoll",
-    "bcmp",
-    "bcopy",
-    "bf16add",
-    "bf16addf",
-    "bf16addf128",
-    "bf16addl",
-    "bf16div",
-    "bf16divf",
-    "bf16divf128",
-    "bf16divl",
-    "bf16fma",
-    "bf16fmaf",
-    "bf16fmaf128",
-    "bf16fmal",
-    "bf16mul",
-    "bf16mulf",
-    "bf16mulf128",
-    "bf16mull",
-    "bf16sub",
-    "bf16subf",
-    "bf16subf128",
-    "bf16subl",
-    "bfloat16",
-    "bsearch",
-    "btowc",
-    "build_mode",
-    "bzero",
-    "canonicalize",
-    "canonicalizef",
-    "canonicalizef128",
-    "canonicalizef16",
-    "canonicalizel",
-    "cbrt",
-    "cbrtbf16",
-    "cbrtf",
-    "ceil",
-    "ceilbf16",
-    "ceilf",
-    "ceilf128",
-    "ceilf16",
-    "ceill",
-    "chdir",
-    "cimag",
-    "cimagf",
-    "cimagf128",
-    "cimagf16",
-    "cimagl",
-    "close",
-    "conj",
-    "conjf",
-    "conjf128",
-    "conjf16",
-    "conjl",
-    "copy_llvm_libc_static_headers",
-    "copy_modular_format_header",
-    "copysign",
-    "copysignbf16",
-    "copysignf",
-    "copysignf128",
-    "copysignf16",
-    "copysignl",
-    "cos",
-    "cosf",
-    "cosf16",
-    "coshf",
-    "coshf16",
-    "cospif",
-    "cospif16",
-    "cproj",
-    "cprojf",
-    "cprojf128",
-    "cprojf16",
-    "cprojl",
-    "creal",
-    "crealf",
-    "crealf128",
-    "crealf16",
-    "creall",
-    "creat",
-    "daddf128",
-    "daddl",
-    "ddivf128",
-    "ddivl",
-    "dfmaf128",
-    "dfmal",
-    "div",
-    "dmulf128",
-    "dmull",
-    "dsqrtf128",
-    "dsqrtl",
-    "dsubf128",
-    "dsubl",
-    "dup",
-    "dup2",
-    "dup3",
-    "entrypoint_declarations",
-    "environ",
-    "epoll_create",
-    "epoll_create1",
-    "epoll_ctl",
-    "epoll_pwait",
-    "epoll_pwait2",
-    "epoll_wait",
-    "erfcf16",
-    "erff",
-    "erff16",
-    "errno",
-    "exp",
-    "exp10",
-    "exp10f",
-    "exp10f16",
-    "exp10m1f",
-    "exp10m1f16",
-    "exp2",
-    "exp2f",
-    "exp2f16",
-    "exp2m1f",
-    "exp2m1f16",
-    "expf",
-    "expf16",
-    "expm1",
-    "expm1f",
-    "expm1f16",
-    "f16add",
-    "f16addf",
-    "f16addf128",
-    "f16addl",
-    "f16div",
-    "f16divf",
-    "f16divf128",
-    "f16divl",
-    "f16fma",
-    "f16fmaf",
-    "f16fmaf128",
-    "f16fmal",
-    "f16mul",
-    "f16mulf",
-    "f16mulf128",
-    "f16mull",
-    "f16sqrt",
-    "f16sqrtf",
-    "f16sqrtf128",
-    "f16sqrtl",
-    "f16sub",
-    "f16subf",
-    "f16subf128",
-    "f16subl",
-    "fabs",
-    "fabsbf16",
-    "fabsf",
-    "fabsf128",
-    "fabsf16",
-    "fabsl",
-    "fadd",
-    "faddf128",
-    "faddl",
-    "fchdir",
-    "fcntl",
-    "fdim",
-    "fdimbf16",
-    "fdimf",
-    "fdimf128",
-    "fdimf16",
-    "fdiml",
-    "fdiv",
-    "fdivf128",
-    "fdivl",
-    "feclearexcept",
-    "fedisableexcept",
-    "feenableexcept",
-    "fegetenv",
-    "fegetexcept",
-    "fegetexceptflag",
-    "fegetround",
-    "feholdexcept",
-    "feraiseexcept",
-    "fesetenv",
-    "fesetexcept",
-    "fesetexceptflag",
-    "fesetround",
-    "fetestexcept",
-    "fetestexceptflag",
-    "feupdateenv",
-    "ffma",
-    "ffmaf128",
-    "ffmal",
-    "floor",
-    "floorbf16",
-    "floorf",
-    "floorf128",
-    "floorf16",
-    "floorl",
-    "fma",
-    "fmabf16",
-    "fmaf",
-    "fmaf16",
-    "fmax",
-    "fmaxbf16",
-    "fmaxf",
-    "fmaxf128",
-    "fmaxf16",
-    "fmaximum",
-    "fmaximum_mag",
-    "fmaximum_mag_num",
-    "fmaximum_mag_numbf16",
-    "fmaximum_mag_numf",
-    "fmaximum_mag_numf128",
-    "fmaximum_mag_numf16",
-    "fmaximum_mag_numl",
-    "fmaximum_magbf16",
-    "fmaximum_magf",
-    "fmaximum_magf128",
-    "fmaximum_magf16",
-    "fmaximum_magl",
-    "fmaximum_num",
-    "fmaximum_numbf16",
-    "fmaximum_numf",
-    "fmaximum_numf128",
-    "fmaximum_numf16",
-    "fmaximum_numl",
-    "fmaximumbf16",
-    "fmaximumf",
-    "fmaximumf128",
-    "fmaximumf16",
-    "fmaximuml",
-    "fmaxl",
-    "fmin",
-    "fminbf16",
-    "fminf",
-    "fminf128",
-    "fminf16",
-    "fminimum",
-    "fminimum_mag",
-    "fminimum_mag_num",
-    "fminimum_mag_numbf16",
-    "fminimum_mag_numf",
-    "fminimum_mag_numf128",
-    "fminimum_mag_numf16",
-    "fminimum_mag_numl",
-    "fminimum_magbf16",
-    "fminimum_magf",
-    "fminimum_magf128",
-    "fminimum_magf16",
-    "fminimum_magl",
-    "fminimum_num",
-    "fminimum_numbf16",
-    "fminimum_numf",
-    "fminimum_numf128",
-    "fminimum_numf16",
-    "fminimum_numl",
-    "fminimumbf16",
-    "fminimumf",
-    "fminimumf128",
-    "fminimumf16",
-    "fminimuml",
-    "fminl",
-    "fmod",
-    "fmodbf16",
-    "fmodf",
-    "fmodf128",
-    "fmodf16",
-    "fmodl",
-    "fmul",
-    "fmulf128",
-    "fmull",
-    "fprintf",
-    "frexp",
-    "frexpbf16",
-    "frexpf",
-    "frexpf128",
-    "frexpf16",
-    "frexpl",
-    "fromfp",
-    "fromfpbf16",
-    "fromfpf",
-    "fromfpf128",
-    "fromfpf16",
-    "fromfpl",
-    "fromfpx",
-    "fromfpxbf16",
-    "fromfpxf",
-    "fromfpxf128",
-    "fromfpxf16",
-    "fromfpxl",
-    "fscanf",
-    "fsqrt",
-    "fsqrtf128",
-    "fsqrtl",
-    "fsub",
-    "fsubf128",
-    "fsubl",
-    "fsync",
-    "ftruncate",
-    "full_build_enable",
-    "func_aligned_alloc",
-    "func_free",
-    "func_malloc",
-    "func_realloc",
-    "geteuid",
-    "getpagesize",
-    "getpayload",
-    "getpayloadf",
-    "getpayloadf128",
-    "getpayloadf16",
-    "getpayloadl",
-    "getppid",
-    "getrlimit",
-    "getsockopt",
-    "getuid",
-    "hdr_elf_proxy_h",
-    "hdr_errno_macros",
-    "hdr_fcntl_macros",
-    "hdr_fcntl_overlay",
-    "hdr_fenv_macros",
-    "hdr_float_macros",
-    "hdr_limits_macros",
-    "hdr_math_macros",
-    "hdr_signal_macros",
-    "hdr_stdint_proxy",
-    "hdr_stdio_macros",
-    "hdr_stdio_overlay",
-    "hdr_stdlib_macros",
-    "hdr_stdlib_overlay",
-    "hdr_sys_auxv_macros",
-    "hdr_sys_epoll_macros",
-    "hdr_sys_mman_macros",
-    "hdr_sys_socket_macros",
-    "hdr_sys_stat_macros",
-    "hdr_time_macros",
-    "hdr_uchar_overlay",
-    "hdr_unistd_macros",
-    "hdr_unistd_overlay",
-    "hdr_wchar_macros",
-    "hdr_wchar_overlay",
-    "hdr_wctype_overlay",
-    "hdrgen",
-    "hypot",
-    "hypotbf16",
-    "hypotf",
-    "hypotf16",
-    "ilogb",
-    "ilogbbf16",
-    "ilogbf",
-    "ilogbf128",
-    "ilogbf16",
-    "ilogbl",
-    "imaxabs",
-    "imaxdiv",
-    "include_arpa_inet_h",
-    "include_assert_h",
-    "include_complex_h",
-    "include_ctype_h",
-    "include_dirent_h",
-    "include_dlfcn_h",
-    "include_elf_h",
-    "include_endian_h",
-    "include_errno_h",
-    "include_fcntl_h",
-    "include_features_h",
-    "include_fenv_h",
-    "include_float_h",
-    "include_inttypes_h",
-    "include_limits_h",
-    "include_link_h",
-    "include_locale_h",
-    "include_malloc_h",
-    "include_math_h",
-    "include_netinet_in_h",
-    "include_nl_types_h",
-    "include_poll_h",
-    "include_pthread_h",
-    "include_sched_h",
-    "include_search_h",
-    "include_setjmp_h",
-    "include_signal_h",
-    "include_spawn_h",
-    "include_stdbit_h",
-    "include_stdckdint_h",
-    "include_stdfix_h",
-    "include_stdint_h",
-    "include_stdio_h",
-    "include_stdlib_h",
-    "include_string_h",
-    "include_strings_h",
-    "include_sys_auxv_h",
-    "include_sys_epoll_h",
-    "include_sys_ioctl_h",
-    "include_sys_ipc_h",
-    "include_sys_mman_h",
-    "include_sys_prctl_h",
-    "include_sys_random_h",
-    "include_sys_resource_h",
-    "include_sys_select_h",
-    "include_sys_socket_h",
-    "include_sys_stat_h",
-    "include_sys_statvfs_h",
-    "include_sys_syscall_h",
-    "include_sys_time_h",
-    "include_sys_types_h",
-    "include_sys_utsname_h",
-    "include_sys_wait_h",
-    "include_sysexits_h",
-    "include_termios_h",
-    "include_threads_h",
-    "include_time_h",
-    "include_uchar_h",
-    "include_unistd_h",
-    "include_wchar_h",
-    "include_wctype_h",
-    "index",
-    "isalnum",
-    "isalpha",
-    "isascii",
-    "isatty",
-    "isblank",
-    "iscanonical",
-    "iscanonicalbf16",
-    "iscanonicalf",
-    "iscanonicalf128",
-    "iscanonicalf16",
-    "iscanonicall",
-    "iscntrl",
-    "isdigit",
-    "isgraph",
-    "islower",
-    "isnan",
-    "isnanf",
-    "isnanl",
-    "isprint",
-    "ispunct",
-    "issignaling",
-    "issignalingbf16",
-    "issignalingf",
-    "issignalingf128",
-    "issignalingf16",
-    "issignalingl",
-    "isspace",
-    "isupper",
-    "isxdigit",
-    "labs",
-    "ldexp",
-    "ldexpbf16",
-    "ldexpf",
-    "ldexpf128",
-    "ldexpf16",
-    "ldexpl",
-    "ldiv",
-    "link",
-    "linkat",
-    "llabs",
-    "lldiv",
-    "llogb",
-    "llogbbf16",
-    "llogbf",
-    "llogbf128",
-    "llogbf16",
-    "llogbl",
-    "llrint",
-    "llrintbf16",
-    "llrintf",
-    "llrintf128",
-    "llrintf16",
-    "llrintl",
-    "llround",
-    "llroundbf16",
-    "llroundf",
-    "llroundf128",
-    "llroundf16",
-    "llroundl",
-    "llvm_libc_macros_complex_macros",
-    "llvm_libc_macros_fcntl_macros",
-    "llvm_libc_macros_float16_macros",
-    "llvm_libc_macros_float_macros",
-    "llvm_libc_macros_limits_macros",
-    "llvm_libc_macros_math_macros",
-    "llvm_libc_macros_stdfix_macros",
-    "llvm_libc_macros_stdint_macros",
-    "llvm_libc_macros_sys_socket_macros",
-    "llvm_libc_macros_sys_stat_macros",
-    "llvm_libc_types_cfloat128",
-    "llvm_libc_types_cfloat16",
-    "llvm_libc_types_char8_t",
-    "llvm_libc_types_float128",
-    "llvm_libc_types_size_t",
-    "llvm_libc_types_struct_cmsghdr",
-    "log",
-    "log10",
-    "log10f",
-    "log10f16",
-    "log10p1f16",
-    "log1p",
-    "log1pf",
-    "log2",
-    "log2f",
-    "log2f16",
-    "log2p1f16",
-    "log_bf16",
-    "logb",
-    "logbbf16",
-    "logbf",
-    "logbf128",
-    "logbf16",
-    "logbl",
-    "logf",
-    "logf16",
-    "lrint",
-    "lrintbf16",
-    "lrintf",
-    "lrintf128",
-    "lrintf16",
-    "lrintl",
-    "lround",
-    "lroundbf16",
-    "lroundf",
-    "lroundf128",
-    "lroundf16",
-    "lroundl",
-    "lseek",
-    "madvise",
-    "memccpy",
-    "memchr",
-    "memcmp",
-    "memcpy",
-    "memmem",
-    "memmove",
-    "mempcpy",
-    "memrchr",
-    "memset",
-    "memset_explicit",
-    "mincore",
-    "mkdir",
-    "mkdirat",
-    "mlock",
-    "mlock2",
-    "mlockall",
-    "mmap",
-    "modf",
-    "modfbf16",
-    "modff",
-    "modff128",
-    "modff16",
-    "modfl",
-    "modular_format",
-    "modular_format_enable",
-    "mpc",
-    "mpc_disable",
-    "mpc_external",
-    "mpc_system",
-    "mpfr",
-    "mpfr_disable",
-    "mpfr_external",
-    "mpfr_system",
-    "mprotect",
-    "mremap",
-    "msync",
-    "munlock",
-    "munlockall",
-    "munmap",
-    "nan",
-    "nanbf16",
-    "nanf",
-    "nanf128",
-    "nanf16",
-    "nanl",
-    "nearbyint",
-    "nearbyintbf16",
-    "nearbyintf",
-    "nearbyintf128",
-    "nearbyintf16",
-    "nearbyintl",
-    "nextafter",
-    "nextafterbf16",
-    "nextafterf",
-    "nextafterf128",
-    "nextafterf16",
-    "nextafterl",
-    "nextdown",
-    "nextdownbf16",
-    "nextdownf",
-    "nextdownf128",
-    "nextdownf16",
-    "nextdownl",
-    "nexttoward",
-    "nexttowardbf16",
-    "nexttowardf",
-    "nexttowardf16",
-    "nexttowardl",
-    "nextup",
-    "nextupbf16",
-    "nextupf",
-    "nextupf128",
-    "nextupf16",
-    "nextupl",
-    "open",
-    "openat",
-    "pipe",
-    "pkey_alloc",
-    "pkey_common",
-    "pkey_free",
-    "pkey_get",
-    "pkey_mprotect",
-    "pkey_set",
-    "posix_madvise",
-    "pow",
-    "powf",
-    "pread",
-    "printf",
-    "printf_config",
-    "printf_converter",
-    "printf_core_structs",
-    "printf_error_mapper",
-    "printf_main",
-    "printf_parser",
-    "printf_writer",
-    "public_headers",
-    "public_headers_deps",
-    "pwrite",
-    "qsort",
-    "qsort_r",
-    "qsort_util",
-    "rand",
-    "rand_util",
-    "read",
-    "readlink",
-    "readlinkat",
-    "recv",
-    "recvfrom",
-    "recvmsg",
-    "remainder",
-    "remainderbf16",
-    "remainderf",
-    "remainderf128",
-    "remainderf16",
-    "remainderl",
-    "remap_file_pages",
-    "remove",
-    "remquo",
-    "remquobf16",
-    "remquof",
-    "remquof128",
-    "remquof16",
-    "remquol",
-    "rename",
-    "rindex",
-    "rint",
-    "rintbf16",
-    "rintf",
-    "rintf128",
-    "rintf16",
-    "rintl",
-    "rmdir",
-    "round",
-    "roundbf16",
-    "roundeven",
-    "roundevenbf16",
-    "roundevenf",
-    "roundevenf128",
-    "roundevenf16",
-    "roundevenl",
-    "roundf",
-    "roundf128",
-    "roundf16",
-    "roundl",
-    "rsqrtf",
-    "rsqrtf16",
-    "scalbln",
-    "scalblnbf16",
-    "scalblnf",
-    "scalblnf128",
-    "scalblnf16",
-    "scalblnl",
-    "scalbn",
-    "scalbnbf16",
-    "scalbnf",
-    "scalbnf128",
-    "scalbnf16",
-    "scalbnl",
-    "scanf",
-    "scanf_config",
-    "scanf_converter",
-    "scanf_core_structs",
-    "scanf_main",
-    "scanf_parser",
-    "scanf_reader",
-    "scanf_string_reader",
-    "send",
-    "sendmsg",
-    "sendto",
-    "setpayload",
-    "setpayloadf",
-    "setpayloadf128",
-    "setpayloadf16",
-    "setpayloadl",
-    "setpayloadsig",
-    "setpayloadsigf",
-    "setpayloadsigf128",
-    "setpayloadsigf16",
-    "setpayloadsigl",
-    "setrlimit",
-    "shm_common",
-    "shm_open",
-    "shm_unlink",
-    "sin",
-    "sincos",
-    "sincosf",
-    "sinf",
-    "sinf16",
-    "sinhf",
-    "sinhf16",
-    "sinpif",
-    "sinpif16",
-    "snprintf",
-    "socket",
-    "socketpair",
-    "sprintf",
-    "sqrt",
-    "sqrtbf16",
-    "sqrtf",
-    "sqrtf128",
-    "sqrtf16",
-    "sqrtl",
-    "srand",
-    "sscanf",
-    "stdc_bit_ceil_uc",
-    "stdc_bit_ceil_ui",
-    "stdc_bit_ceil_ul",
-    "stdc_bit_ceil_ull",
-    "stdc_bit_ceil_us",
-    "stdc_bit_floor_uc",
-    "stdc_bit_floor_ui",
-    "stdc_bit_floor_ul",
-    "stdc_bit_floor_ull",
-    "stdc_bit_floor_us",
-    "stdc_bit_width_uc",
-    "stdc_bit_width_ui",
-    "stdc_bit_width_ul",
-    "stdc_bit_width_ull",
-    "stdc_bit_width_us",
-    "stdc_count_ones_uc",
-    "stdc_count_ones_ui",
-    "stdc_count_ones_ul",
-    "stdc_count_ones_ull",
-    "stdc_count_ones_us",
-    "stdc_count_zeros_uc",
-    "stdc_count_zeros_ui",
-    "stdc_count_zeros_ul",
-    "stdc_count_zeros_ull",
-    "stdc_count_zeros_us",
-    "stdc_first_leading_one_uc",
-    "stdc_first_leading_one_ui",
-    "stdc_first_leading_one_ul",
-    "stdc_first_leading_one_ull",
-    "stdc_first_leading_one_us",
-    "stdc_first_leading_zero_uc",
-    "stdc_first_leading_zero_ui",
-    "stdc_first_leading_zero_ul",
-    "stdc_first_leading_zero_ull",
-    "stdc_first_leading_zero_us",
-    "stdc_first_trailing_one_uc",
-    "stdc_first_trailing_one_ui",
-    "stdc_first_trailing_one_ul",
-    "stdc_first_trailing_one_ull",
-    "stdc_first_trailing_one_us",
-    "stdc_first_trailing_zero_uc",
-    "stdc_first_trailing_zero_ui",
-    "stdc_first_trailing_zero_ul",
-    "stdc_first_trailing_zero_ull",
-    "stdc_first_trailing_zero_us",
-    "stdc_has_single_bit_uc",
-    "stdc_has_single_bit_ui",
-    "stdc_has_single_bit_ul",
-    "stdc_has_single_bit_ull",
-    "stdc_has_single_bit_us",
-    "stdc_leading_ones_uc",
-    "stdc_leading_ones_ui",
-    "stdc_leading_ones_ul",
-    "stdc_leading_ones_ull",
-    "stdc_leading_ones_us",
-    "stdc_leading_zeros_uc",
-    "stdc_leading_zeros_ui",
-    "stdc_leading_zeros_ul",
-    "stdc_leading_zeros_ull",
-    "stdc_leading_zeros_us",
-    "stdc_trailing_ones_uc",
-    "stdc_trailing_ones_ui",
-    "stdc_trailing_ones_ul",
-    "stdc_trailing_ones_ull",
-    "stdc_trailing_ones_us",
-    "stdc_trailing_zeros_uc",
-    "stdc_trailing_zeros_ui",
-    "stdc_trailing_zeros_ul",
-    "stdc_trailing_zeros_ull",
-    "stdc_trailing_zeros_us",
-    "stdin",
-    "stdout",
-    "stpcpy",
-    "stpncpy",
-    "str_from_util",
-    "strcasecmp",
-    "strcasestr",
-    "strcat",
-    "strchr",
-    "strchrnul",
-    "strcmp",
-    "strcpy",
-    "strcspn",
-    "strfromd",
-    "strfromf",
-    "strfroml",
-    "string_memory_utils",
-    "string_utils",
-    "strlcat",
-    "strlcpy",
-    "strlen",
-    "strncasecmp",
-    "strncat",
-    "strncmp",
-    "strncpy",
-    "strnlen",
-    "strpbrk",
-    "strrchr",
-    "strsep",
-    "strspn",
-    "strstr",
-    "strtod",
-    "strtof",
-    "strtoimax",
-    "strtok",
-    "strtok_r",
-    "strtol",
-    "strtold",
-    "strtoll",
-    "strtoul",
-    "strtoull",
-    "strtoumax",
-    "swab",
-    "symlink",
-    "symlinkat",
-    "sysconf",
-    "tan",
-    "tanf",
-    "tanf16",
-    "tanhf",
-    "tanhf16",
-    "tanpif",
-    "tanpif16",
-    "toascii",
-    "tolower",
-    "totalorder",
-    "totalorderbf16",
-    "totalorderf",
-    "totalorderf128",
-    "totalorderf16",
-    "totalorderl",
-    "totalordermag",
-    "totalordermagbf16",
-    "totalordermagf",
-    "totalordermagf128",
-    "totalordermagf16",
-    "totalordermagl",
-    "toupper",
-    "trunc",
-    "truncate",
-    "truncbf16",
-    "truncf",
-    "truncf128",
-    "truncf16",
-    "truncl",
-    "types_FILE",
-    "types_char32_t",
-    "types_char8_t",
-    "types_clock_t",
-    "types_clockid_t",
-    "types_div_t",
-    "types_fenv_t",
-    "types_fexcept_t",
-    "types_ldiv_t",
-    "types_lldiv_t",
-    "types_mode_t",
-    "types_off_t",
-    "types_pid_t",
-    "types_sigset_t",
-    "types_size_t",
-    "types_socklen_t",
-    "types_ssize_t",
-    "types_struct_cmsghdr",
-    "types_struct_epoll_event",
-    "types_struct_f_owner_ex",
-    "types_struct_flock",
-    "types_struct_flock64",
-    "types_struct_msghdr",
-    "types_struct_rlimit",
-    "types_struct_sockaddr",
-    "types_struct_timespec",
-    "types_struct_timeval",
-    "types_time_t",
-    "types_uid_t",
-    "types_wchar_t",
-    "types_wctype_t",
-    "types_wint_t",
-    "ufromfp",
-    "ufromfpbf16",
-    "ufromfpf",
-    "ufromfpf128",
-    "ufromfpf16",
-    "ufromfpl",
-    "ufromfpx",
-    "ufromfpxbf16",
-    "ufromfpxf",
-    "ufromfpxf128",
-    "ufromfpxf16",
-    "ufromfpxl",
-    "unlink",
-    "unlinkat",
-    "vasprintf",
-    "vasprintf_internal",
-    "vfprintf",
-    "vfprintf_internal",
-    "vfscanf",
-    "vfscanf_internal",
-    "vprintf",
-    "vscanf",
-    "vsnprintf",
-    "vsprintf",
-    "vsscanf",
-    "wchar_utils",
-    "wcpcpy",
-    "wcpncpy",
-    "wcscat",
-    "wcschr",
-    "wcscmp",
-    "wcscpy",
-    "wcscspn",
-    "wcslcat",
-    "wcslcpy",
-    "wcslen",
-    "wcsncat",
-    "wcsncmp",
-    "wcsncpy",
-    "wcspbrk",
-    "wcsrchr",
-    "wcsspn",
-    "wcsstr",
-    "wctob",
-    "wmemchr",
-    "wmemcmp",
-    "wmemcpy",
-    "wmemmove",
-    "wmempcpy",
-    "wmemset",
-    "write",
-]
-
-LIBC_ENTRYPOINTS = list(sorted(set(CMAKE_LIBC_ENTRYPOINTS) & set(ENTRYPOINTS_WITH_EXISTING_BAZEL_RULES)))
-
-LIBM_ENTRYPOINTS = list(sorted(set(CMAKE_LIBM_ENTRYPOINTS) & set(ENTRYPOINTS_WITH_EXISTING_BAZEL_RULES)))
