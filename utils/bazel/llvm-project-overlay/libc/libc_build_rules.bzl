@@ -246,7 +246,13 @@ def libc_release_library(
         local_defines = weak_attributes + LIBC_CONFIGURE_OPTIONS,
         deps = [
             ":" + name + "_textual_hdr_library",
-        ],
+        ] + select({
+            "//libc:full_build_enable": [
+                "//libc:public_headers",
+                "@libc_headers//:kernel_headers",
+            ],
+            "//conditions:default": [],
+        }),
         **kwargs
     )
 

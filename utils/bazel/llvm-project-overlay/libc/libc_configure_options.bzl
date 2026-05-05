@@ -38,7 +38,6 @@ _LIBC_COMMON_CONFIGURE_OPTIONS = [
     # "LIBC_COPT_PRINTF_NO_NULLPTR_CHECKS",
     # "LIBC_COPT_SCANF_DISABLE_FLOAT",
     # "LIBC_COPT_SCANF_DISABLE_INDEX_MODE",
-    "LIBC_COPT_STDIO_USE_SYSTEM_FILE",
     "LIBC_COPT_STRING_LENGTH_IMPL=clang_vector",
     "LIBC_COPT_FIND_FIRST_CHARACTER_IMPL=word",
     # "LIBC_COPT_STRTOFLOAT_DISABLE_CLINGER_FAST_PATH",
@@ -59,6 +58,9 @@ LIBC_OVERLAY_CONFIGURE_OPTIONS = _LIBC_COMMON_CONFIGURE_OPTIONS + [
 
     # Documentation in libc/src/__support/libc_errno.h
     "LIBC_ERRNO_MODE=LIBC_ERRNO_MODE_SYSTEM_INLINE",
+
+    # Documentation in libc/docs/dev/printf_behavior.rst
+    "LIBC_COPT_STDIO_USE_SYSTEM_FILE",
 ]
 
 # This list of definitions is used to customize LLVM libc full-build mode.

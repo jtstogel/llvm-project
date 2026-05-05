@@ -62,19 +62,26 @@ def libc_test(
     cc_test(
         name = name,
         local_defines = local_defines + LIBC_CONFIGURE_OPTIONS,
-        deps = deps,
+        deps = deps + select({
+            "//libc:full_build_enable": [
+                "//libc:public_headers",
+                "@libc_headers//:kernel_headers",
+            ],
+            "//conditions:default": [],
+        }),
         copts = copts + libc_common_copts(),
         linkstatic = 1,
         **kwargs
     )
 
-def libc_test_library(name, copts = [], local_defines = [], **kwargs):
+def libc_test_library(name, copts = [], local_defines = [], deps = [], **kwargs):
     """Add target for library used in libc tests.
 
     Args:
       name: Library target name.
       copts: See cc_library.copts.
       local_defines: See cc_library.local_defines.
+      deps: Deps for the cc_library.
       **kwargs: Other attributes relevant to cc_library (e.g. "deps").
     """
     cc_library(
@@ -82,6 +89,13 @@ def libc_test_library(name, copts = [], local_defines = [], **kwargs):
         testonly = True,
         copts = copts + libc_common_copts(),
         local_defines = local_defines + LIBC_CONFIGURE_OPTIONS,
+        deps = deps + select({
+            "//libc:full_build_enable": [
+                "//libc:public_headers",
+                "@libc_headers//:kernel_headers",
+            ],
+            "//conditions:default": [],
+        }),
         linkstatic = 1,
         **kwargs
     )
