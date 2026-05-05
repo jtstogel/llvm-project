@@ -9,6 +9,7 @@
 #ifndef LLVM_LIBC_TYPES_EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL_H
 #define LLVM_LIBC_TYPES_EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL_H
 
+#include "../llvm-libc-macros/EFIAPI-macros.h"
 #include "../llvm-libc-macros/stdint-macros.h"
 #include "EFI_STATUS.h"
 #include "size_t.h"
@@ -18,13 +19,13 @@
 
 struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL;
 
-typedef EFI_STATUS(EFIAPI *EFI_TEXT_RESET)(
+typedef EFI_STATUS (EFIAPI *EFI_TEXT_RESET)(
     struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, bool ExtendedVerification);
-typedef EFI_STATUS(EFIAPI *EFI_TEXT_STRING)(
+typedef EFI_STATUS (EFIAPI *EFI_TEXT_STRING)(
     struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, const char16_t *String);
-typedef EFI_STATUS(EFIAPI *EFI_TEXT_TEST_STRING)(
+typedef EFI_STATUS (EFIAPI *EFI_TEXT_TEST_STRING)(
     struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, const char16_t *String);
-typedef EFI_STATUS(EFIAPI *EFI_TEXT_QUERY_MODE)(
+typedef EFI_STATUS (EFIAPI *EFI_TEXT_QUERY_MODE)(
     struct _EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, size_t ModeNumber,
     size_t *Columns, size_t *Rows);
 

@@ -13,9 +13,15 @@ load(
     "libc_generated_header",
     "libc_header_info",
     "libc_header_library",
+    "libc_release_library",
     "libc_math_function",
     "libc_support_library",
     "libc_support_library_overlay_only",
+)
+load(
+    ":libc_entrypoints.bzl",
+    "LIBC_ENTRYPOINTS",
+    "LIBM_ENTRYPOINTS",
 )
 load(":platforms.bzl", "PLATFORM_CPU_ARM64", "PLATFORM_CPU_X86_64")
 
@@ -117,6 +123,19 @@ string_flag(
 config_setting(
     name = "full_build_enable",
     flag_values = {":build_mode": "full"},
+)
+
+######################### Entrypoint generation ################################
+
+filegroup(
+    name = "entrypoint_declarations",
+    srcs = glob(
+        [
+            "config/**/entrypoints.txt",
+            "config/**/headers.txt",
+            "config/**/exclude.txt",
+        ]
+    ),
 )
 
 ########################### Header Generation ##################################
@@ -15743,4 +15762,14 @@ libc_function(
         ":types_size_t",
         ":types_wchar_t",
     ],
+)
+
+libc_release_library(
+    name = "full_build_libc",
+    libc_functions = LIBC_ENTRYPOINTS,
+)
+
+libc_release_library(
+    name = "full_build_libm",
+    libc_functions = LIBM_ENTRYPOINTS,
 )
