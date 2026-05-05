@@ -86,6 +86,25 @@ def _libc_library(name, deps = [], **kwargs):
 def libc_support_library(name, **kwargs):
     _libc_library(name = name, **kwargs)
 
+def libc_support_library_overlay_only(name, srcs = [], deps = [], hdrs = [], **kwargs):
+    _libc_library(
+        name = name,
+        srcs = select({
+            "//libc:full_build_enable": [],
+            "//conditions:default": srcs,
+        }),
+        deps = select({
+            "//libc:full_build_enable": [],
+            "//conditions:default": deps,
+        }),
+        hdrs = select({
+            "//libc:full_build_enable": [],
+            "//conditions:default": hdrs,
+        }),
+        **kwargs,
+    )
+
+
 def libc_function(name, **kwargs):
     """Add target for a libc function.
 

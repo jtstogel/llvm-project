@@ -15,6 +15,7 @@ load(
     "libc_header_library",
     "libc_math_function",
     "libc_support_library",
+    "libc_support_library_overlay_only",
 )
 load(":platforms.bzl", "PLATFORM_CPU_ARM64", "PLATFORM_CPU_X86_64")
 
@@ -431,13 +432,13 @@ libc_support_library(
     hdrs = ["hdr/fenv_macros.h"],
 )
 
-libc_support_library(
+libc_support_library_overlay_only(
     name = "hdr_fcntl_macros",
     hdrs = ["hdr/fcntl_macros.h"],
     deps = [":hdr_fcntl_overlay"],
 )
 
-libc_support_library(
+libc_support_library_overlay_only(
     name = "hdr_fcntl_overlay",
     hdrs = ["hdr/fcntl_overlay.h"],
 )
@@ -517,12 +518,9 @@ libc_support_library(
     hdrs = ["hdr/limits_macros.h"],
 )
 
-libc_support_library(
+libc_support_library_overlay_only(
     name = "hdr_stdio_overlay",
-    hdrs = select({
-        ":full_build_enable": [],
-        "//conditions:default": ["hdr/stdio_overlay.h"],
-    }),
+    hdrs = ["hdr/stdio_overlay.h"],
 )
 
 libc_support_library(
@@ -533,20 +531,14 @@ libc_support_library(
     ],
 )
 
-libc_support_library(
+libc_support_library_overlay_only(
     name = "hdr_stdlib_overlay",
-    hdrs = select({
-        ":full_build_enable": [],
-        "//conditions:default": ["hdr/stdlib_overlay.h"],
-    }),
+    hdrs = ["hdr/stdlib_overlay.h"],
 )
 
-libc_support_library(
+libc_support_library_overlay_only(
     name = "hdr_unistd_overlay",
-    hdrs = select({
-        ":full_build_enable": [],
-        "//conditions:default": ["hdr/unistd_overlay.h"],
-    }),
+    hdrs = ["hdr/unistd_overlay.h"],
 )
 
 libc_support_library(
@@ -557,17 +549,17 @@ libc_support_library(
     ],
 )
 
-libc_support_library(
+libc_support_library_overlay_only(
     name = "hdr_wchar_overlay",
     hdrs = ["hdr/wchar_overlay.h"],
 )
 
-libc_support_library(
+libc_support_library_overlay_only(
     name = "hdr_uchar_overlay",
     hdrs = ["hdr/uchar_overlay.h"],
 )
 
-libc_support_library(
+libc_support_library_overlay_only(
     name = "hdr_wctype_overlay",
     hdrs = ["hdr/wctype_overlay.h"],
 )
