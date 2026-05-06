@@ -13,6 +13,7 @@ load(
     "libc_generated_header",
     "libc_header_info",
     "libc_header_library",
+    "libc_release_sysroot",
     "libc_release_library",
     "libc_math_function",
     "libc_support_library",
@@ -16024,13 +16025,10 @@ libc_function(
     for name in ["crt1", "crti", "crtn"]
 ]
 
-libc_release_library(
-    name = "libc_sysroot",
+libc_release_sysroot(
+    name = "llvmlibc_sysroot",
     libc_functions = LIBC_ENTRYPOINTS,
+    libm_functions = LIBM_ENTRYPOINTS,
+    headers = [":public_headers"],
+    startup_files = [":crt1_obj", ":crti_obj", ":crtn_obj"],
 )
-
-libc_release_library(
-    name = "libm_sysroot",
-    libc_functions = LIBM_ENTRYPOINTS,
-)
-

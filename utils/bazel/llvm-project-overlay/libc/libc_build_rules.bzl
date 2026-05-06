@@ -379,3 +379,83 @@ def libc_math_function(
             ":__support_macros_properties_types",
         ] + OLD_FPUTIL_DEPS + additional_deps,
     )
+
+def _libc_sysroot_stage_impl(ctx):
+    sysroot_dir = ctx.attr.sysroot_name
+    outputs = []
+
+    def copy_to_sysroot(src, rel_path):
+        out = ctx.actions.declare_file(paths.join(sysroot_dir, rel_path))
+        ctx.actions.run_shell(
+            outputs = [out],
+            inputs = [src],
+            command = "cp {} {}".format(src.path, out.path),
+            mnemonic = "LibcSysrootStage",
+        )
+        outputs.append(out)
+
+    def get_static_lib(files):
+        for f in files:
+            if f.extension == "a":
+                return f
+        return None
+
+    copy_to_sysroot(get_static_lib(ctx.files.libc), "lib/libc.a")
+    copy_to_sysroot(get_static_lib(ctx.files.libm), "lib/libm.a")
+
+    for f in ctx.files.startup_files:
+        copy_to_sysroot(f, paths.join("lib", f.basename))
+
+    for dep in ctx.attr.include:
+        info = dep[LibcLibraryInfo]
+        for f in depset(transitive = [info.srcs, info.textual_hdrs]).to_list():
+            path_parts = f.path.split("/")
+            if "include" in path_parts:
+                include_idx = path_parts.index("include")
+                rel_path = paths.join("include", *path_parts[include_idx + 1:])
+                copy_to_sysroot(f, rel_path)
+
+    return [DefaultInfo(files = depset(outputs))]
+
+_libc_sysroot_stage = rule(
+    implementation = _libc_sysroot_stage_impl,
+    attrs = {
+        "libc": attr.label(allow_files = True),
+        "libm": attr.label(allow_files = True),
+        "startup_files": attr.label_list(allow_files = True),
+        "include": attr.label_list(aspects = [_get_libc_info_aspect]),
+        "sysroot_name": attr.string(),
+    },
+)
+
+def libc_release_sysroot(
+        name,
+        libc_functions = [],
+        libm_functions = [],
+        startup_files = [],
+        headers = []):
+    """Stages a sysroot for compiling against LLVM-libc.
+    
+    $ export LIBC_KERNEL_HEADERS=/usr/local/google/home/jtstogel/kernel-headers/include
+    $ bazel build --copt=-Wno-unused-command-line-argument \
+            --config=generic_clang \
+            --@llvm-project//libc:build_mode=full \
+            @llvm-project//libc:llvmlibc_sysroot
+    """
+    libc_release_library(
+        name = name + "_libc_functions",
+        libc_functions = libc_functions,
+    )
+    libc_release_library(
+        name = name + "_libm_functions",
+        libc_functions = libm_functions,
+    )
+    _libc_sysroot_stage(
+        name = name,
+        libc = ":" + name + "_libc_functions",
+        libm = ":" + name + "_libm_functions",
+        startup_files = startup_files,
+        include = headers,
+        sysroot_name = name,
+    )
+
