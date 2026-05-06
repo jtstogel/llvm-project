@@ -234,7 +234,7 @@
   "moduleExtensions": {
     "//:extensions.bzl%llvm_repos_extension": {
       "general": {
-        "bzlTransitiveDigest": "EfkYUhfoZKdsd86zPs+PBEmu0dI0XwbAGrUYnQqt3Bg=",
+        "bzlTransitiveDigest": "A+WPqqiN68I76OwiN4iFqHkDHPCvfwlhIJUPs3I+FTk=",
         "usagesDigest": "X0yUkkWyxQ2Y5oZVDkRSE/K4YkDWo1IjhHsL+1weKyU=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},

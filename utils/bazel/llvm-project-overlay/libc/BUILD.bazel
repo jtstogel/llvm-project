@@ -268,6 +268,11 @@ libc_generated_header(
     yaml_template = "include/elf.yaml",
 )
 
+libc_support_library(
+    name = "hdr_elf_proxy",
+    textual_hdrs = [":hdr_elf_proxy_h"],
+)
+
 # Static headers that need to be in staging/include
 STATIC_HEADERS = glob(
     ["include/llvm-libc-types/**/*.h"],
@@ -558,6 +563,56 @@ libc_support_library(
 libc_support_library_overlay_only(
     name = "hdr_stdlib_overlay",
     hdrs = ["hdr/stdlib_overlay.h"],
+)
+
+libc_support_library(
+    name = "hdr_elf_macros",
+    hdrs = ["hdr/elf_macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_link_macros",
+    hdrs = ["hdr/link_macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_locale_macros",
+    hdrs = ["hdr/locale_macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_math_function_macros",
+    hdrs = ["hdr/math_function_macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_offsetof_macros",
+    hdrs = ["hdr/offsetof_macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_pthread_macros",
+    hdrs = ["hdr/pthread_macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_sched_macros",
+    hdrs = ["hdr/sched_macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_sys_ioctl_macros",
+    hdrs = ["hdr/sys_ioctl_macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_sys_ipc_macros",
+    hdrs = ["hdr/sys_ipc_macros.h"],
+)
+
+libc_support_library(
+    name = "hdr_sys_sem_macros",
+    hdrs = ["hdr/sys_sem_macros.h"],
 )
 
 libc_support_library_overlay_only(
@@ -1161,6 +1216,14 @@ libc_support_library(
         ":__support_macros_config",
         ":__support_macros_properties_architectures",
         ":hdr_stdint_proxy",
+    ],
+)
+
+libc_support_library(
+    name = "__support_cpp_mutex",
+    hdrs = ["src/__support/CPP/mutex.h"],
+    deps = [
+        ":__support_macros_config",
     ],
 )
 
@@ -15769,12 +15832,205 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "config_app",
+    hdrs = glob(
+        ["config/**/*.h"],
+        exclude = [
+            "config/uefi/**/*.h",
+            "config/gpu/**/*.h",
+            "config/windows/**/*.h",
+            "config/darwin/**/*.h",
+        ],
+    ),
+    deps = [
+        ":__support_macros_config",
+        ":__support_macros_properties_architectures",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_support_library(
+    name = "startup_headers",
+    hdrs = [
+        "startup/linux/do_start.h",
+        "startup/linux/irelative.h",
+        "startup/linux/gnu_property_section.h",
+    ],
+    deps = [
+        ":config_app",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+        ":__support_macros_config",
+        ":__support_macros_attributes",
+    ],
+)
+
+libc_support_library(
+    name = "startup_gnu_property_section",
+    hdrs = ["startup/linux/gnu_property_section.h"],
+    srcs = ["startup/linux/gnu_property_section.cpp"],
+    deps = [
+        ":__support_cpp_string_view",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":string_memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "startup_irelative",
+    srcs = ["startup/linux/x86_64/irelative.cpp"],
+    hdrs = ["startup/linux/irelative.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":hdr_elf_macros",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+    ],
+)
+
+libc_support_library(
+    name = "startup_do_start",
+    srcs = ["startup/linux/do_start.cpp"],
+    hdrs = ["startup/linux/do_start.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":__support_osutil_linux_auxv",
+        ":environ",
+        ":exit",
+        ":atexit",
+        ":__support_threads_thread",
+        ":config_app",
+        ":hdr_elf_proxy",
+        ":hdr_link_macros",
+        ":hdr_stdint_proxy",
+        ":include_sys_mman_h",
+        ":include_sys_syscall_h",
+        ":startup_gnu_property_section",
+        ":startup_irelative",
+    ],
+)
+
+libc_support_library(
+    name = "crti",
+    srcs = ["startup/linux/crti.cpp"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "crtn",
+    srcs = ["startup/linux/crtn.cpp"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+    ],
+)
+
+libc_support_library(
+    name = "startup_tls",
+    srcs = ["startup/linux/x86_64/tls.cpp"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_syscall",
+        ":config_app",
+        ":include_sys_mman_h",
+        ":include_sys_syscall_h",
+        ":startup_headers",
+        ":string_memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "crt1",
+    srcs = ["startup/linux/x86_64/start.cpp"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_attributes",
+        ":__support_macros_config",
+        ":startup_do_start",
+        ":startup_tls",
+    ],
+)
+
+libc_function(
+    name = "exit",
+    srcs = ["src/stdlib/exit.cpp"],
+    hdrs = ["src/stdlib/exit.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_osutil_exit",
+    ],
+)
+
+
+libc_support_library(
+    name = "types_atexithandler_t",
+    hdrs = ["hdr/types/atexithandler_t.h"],
+)
+
+libc_support_library(
+    name = "exit_handler",
+    hdrs = ["src/stdlib/exit_handler.h"],
+    deps = [
+        ":__support_blockstore",
+        ":__support_common",
+        ":__support_cpp_mutex",
+        ":__support_fixedvector",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
+        ":types_atexithandler_t",
+    ],
+)
+
+libc_function(
+    name = "atexit",
+    srcs = ["src/stdlib/atexit.cpp"],
+    hdrs = ["src/stdlib/atexit.h"],
+    deps = [
+        ":__support_common",
+        ":__support_macros_config",
+        ":__support_threads_mutex",
+        ":exit_handler",
+        ":types_atexithandler_t",
+    ],
+)
+
+[
+    genrule(
+        name = name + "_obj",
+        srcs = [":" + name],
+        outs = [name + ".o"],
+        # 'ar t' lists objects, 'ar x' extracts them, 'ld -r' merges them.
+        cmd = """
+            mkdir -p tmp_ext
+            cd tmp_ext
+            ar x ../$(location :""" + name + """)
+            ld -r *.o -o ../$@
+        """,
+    )
+    for name in ["crt1", "crti", "crtn"]
+]
+
 libc_release_library(
-    name = "full_build_libc",
+    name = "libc_sysroot",
     libc_functions = LIBC_ENTRYPOINTS,
 )
 
 libc_release_library(
-    name = "full_build_libm",
+    name = "libm_sysroot",
     libc_functions = LIBM_ENTRYPOINTS,
 )
+

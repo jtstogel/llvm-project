@@ -20,10 +20,8 @@ def libc_common_copts():
         "-DLIBC_NAMESPACE=" + LIBC_NAMESPACE,
     ] + select({
         "//libc:full_build_enable": [
-            "-nostdlib++",
-            "-nostdlib",
-            "-nostdlibinc",
-            "-nostdinc++",
+            "-ffreestanding",
+            "-nostdinc",
             # For generated headers.
             "-I" + paths.join(libc_include_path, "staging"),
             "-I" + paths.join(libc_include_path, "staging", "include"),
@@ -73,6 +71,7 @@ def _libc_library(name, deps = [], **kwargs):
             "//libc:full_build_enable": [
                 "//libc:public_headers",
                 "@libc_headers//:kernel_headers",
+                "@libc_headers//:resource_headers",
             ],
             "//conditions:default": [],
         }),
@@ -250,6 +249,7 @@ def libc_release_library(
             "//libc:full_build_enable": [
                 "//libc:public_headers",
                 "@libc_headers//:kernel_headers",
+                "@libc_headers//:resource_headers",
             ],
             "//conditions:default": [],
         }),
