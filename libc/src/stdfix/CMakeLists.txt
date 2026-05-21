@@ -129,8 +129,8 @@ add_entrypoint_object(
   SRCS
     exphk.cpp
   DEPENDS
-    libc.src.__support.fixed_point.fx_rep
     libc.src.__support.CPP.bit
+    libc.src.__support.fixed_point.fx_bits
 )
 
 add_entrypoint_object(
@@ -140,6 +140,6 @@ add_entrypoint_object(
   SRCS
     expk.cpp
   DEPENDS
-    libc.src.__support.fixed_point.fx_rep
     libc.src.__support.CPP.bit
+    libc.src.__support.fixed_point.fx_bits
 )

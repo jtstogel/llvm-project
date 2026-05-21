@@ -328,6 +328,7 @@ add_gen_header(
     elf_proxy.h
   DEPENDS
     libc.include.llvm_libc_common_h
+    libc.include.llvm-libc-macros.elf_macros
     libc.include.llvm-libc-types.Elf32_Addr
     libc.include.llvm-libc-types.Elf32_Chdr
     libc.include.llvm-libc-types.Elf32_Dyn

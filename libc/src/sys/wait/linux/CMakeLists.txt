@@ -9,6 +9,7 @@ add_entrypoint_object(
     libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
+    libc.src.sys.wait.wait4Impl
 )
 
 add_entrypoint_object(
@@ -22,6 +23,7 @@ add_entrypoint_object(
     libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
+    libc.src.sys.wait.wait4Impl
 )
 
 add_entrypoint_object(
@@ -35,4 +37,5 @@ add_entrypoint_object(
     libc.include.sys_syscall
     libc.src.__support.OSUtil.osutil
     libc.src.errno.errno
+    libc.src.sys.wait.wait4Impl
 )

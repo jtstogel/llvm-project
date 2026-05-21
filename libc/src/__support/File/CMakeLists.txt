@@ -39,6 +39,7 @@ add_object_library(
   HDRS
     dir.h
   DEPENDS
+    libc.include.dirent
     libc.src.__support.CPP.mutex
     libc.src.__support.CPP.new
     libc.src.__support.CPP.span

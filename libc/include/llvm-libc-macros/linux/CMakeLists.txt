@@ -104,6 +104,8 @@ add_header(
   signal_macros
   HDR
     signal-macros.h
+  DEPENDS
+    libc.include.llvm_libc_common_h
 )
 
 add_header(

@@ -66,6 +66,8 @@ add_entrypoint_object(
     iscanonical.cpp
   HDRS
     ../iscanonical.h
+  DEPENDS
+    libc.src.__support.math.iscanonical
 )
 
 add_entrypoint_object(
@@ -74,6 +76,8 @@ add_entrypoint_object(
     iscanonicalf.cpp
   HDRS
     ../iscanonicalf.h
+  DEPENDS
+    libc.src.__support.math.iscanonicalf
 )
 
 add_entrypoint_object(
@@ -82,6 +86,8 @@ add_entrypoint_object(
     iscanonicall.cpp
   HDRS
     ../iscanonicall.h
+  DEPENDS
+    libc.src.__support.math.iscanonicall
 )
 
 add_entrypoint_object(
@@ -91,7 +97,7 @@ add_entrypoint_object(
   HDRS
     ../iscanonicalf16.h
   DEPENDS
-    libc.src.__support.math.iscanonicall
+    libc.src.__support.math.iscanonicalf16
 )
 
 add_entrypoint_object(
@@ -2963,6 +2969,8 @@ add_entrypoint_object(
     issignaling.cpp
   HDRS
     ../issignaling.h
+  DEPENDS
+    libc.src.__support.math.issignaling
 )
 
 add_entrypoint_object(
@@ -2971,6 +2979,8 @@ add_entrypoint_object(
     issignalingf.cpp
   HDRS
     ../issignalingf.h
+  DEPENDS
+    libc.src.__support.math.issignalingf
 )
 
 add_entrypoint_object(
@@ -2979,6 +2989,8 @@ add_entrypoint_object(
     issignalingl.cpp
   HDRS
     ../issignalingl.h
+  DEPENDS
+    libc.src.__support.math.issignalingl
 )
 
 add_entrypoint_object(
@@ -2988,7 +3000,7 @@ add_entrypoint_object(
   HDRS
     ../issignalingf16.h
   DEPENDS
-    libc.src.__support.math.issignalingl
+    libc.src.__support.math.issignalingf16
 )
 
 add_entrypoint_object(

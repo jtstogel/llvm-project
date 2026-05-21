@@ -16,6 +16,7 @@ add_header_library(
   DEPENDS
     .fx_rep
     libc.include.llvm-libc-macros.stdfix_macros
+    libc.src.__support.libc_assert
     libc.src.__support.macros.attributes
     libc.src.__support.macros.null_check
     libc.src.__support.macros.optimization

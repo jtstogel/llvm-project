@@ -8,14 +8,14 @@ if(LIBC_TARGET_OS_IS_GPU)
   include(GetClangResourceDir)
 endif()
 
-add_subdirectory(llvm-libc-macros)
-add_subdirectory(llvm-libc-types)
-
 add_header(
   llvm_libc_common_h
   HDR
     __llvm-libc-common.h
 )
+
+add_subdirectory(llvm-libc-macros)
+add_subdirectory(llvm-libc-types)
 
 # TODO: Can we simplify this macro expansion?
 # https://github.com/llvm/llvm-project/issues/117254
@@ -107,6 +107,7 @@ add_header_macro(
   ../libc/include/stdint.yaml
   stdint.h
   DEPENDS
+    .llvm_libc_common_h
     .llvm-libc-macros.stdint_macros
 )
 
@@ -126,6 +127,7 @@ add_header_macro(
   ../libc/include/float.yaml
   float.h
   DEPENDS
+    .llvm_libc_common_h
     .llvm-libc-macros.float_macros
 )
 
@@ -134,6 +136,7 @@ add_header_macro(
   ../libc/include/limits.yaml
   limits.h
   DEPENDS
+    .llvm_libc_common_h
     .llvm-libc-macros.limits_macros
 )
 
@@ -165,6 +168,7 @@ add_header_macro(
   ../libc/include/stdfix.yaml
   stdfix.h
   DEPENDS
+    .llvm_libc_common_h
     .llvm-libc-macros.stdfix_macros
     .llvm-libc-types.int_hk_t
     .llvm-libc-types.int_hr_t
@@ -191,6 +195,7 @@ add_header_macro(
   ../libc/include/sysexits.yaml
   sysexits.h
   DEPENDS
+    .llvm_libc_common_h
     .llvm-libc-macros.sysexits_macros
 )
 
@@ -366,6 +371,7 @@ add_header_macro(
   ../libc/include/errno.yaml
   errno.h
   DEPENDS
+    .llvm_libc_common_h
     .llvm-libc-macros.generic_error_number_macros
     .llvm-libc-macros.error_number_macros
     .llvm-libc-types.errno_t
@@ -376,6 +382,7 @@ add_header_macro(
   ../libc/include/signal.yaml
   signal.h
   DEPENDS
+    .llvm_libc_common_h
     .llvm-libc-macros.signal_macros
     .llvm-libc-types.pid_t
     .llvm-libc-types.sig_atomic_t

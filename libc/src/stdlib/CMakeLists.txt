@@ -243,6 +243,7 @@ add_entrypoint_object(
     libc.hdr.stdint_proxy
     libc.hdr.types.size_t
     libc.src.__support.ctype_utils
+    libc.src.__support.libc_assert
 )
 
 add_entrypoint_object(

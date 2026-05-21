@@ -34,6 +34,7 @@ add_header_library(
     libc.hdr.fcntl_macros
     libc.hdr.sys_auxv_macros
     libc.hdr.sys_mman_macros
+    libc.include.sys_syscall
     libc.src.__support.OSUtil.linux.syscall_wrappers.mmap
     libc.src.__support.OSUtil.osutil
     libc.src.__support.common

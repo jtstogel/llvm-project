@@ -141,6 +141,7 @@ add_entrypoint_object(
     libc.hdr.types.pid_t
     libc.hdr.fcntl_macros
     libc.include.unistd
+    libc.include.signal
     libc.include.sys_syscall
     libc.src.__support.threads.fork_callbacks
     libc.src.__support.OSUtil.osutil

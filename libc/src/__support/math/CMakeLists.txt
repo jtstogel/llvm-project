@@ -1428,6 +1428,7 @@ add_header_library(
     libc.hdr.errno_macros
     libc.hdr.fenv_macros
     libc.src.__support.FPUtil.double_double
+    libc.src.__support.FPUtil.fp_bits
     libc.src.__support.macros.config
 )
 
