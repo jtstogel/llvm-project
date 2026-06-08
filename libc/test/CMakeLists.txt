@@ -42,6 +42,14 @@ if(LIBC_ENABLE_HERMETIC_TESTS AND NOT LIBC_TEST_UNIT_TEST_ONLY)
   add_dependencies(check-libc libc-hermetic-tests-build)
 endif()
 
+if(CMAKE_GENERATOR STREQUAL "Ninja")
+  add_custom_command(TARGET check-libc POST_BUILD
+    COMMAND ${CMAKE_MAKE_PROGRAM} -t missingdeps
+    COMMENT "Verifying explicit dependencies..."
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  )
+endif()
+
 add_subdirectory(UnitTest)
 
 if(LIBC_TARGET_OS_IS_GPU)
