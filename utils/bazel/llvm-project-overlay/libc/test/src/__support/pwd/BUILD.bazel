@@ -1,0 +1,39 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc __support/pwd functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "field_tokenizer_test",
+    srcs = ["field_tokenizer_test.cpp"],
+    deps = [
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/pwd:field_tokenizer",
+    ],
+)
+
+libc_test(
+    name = "flat_file_db_test",
+    srcs = ["flat_file_db_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/pwd:dynamic_buffer",
+        "//libc/src/__support/pwd:field_tokenizer",
+        "//libc/src/__support/pwd:flat_file_db",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)

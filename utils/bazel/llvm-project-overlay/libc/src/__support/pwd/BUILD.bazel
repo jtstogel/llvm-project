@@ -1,0 +1,62 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "dynamic_buffer",
+    hdrs = ["dynamic_buffer.h"],
+    deps = [
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:realloc",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:type_traits",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "field_tokenizer",
+    hdrs = ["field_tokenizer.h"],
+    deps = [
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "flat_file_db",
+    hdrs = ["flat_file_db.h"],
+    deps = [
+        ":dynamic_buffer",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/CPP:functional",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
