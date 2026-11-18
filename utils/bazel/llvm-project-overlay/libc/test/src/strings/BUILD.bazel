@@ -11,6 +11,24 @@ package(default_visibility = ["//visibility:public"])
 licenses(["notice"])
 
 libc_test(
+    name = "ffs_test",
+    srcs = ["ffs_test.cpp"],
+    deps = ["//libc/src/strings:ffs"],
+)
+
+libc_test(
+    name = "ffsl_test",
+    srcs = ["ffsl_test.cpp"],
+    deps = ["//libc/src/strings:ffsl"],
+)
+
+libc_test(
+    name = "ffsll_test",
+    srcs = ["ffsll_test.cpp"],
+    deps = ["//libc/src/strings:ffsll"],
+)
+
+libc_test(
     name = "bcopy_test",
     srcs = ["bcopy_test.cpp"],
     deps = [
@@ -67,9 +85,33 @@ libc_test(
 )
 
 libc_test(
+    name = "strcasecmp_l_test",
+    srcs = ["strcasecmp_l_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:locale_macros",
+        "//libc/src/locale:freelocale",
+        "//libc/src/locale:newlocale",
+        "//libc/src/strings:strcasecmp_l",
+    ],
+)
+
+libc_test(
     name = "strncasecmp_test",
     srcs = ["strncasecmp_test.cpp"],
     deps = [
         "//libc/src/strings:strncasecmp",
+    ],
+)
+
+libc_test(
+    name = "strncasecmp_l_test",
+    srcs = ["strncasecmp_l_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:locale_macros",
+        "//libc/src/locale:freelocale",
+        "//libc/src/locale:newlocale",
+        "//libc/src/strings:strncasecmp_l",
     ],
 )
