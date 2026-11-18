@@ -1,0 +1,152 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc pwd functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "pwd_utils_test",
+    srcs = ["pwd_utils_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/src/pwd:pwd_utils",
+    ],
+)
+
+libc_test(
+    name = "getpwent_test",
+    srcs = [
+        "getpwent_test.cpp",
+        "pwd_test_utils.h",
+    ],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/pwd:endpwent",
+        "//libc/src/pwd:getpwent",
+        "//libc/src/pwd:pwd_utils",
+        "//libc/src/pwd:setpwent",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
+    name = "getpwent_r_test",
+    srcs = [
+        "getpwent_r_test.cpp",
+        "pwd_test_utils.h",
+    ],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/pwd:endpwent",
+        "//libc/src/pwd:getpwent_r",
+        "//libc/src/pwd:pwd_utils",
+        "//libc/src/pwd:setpwent",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
+    name = "getpwnam_r_test",
+    srcs = [
+        "getpwnam_r_test.cpp",
+        "pwd_test_utils.h",
+    ],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/pwd:getpwnam_r",
+        "//libc/src/pwd:pwd_utils",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
+    name = "getpwuid_r_test",
+    srcs = [
+        "getpwuid_r_test.cpp",
+        "pwd_test_utils.h",
+    ],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/pwd:getpwuid_r",
+        "//libc/src/pwd:pwd_utils",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
+    name = "getpwnam_test",
+    srcs = [
+        "getpwnam_test.cpp",
+        "pwd_test_utils.h",
+    ],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/pwd:endpwent",
+        "//libc/src/pwd:getpwent",
+        "//libc/src/pwd:getpwnam",
+        "//libc/src/pwd:pwd_utils",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
+    name = "getpwuid_test",
+    srcs = [
+        "getpwuid_test.cpp",
+        "pwd_test_utils.h",
+    ],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/pwd:getpwuid",
+        "//libc/src/pwd:pwd_utils",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)

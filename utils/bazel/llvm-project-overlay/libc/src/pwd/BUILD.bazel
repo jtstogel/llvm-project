@@ -1,0 +1,158 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "pwd_utils",
+    srcs = ["pwd_utils.cpp"],
+    hdrs = ["pwd_utils.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/pwd:dynamic_buffer",
+        "//libc/src/__support/pwd:field_tokenizer",
+        "//libc/src/__support/pwd:flat_file_db",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
+    name = "endpwent",
+    srcs = ["endpwent.cpp"],
+    hdrs = ["endpwent.h"],
+    deps = [
+        ":pwd_utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getpwent",
+    srcs = ["getpwent.cpp"],
+    hdrs = ["getpwent.h"],
+    deps = [
+        ":pwd_utils",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getpwnam",
+    srcs = ["getpwnam.cpp"],
+    hdrs = ["getpwnam.h"],
+    deps = [
+        ":pwd_utils",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getpwnam_r",
+    srcs = ["getpwnam_r.cpp"],
+    hdrs = ["getpwnam_r.h"],
+    deps = [
+        ":pwd_utils",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "getpwuid",
+    srcs = ["getpwuid.cpp"],
+    hdrs = ["getpwuid.h"],
+    deps = [
+        ":pwd_utils",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getpwuid_r",
+    srcs = ["getpwuid_r.cpp"],
+    hdrs = ["getpwuid_r.h"],
+    deps = [
+        ":pwd_utils",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "setpwent",
+    srcs = ["setpwent.cpp"],
+    hdrs = ["setpwent.h"],
+    deps = [
+        ":pwd_utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getpwent_r",
+    srcs = ["getpwent_r.cpp"],
+    hdrs = ["getpwent_r.h"],
+    deps = [
+        ":pwd_utils",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_passwd",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
