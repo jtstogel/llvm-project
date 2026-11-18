@@ -131,6 +131,230 @@ libc_test(
 )
 
 libc_test(
+    name = "fmemopen_test",
+    srcs = ["fmemopen_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr/types:off_t",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/stdio:clearerr",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fflush",
+        "//libc/src/stdio:fgetc",
+        "//libc/src/stdio:fmemopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:fseek",
+        "//libc/src/stdio:fseeko",
+        "//libc/src/stdio:ftell",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:setvbuf",
+        "//libc/test/UnitTest:memory_matcher",
+    ],
+)
+
+libc_test(
+    name = "fopencookie_test",
+    srcs = ["fopencookie_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/stdio:clearerr",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fflush",
+        "//libc/src/stdio:fopencookie",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:fseek",
+        "//libc/src/stdio:fwrite",
+        "//libc/test/UnitTest:memory_matcher",
+    ],
+)
+
+libc_test(
+    name = "freopen_test",
+    srcs = ["freopen_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/__support/macros/properties:os",
+        "//libc/src/fcntl",
+        "//libc/src/stdio:clearerr",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fflush",
+        "//libc/src/stdio:fileno",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:freopen",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:stdout",
+        "//libc/src/unistd:close",
+        "//libc/src/wchar:fwide",
+    ],
+)
+
+libc_test(
+    name = "fgetpos_test",
+    srcs = ["fgetpos_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:fpos_t",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:fgetpos",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:fseek",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:remove",
+        "//libc/src/stdio:setvbuf",
+        "//libc/src/stdio:ungetc",
+        "//libc/src/wchar:fgetwc",
+        "//libc/src/wchar:fputwc",
+        "//libc/src/wchar:fwide",
+        "//libc/src/wchar:mbsinit",
+        "//libc/src/wchar:ungetwc",
+    ],
+)
+
+libc_test(
+    name = "fsetpos_test",
+    srcs = ["fsetpos_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:fpos_t",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fgetpos",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:fseek",
+        "//libc/src/stdio:fsetpos",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:remove",
+        "//libc/src/stdio:setvbuf",
+        "//libc/src/stdio:ungetc",
+        "//libc/src/wchar:fgetwc",
+        "//libc/src/wchar:fputwc",
+        "//libc/src/wchar:fwide",
+        "//libc/src/wchar:mbsinit",
+        "//libc/src/wchar:ungetwc",
+    ],
+)
+
+libc_test(
+    name = "fputc_test",
+    srcs = ["fputc_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support/File:file",
+        "//libc/src/stdio:fputc",
+        "//libc/src/stdio:putchar",
+        "//libc/src/stdio:stderr",
+    ],
+)
+
+libc_test(
+    name = "fputs_test",
+    srcs = ["fputs_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support/File:file",
+        "//libc/src/stdio:fputs",
+        "//libc/src/stdio:stderr",
+        "//libc/src/stdio:stdout",
+    ],
+)
+
+libc_test(
+    name = "puts_test",
+    srcs = ["puts_test.cpp"],
+    full_build_only = True,
+    deps = ["//libc/src/stdio:puts"],
+)
+
+libc_test(
+    name = "perror_test",
+    srcs = ["perror_test.cpp"],
+    full_build_only = True,
+    deps = ["//libc/src/stdio:perror"],
+)
+
+libc_test(
+    name = "tmpfile_test",
+    srcs = ["tmpfile_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:stdio_macros",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:fflush",
+        "//libc/src/stdio:fread",
+        "//libc/src/stdio:fseek",
+        "//libc/src/stdio:ftell",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/stdio:tmpfile",
+    ],
+)
+
+libc_test(
+    name = "tmpnam_test",
+    srcs = ["tmpnam_test.cpp"],
+    deps = [
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support/CPP:string",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/stdio:tmpnam",
+    ],
+)
+
+libc_test(
+    name = "popen_pclose_test",
+    srcs = ["popen_pclose_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_wait_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/src/fcntl",
+        "//libc/src/stdio:fgets",
+        "//libc/src/stdio:fileno",
+        "//libc/src/stdio:fputs",
+        "//libc/src/stdio:pclose",
+        "//libc/src/stdio:popen",
+        "//libc/src/stdio:snprintf",
+        "//libc/src/sys/wait",
+    ],
+)
+
+libc_test(
     name = "sscanf_test",
     srcs = ["sscanf_test.cpp"],
     deps = [

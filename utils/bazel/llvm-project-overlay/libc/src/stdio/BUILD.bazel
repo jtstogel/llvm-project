@@ -100,6 +100,42 @@ libc_function(
 )
 
 libc_function(
+    name = "fileno",
+    srcs = ["generic/fileno.cpp"],
+    hdrs = ["fileno.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "flockfile",
+    srcs = ["flockfile.cpp"],
+    hdrs = ["flockfile.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "funlockfile",
+    srcs = ["funlockfile.cpp"],
+    hdrs = ["funlockfile.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "fopen",
     srcs = ["generic/fopen.cpp"],
     hdrs = ["fopen.h"],
@@ -110,6 +146,78 @@ libc_function(
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "fdopen",
+    srcs = ["linux/fdopen.cpp"],
+    hdrs = ["fdopen.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fmemopen",
+    srcs = ["fmemopen.cpp"],
+    hdrs = ["fmemopen.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:algorithm",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_function(
+    name = "fopencookie",
+    srcs = ["fopencookie.cpp"],
+    hdrs = ["fopencookie.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:cookie_io_functions_t",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "freopen",
+    srcs = ["generic/freopen.cpp"],
+    hdrs = ["freopen.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
     ],
 )
 
@@ -127,6 +235,20 @@ libc_function(
 )
 
 libc_function(
+    name = "fread_unlocked",
+    srcs = ["generic/fread_unlocked.cpp"],
+    hdrs = ["fread_unlocked.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "fwrite",
     srcs = ["generic/fwrite.cpp"],
     hdrs = ["fwrite.h"],
@@ -136,6 +258,20 @@ libc_function(
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fwrite_unlocked",
+    srcs = ["generic/fwrite_unlocked.cpp"],
+    hdrs = ["fwrite_unlocked.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
     ],
 )
 
@@ -152,6 +288,18 @@ libc_function(
 )
 
 libc_function(
+    name = "feof_unlocked",
+    srcs = ["generic/feof_unlocked.cpp"],
+    hdrs = ["feof_unlocked.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "ferror",
     srcs = ["generic/ferror.cpp"],
     hdrs = ["ferror.h"],
@@ -160,6 +308,389 @@ libc_function(
         "//libc/src/__support/File:file",
         "//libc/src/__support/File:platform_file",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "ferror_unlocked",
+    srcs = ["generic/ferror_unlocked.cpp"],
+    hdrs = ["ferror_unlocked.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "clearerr",
+    srcs = ["generic/clearerr.cpp"],
+    hdrs = ["clearerr.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "clearerr_unlocked",
+    srcs = ["generic/clearerr_unlocked.cpp"],
+    hdrs = ["clearerr_unlocked.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fgetpos",
+    srcs = ["generic/fgetpos.cpp"],
+    hdrs = ["fgetpos.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:fpos_t",
+        "//libc/hdr/types:mbstate_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:type_traits",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_function(
+    name = "fsetpos",
+    srcs = ["generic/fsetpos.cpp"],
+    hdrs = ["fsetpos.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:fpos_t",
+        "//libc/hdr/types:mbstate_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:type_traits",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_function(
+    name = "fseek",
+    srcs = ["generic/fseek.cpp"],
+    hdrs = ["fseek.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "fseeko",
+    srcs = ["generic/fseeko.cpp"],
+    hdrs = ["fseeko.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:off_t",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "ftell",
+    srcs = ["generic/ftell.cpp"],
+    hdrs = ["ftell.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "ftello",
+    srcs = ["generic/ftello.cpp"],
+    hdrs = ["ftello.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:off_t",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "rewind",
+    srcs = ["generic/rewind.cpp"],
+    hdrs = ["rewind.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "setbuf",
+    srcs = ["setbuf.cpp"],
+    hdrs = ["setbuf.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "setvbuf",
+    srcs = ["setvbuf.cpp"],
+    hdrs = ["setvbuf.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "fgetc",
+    srcs = ["generic/fgetc.cpp"],
+    hdrs = ["fgetc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "fgetc_unlocked",
+    srcs = ["generic/fgetc_unlocked.cpp"],
+    hdrs = ["fgetc_unlocked.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "fgets",
+    srcs = ["generic/fgets.cpp"],
+    hdrs = ["fgets.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "fputc",
+    srcs = ["generic/fputc.cpp"],
+    hdrs = ["fputc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "fputs",
+    srcs = ["generic/fputs.cpp"],
+    hdrs = ["fputs.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getc",
+    srcs = ["generic/getc.cpp"],
+    hdrs = ["getc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getc_unlocked",
+    srcs = ["generic/getc_unlocked.cpp"],
+    hdrs = ["getc_unlocked.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getchar",
+    srcs = ["generic/getchar.cpp"],
+    hdrs = ["getchar.h"],
+    full_build_only = True,
+    deps = [
+        ":stdin",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getchar_unlocked",
+    srcs = ["generic/getchar_unlocked.cpp"],
+    hdrs = ["getchar_unlocked.h"],
+    full_build_only = True,
+    deps = [
+        ":stdin",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "putc",
+    srcs = ["generic/putc.cpp"],
+    hdrs = ["putc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "putchar",
+    srcs = ["generic/putchar.cpp"],
+    hdrs = ["putchar.h"],
+    full_build_only = True,
+    deps = [
+        ":stdout",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "puts",
+    srcs = ["generic/puts.cpp"],
+    hdrs = ["puts.h"],
+    full_build_only = True,
+    deps = [
+        ":stdout",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "ungetc",
+    srcs = ["generic/ungetc.cpp"],
+    hdrs = ["ungetc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "perror",
+    srcs = ["generic/perror.cpp"],
+    hdrs = ["perror.h"],
+    full_build_only = True,
+    deps = [
+        ":stderr",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/StringUtil",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
     ],
 )
 
@@ -556,5 +1087,107 @@ libc_function(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:rename",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "renameat",
+    srcs = ["linux/renameat.cpp"],
+    hdrs = ["renameat.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:renameat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tmpfile",
+    srcs = ["linux/tmpfile.cpp"],
+    hdrs = ["tmpfile.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "tmpnam",
+    srcs = ["linux/tmpnam.cpp"],
+    hdrs = ["tmpnam.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/CPP:atomic",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:access",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getrandom",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_function(
+    name = "popen",
+    srcs = ["linux/popen.cpp"],
+    hdrs = ["popen.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:linux_popen_file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/__support/OSUtil:linux_shell_fork",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:dup2",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fcntl",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:pipe2",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "pclose",
+    srcs = ["linux/pclose.cpp"],
+    hdrs = ["pclose.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:linux_popen_file",
+        "//libc/src/__support/OSUtil:linux_shell_fork",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
     ],
 )

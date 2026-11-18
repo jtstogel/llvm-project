@@ -662,6 +662,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "pipe2",
+    hdrs = ["pipe2.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:sanitizer",
+    ],
+)
+
+libc_support_library(
     name = "posix_fadvise",
     hdrs = ["posix_fadvise.h"],
     deps = [
@@ -870,6 +882,17 @@ libc_support_library(
     }),
     deps = [
         "//libc/hdr:fcntl_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "renameat",
+    hdrs = ["renameat.h"],
+    deps = [
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",

@@ -239,6 +239,25 @@ libc_test(
 )
 
 libc_test(
+    name = "ungetwc_test",
+    srcs = ["ungetwc_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr:wchar_macros",
+        "//libc/src/stdio:fclose",
+        "//libc/src/stdio:feof",
+        "//libc/src/stdio:ferror",
+        "//libc/src/stdio:fopen",
+        "//libc/src/stdio:fseek",
+        "//libc/src/stdio:fwrite",
+        "//libc/src/wchar:fgetwc",
+        "//libc/src/wchar:fwide",
+        "//libc/src/wchar:ungetwc",
+    ],
+)
+
+libc_test(
     name = "wcpcpy_test",
     srcs = ["wcpcpy_test.cpp"],
     deps = [
