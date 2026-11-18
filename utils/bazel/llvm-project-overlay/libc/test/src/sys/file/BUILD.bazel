@@ -1,0 +1,27 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/file functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "flock_test",
+    srcs = ["linux/flock_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_file_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/fcntl:open",
+        "//libc/src/sys/file:flock",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:unlink",
+    ],
+)
