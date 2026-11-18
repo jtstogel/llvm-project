@@ -44,6 +44,39 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "mbrtowc",
+    srcs = ["mbrtowc.cpp"],
+    hdrs = ["mbrtowc.h"],
+    deps = [
+        ":character_converter",
+        ":mbstate",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "mbsnrtowcs",
+    hdrs = ["mbsnrtowcs.h"],
+    deps = [
+        ":character_converter",
+        ":mbstate",
+        ":string_converter",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_support_library(
     name = "wcrtomb",
     hdrs = ["wcrtomb.h"],
     deps = [
@@ -57,6 +90,26 @@ libc_support_library(
         "//libc/src/__support:error_or",
         "//libc/src/__support:libc_assert",
         "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_support_library(
+    name = "wcsnrtombs",
+    hdrs = ["wcsnrtombs.h"],
+    deps = [
+        ":character_converter",
+        ":mbstate",
+        ":string_converter",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr/types:char8_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/macros/properties:types",
     ],
 )
 
