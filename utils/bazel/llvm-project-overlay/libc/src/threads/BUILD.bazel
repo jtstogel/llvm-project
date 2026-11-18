@@ -1,0 +1,327 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "call_once",
+    srcs = ["call_once.cpp"],
+    hdrs = ["call_once.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:callonce",
+    ],
+)
+
+libc_function(
+    name = "cnd_broadcast",
+    srcs = ["linux/cnd_broadcast.cpp"],
+    hdrs = ["cnd_broadcast.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cndvar",
+    ],
+)
+
+libc_function(
+    name = "cnd_destroy",
+    srcs = ["linux/cnd_destroy.cpp"],
+    hdrs = ["cnd_destroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cndvar",
+    ],
+)
+
+libc_function(
+    name = "cnd_init",
+    srcs = ["linux/cnd_init.cpp"],
+    hdrs = ["cnd_init.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cndvar",
+    ],
+)
+
+libc_function(
+    name = "cnd_signal",
+    srcs = ["linux/cnd_signal.cpp"],
+    hdrs = ["cnd_signal.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cndvar",
+    ],
+)
+
+libc_function(
+    name = "cnd_timedwait",
+    srcs = ["linux/cnd_timedwait.cpp"],
+    hdrs = ["cnd_timedwait.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:cndvar",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support/time",
+    ],
+)
+
+libc_function(
+    name = "cnd_wait",
+    srcs = ["linux/cnd_wait.cpp"],
+    hdrs = ["cnd_wait.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:cndvar",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "mtx_destroy",
+    srcs = ["mtx_destroy.cpp"],
+    hdrs = ["mtx_destroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "mtx_init",
+    srcs = ["mtx_init.cpp"],
+    hdrs = ["mtx_init.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "mtx_lock",
+    srcs = ["mtx_lock.cpp"],
+    hdrs = ["mtx_lock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "mtx_trylock",
+    srcs = ["mtx_trylock.cpp"],
+    hdrs = ["mtx_trylock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "mtx_unlock",
+    srcs = ["mtx_unlock.cpp"],
+    hdrs = ["mtx_unlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "thrd_create",
+    srcs = ["thrd_create.cpp"],
+    hdrs = ["thrd_create.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "thrd_current",
+    srcs = ["thrd_current.cpp"],
+    hdrs = ["thrd_current.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "thrd_detach",
+    srcs = ["thrd_detach.cpp"],
+    hdrs = ["thrd_detach.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "thrd_equal",
+    srcs = ["thrd_equal.cpp"],
+    hdrs = ["thrd_equal.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "thrd_exit",
+    srcs = ["thrd_exit.cpp"],
+    hdrs = ["thrd_exit.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "thrd_join",
+    srcs = ["thrd_join.cpp"],
+    hdrs = ["thrd_join.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "tss_create",
+    srcs = ["tss_create.cpp"],
+    hdrs = ["tss_create.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "tss_delete",
+    srcs = ["tss_delete.cpp"],
+    hdrs = ["tss_delete.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "tss_get",
+    srcs = ["tss_get.cpp"],
+    hdrs = ["tss_get.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "tss_set",
+    srcs = ["tss_set.cpp"],
+    hdrs = ["tss_set.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "thrd_sleep",
+    srcs = ["linux/thrd_sleep.cpp"],
+    hdrs = ["thrd_sleep.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:nanosleep",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "thrd_yield",
+    srcs = ["linux/thrd_yield.cpp"],
+    hdrs = ["thrd_yield.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sched_yield",
+        "//libc/src/__support/macros:config",
+    ],
+)
