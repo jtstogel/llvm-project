@@ -1,0 +1,40 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "in6addr_any",
+    srcs = ["in6addr_any.cpp"],
+    hdrs = ["in6addr_any.h"],
+    deps = [
+        "//libc/hdr:netinet_in_macros",
+        "//libc/hdr/types:struct_in6_addr",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "in6addr_loopback",
+    srcs = ["in6addr_loopback.cpp"],
+    hdrs = ["in6addr_loopback.h"],
+    deps = [
+        "//libc/hdr:netinet_in_macros",
+        "//libc/hdr/types:struct_in6_addr",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
