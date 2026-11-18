@@ -1,0 +1,242 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc time functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test", "libc_test_library")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "localtime_test",
+    srcs = ["localtime_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/src/time:localtime",
+    ],
+)
+
+libc_test(
+    name = "localtime_r_test",
+    srcs = ["localtime_r_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/src/time:localtime_r",
+    ],
+)
+
+libc_test(
+    name = "clock_gettime_test",
+    srcs = ["clock_gettime_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/time:clock_gettime",
+    ],
+)
+
+libc_test(
+    name = "clock_getcpuclockid_test",
+    srcs = ["clock_getcpuclockid_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/time:clock_getcpuclockid",
+        "//libc/src/time:clock_gettime",
+        "//libc/src/unistd:getpid",
+    ],
+)
+
+libc_test(
+    name = "clock_getres_test",
+    srcs = ["clock_getres_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:time_macros",
+        "//libc/src/time:clock_getres",
+    ],
+)
+
+libc_test(
+    name = "clock_settime_test",
+    srcs = ["clock_settime_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/time:clock_settime",
+    ],
+)
+
+libc_test(
+    name = "timer_test",
+    srcs = ["timer_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/hdr/types:struct_sigevent",
+        "//libc/hdr/types:timer_t",
+        "//libc/src/time:clock_gettime",
+        "//libc/src/time:timer_create",
+        "//libc/src/time:timer_delete",
+        "//libc/src/time:timer_getoverrun",
+        "//libc/src/time:timer_gettime",
+        "//libc/src/time:timer_settime",
+        "//libc/src/unistd:gettid",
+    ],
+)
+
+libc_test(
+    name = "difftime_test",
+    srcs = ["difftime_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support/FPUtil:fp_bits",
+        "//libc/src/time:difftime",
+        "//libc/src/time:time_constants",
+    ],
+)
+
+libc_test(
+    name = "nanosleep_test",
+    srcs = ["nanosleep_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/time:nanosleep",
+    ],
+)
+
+libc_test(
+    name = "strftime_test",
+    srcs = ["strftime_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support:integer_to_string",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/time:strftime",
+        "//libc/src/time:time_constants",
+    ],
+)
+
+libc_test(
+    name = "strptime_test",
+    srcs = ["strptime_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/time:strptime",
+    ],
+)
+
+libc_test(
+    name = "time_test",
+    srcs = ["time_test.cpp"],
+    full_build_only = True,
+    deps = ["//libc/src/time"],
+)
+
+libc_test(
+    name = "timespec_get_test",
+    srcs = ["timespec_get_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/time:timespec_get",
+    ],
+)
+
+libc_test(
+    name = "tzset_test",
+    srcs = ["tzset_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/time:tz_variables",
+        "//libc/src/time:tzset",
+    ],
+)
+
+libc_test(
+    name = "time_utils_test",
+    srcs = ["time_utils_test.cpp"],
+    deps = [
+        "//libc/hdr:limits_macros",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/time:time_constants",
+        "//libc/src/time:time_utils",
+    ],
+)
+
+libc_test_library(
+    name = "time_test_utils",
+    hdrs = [
+        "TmHelper.h",
+        "TmMatcher.h",
+    ],
+    deps = [
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support/macros:config",
+        "//libc/src/time:time_constants",
+        "//libc/test/UnitTest:LibcUnitTest",
+    ],
+)
+
+libc_test(
+    name = "gmtime_test",
+    srcs = ["gmtime_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/time:gmtime",
+        "//libc/src/time:time_constants",
+        "//libc/src/time:time_utils",
+        "//libc/test/src/time:time_test_utils",
+    ],
+)
+
+libc_test(
+    name = "gmtime_r_test",
+    srcs = ["gmtime_r_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/src/time:gmtime_r",
+        "//libc/src/time:time_constants",
+        "//libc/test/src/time:time_test_utils",
+    ],
+)
+
+libc_test(
+    name = "mktime_test",
+    srcs = ["mktime_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/time:mktime",
+        "//libc/src/time:time_constants",
+        "//libc/src/time:time_utils",
+        "//libc/test/src/time:time_test_utils",
+    ],
+)

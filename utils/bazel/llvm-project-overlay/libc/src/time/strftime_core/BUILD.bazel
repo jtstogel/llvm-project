@@ -1,0 +1,74 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "core_structs",
+    hdrs = ["core_structs.h"],
+    deps = [
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support/CPP:string_view",
+    ],
+)
+
+libc_support_library(
+    name = "converter",
+    hdrs = [
+        "composite_converter.h",
+        "converter.h",
+        "num_converter.h",
+        "str_converter.h",
+    ],
+    deps = [
+        ":core_structs",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:integer_to_string",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/time:time_constants",
+        "//libc/src/time:time_utils",
+    ],
+)
+
+libc_support_library(
+    name = "parser",
+    hdrs = ["parser.h"],
+    deps = [
+        ":core_structs",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "strftime_main",
+    hdrs = ["strftime_main.h"],
+    deps = [
+        ":converter",
+        ":core_structs",
+        ":parser",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_writer",
+    ],
+)
