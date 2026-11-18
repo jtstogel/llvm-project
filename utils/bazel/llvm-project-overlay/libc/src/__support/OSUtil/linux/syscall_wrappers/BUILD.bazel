@@ -363,6 +363,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "getitimer",
+    hdrs = ["getitimer.h"],
+    deps = [
+        "//libc/hdr/types:struct_itimerval",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "getpriority",
     hdrs = ["getpriority.h"],
     deps = [
@@ -974,6 +986,20 @@ libc_support_library(
         "//libc/hdr/types:struct_sockaddr",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "setitimer",
+    hdrs = ["setitimer.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:struct_itimerval",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/CPP:limits",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
     ],

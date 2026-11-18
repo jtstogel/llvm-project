@@ -1,0 +1,75 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "getitimer",
+    srcs = ["linux/getitimer.cpp"],
+    hdrs = ["getitimer.h"],
+    deps = [
+        "//libc/hdr/types:struct_itimerval",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getitimer",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "gettimeofday",
+    srcs = ["linux/gettimeofday.cpp"],
+    hdrs = ["gettimeofday.h"],
+    deps = [
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:struct_timeval",
+        "//libc/hdr/types:suseconds_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "setitimer",
+    srcs = ["linux/setitimer.cpp"],
+    hdrs = ["setitimer.h"],
+    deps = [
+        "//libc/hdr/types:struct_itimerval",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setitimer",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "utimes",
+    srcs = ["linux/utimes.cpp"],
+    hdrs = ["utimes.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr/types:struct_timeval",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:utimensat",
+        "//libc/src/__support/macros:config",
+    ],
+)
