@@ -39,6 +39,281 @@ libc_function(
 )
 
 libc_function(
+    name = "fgetwc",
+    srcs = ["fgetwc.cpp"],
+    hdrs = ["fgetwc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:wchar_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "fgetws",
+    srcs = ["fgetws.cpp"],
+    hdrs = ["fgetws.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "fputwc",
+    srcs = ["fputwc.cpp"],
+    hdrs = ["fputwc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:wchar_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "fputws",
+    srcs = ["fputws.cpp"],
+    hdrs = ["fputws.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
+    name = "fwide",
+    srcs = ["fwide.cpp"],
+    hdrs = ["fwide.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:common",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "getwc",
+    srcs = ["getwc.cpp"],
+    hdrs = ["getwc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:wchar_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "getwchar",
+    srcs = ["getwchar.cpp"],
+    hdrs = ["getwchar.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:wchar_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/stdio:stdin",
+    ],
+)
+
+libc_function(
+    name = "mbrlen",
+    srcs = ["mbrlen.cpp"],
+    hdrs = ["mbrlen.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbrtowc",
+        "//libc/src/__support/wchar:mbstate",
+    ],
+)
+
+libc_function(
+    name = "mbrtowc",
+    srcs = ["mbrtowc.cpp"],
+    hdrs = ["mbrtowc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbrtowc",
+        "//libc/src/__support/wchar:mbstate",
+    ],
+)
+
+libc_function(
+    name = "mbsinit",
+    srcs = ["mbsinit.cpp"],
+    hdrs = ["mbsinit.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:character_converter",
+        "//libc/src/__support/wchar:mbstate",
+    ],
+)
+
+libc_function(
+    name = "mbsnrtowcs",
+    srcs = ["mbsnrtowcs.cpp"],
+    hdrs = ["mbsnrtowcs.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbsnrtowcs",
+        "//libc/src/__support/wchar:mbstate",
+    ],
+)
+
+libc_function(
+    name = "mbsrtowcs",
+    srcs = ["mbsrtowcs.cpp"],
+    hdrs = ["mbsrtowcs.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbsnrtowcs",
+        "//libc/src/__support/wchar:mbstate",
+    ],
+)
+
+libc_function(
+    name = "putwc",
+    srcs = ["putwc.cpp"],
+    hdrs = ["putwc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:wchar_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "putwchar",
+    srcs = ["putwchar.cpp"],
+    hdrs = ["putwchar.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:wchar_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wchar_t",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/stdio:stdout",
+    ],
+)
+
+libc_function(
+    name = "swprintf",
+    srcs = ["swprintf.cpp"],
+    hdrs = ["swprintf.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_core_structs",
+        "//libc/src/__support/printf_core:printf_error_mapper",
+        "//libc/src/__support/printf_core:printf_main",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "ungetwc",
+    srcs = ["ungetwc.cpp"],
+    hdrs = ["ungetwc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:wchar_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
     name = "wcpcpy",
     srcs = ["wcpcpy.cpp"],
     hdrs = ["wcpcpy.h"],
@@ -59,6 +334,36 @@ libc_function(
         "//libc/hdr/types:size_t",
         "//libc/hdr/types:wchar_t",
         "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "wcrtomb",
+    srcs = ["wcrtomb.cpp"],
+    hdrs = ["wcrtomb.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcrtomb",
+    ],
+)
+
+libc_function(
+    name = "wcscasecmp",
+    srcs = ["wcscasecmp.cpp"],
+    hdrs = ["wcscasecmp.h"],
+    deps = [
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
     ],
@@ -104,6 +409,18 @@ libc_function(
 )
 
 libc_function(
+    name = "wcscoll",
+    srcs = ["wcscoll.cpp"],
+    hdrs = ["wcscoll.h"],
+    deps = [
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
     name = "wcscpy",
     srcs = ["wcscpy.cpp"],
     hdrs = ["wcscpy.h"],
@@ -127,6 +444,19 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "wcsdup",
+    srcs = ["wcsdup.cpp"],
+    hdrs = ["wcsdup.h"],
+    deps = [
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string:allocating_string_utils",
     ],
 )
 
@@ -170,6 +500,20 @@ libc_function(
 )
 
 libc_function(
+    name = "wcsncasecmp",
+    srcs = ["wcsncasecmp.cpp"],
+    hdrs = ["wcsncasecmp.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:wctype_utils",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
     name = "wcsncat",
     srcs = ["wcsncat.cpp"],
     hdrs = ["wcsncat.h"],
@@ -208,6 +552,36 @@ libc_function(
 )
 
 libc_function(
+    name = "wcsnlen",
+    srcs = ["wcsnlen.cpp"],
+    hdrs = ["wcsnlen.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "wcsnrtombs",
+    srcs = ["wcsnrtombs.cpp"],
+    hdrs = ["wcsnrtombs.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcsnrtombs",
+    ],
+)
+
+libc_function(
     name = "wcspbrk",
     srcs = ["wcspbrk.cpp"],
     hdrs = ["wcspbrk.h"],
@@ -229,6 +603,24 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "wcsrtombs",
+    srcs = ["wcsrtombs.cpp"],
+    hdrs = ["wcsrtombs.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcsnrtombs",
     ],
 )
 
@@ -256,6 +648,126 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/string:utils",
+    ],
+)
+
+libc_function(
+    name = "wcstod",
+    srcs = ["wcstod.cpp"],
+    hdrs = ["wcstod.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "wcstof",
+    srcs = ["wcstof.cpp"],
+    hdrs = ["wcstof.h"],
+    deps = [
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "wcstok",
+    srcs = ["wcstok.cpp"],
+    hdrs = ["wcstok.h"],
+    deps = [
+        ":utils",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "wcstol",
+    srcs = ["wcstol.cpp"],
+    hdrs = ["wcstol.h"],
+    deps = [
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "wcstold",
+    srcs = ["wcstold.cpp"],
+    hdrs = ["wcstold.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "wcstoll",
+    srcs = ["wcstoll.cpp"],
+    hdrs = ["wcstoll.h"],
+    deps = [
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "wcstoul",
+    srcs = ["wcstoul.cpp"],
+    hdrs = ["wcstoul.h"],
+    deps = [
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "wcstoull",
+    srcs = ["wcstoull.cpp"],
+    hdrs = ["wcstoull.h"],
+    deps = [
+        "//libc/hdr/types:wint_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "wcsxfrm",
+    srcs = ["wcsxfrm.cpp"],
+    hdrs = ["wcsxfrm.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
     ],
 )
 
