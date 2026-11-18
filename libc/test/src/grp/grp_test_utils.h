@@ -25,14 +25,15 @@
 // RAII helper class for creating and automatically removing temporary test
 // files, while safely scoping the group database path.
 class ScopedGroupFile {
-  char path[256];
+  char path[4096];
 
 public:
   ScopedGroupFile(const ScopedGroupFile &) = delete;
   ScopedGroupFile &operator=(const ScopedGroupFile &) = delete;
 
   ScopedGroupFile(const char *file_path, const char *content) {
-    LIBC_NAMESPACE::internal::strlcpy(path, file_path, sizeof(path));
+    EXPECT_LT(LIBC_NAMESPACE::internal::strlcpy(path, file_path, sizeof(path)),
+              sizeof(path));
 
     auto file_or = LIBC_NAMESPACE::openfile(path, "w");
     if (file_or.has_value()) {
