@@ -71,6 +71,44 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "fgetxattr",
+    hdrs = ["fgetxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "flistxattr",
+    hdrs = ["flistxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "fsetxattr",
+    hdrs = ["fsetxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "fstatfs",
     hdrs = ["fstatfs.h"],
     deps = [
@@ -314,6 +352,32 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "getxattr",
+    hdrs = ["getxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "lgetxattr",
+    hdrs = ["lgetxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "link",
     hdrs = ["link.h"],
     target_compatible_with = select({
@@ -367,6 +431,44 @@ libc_support_library(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "listxattr",
+    hdrs = ["listxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "llistxattr",
+    hdrs = ["llistxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "lsetxattr",
+    hdrs = ["lsetxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",
@@ -813,6 +915,18 @@ libc_support_library(
         "//libc/hdr/types:socklen_t",
         "//libc/hdr/types:ssize_t",
         "//libc/hdr/types:struct_sockaddr",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "setxattr",
+    hdrs = ["setxattr.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",
