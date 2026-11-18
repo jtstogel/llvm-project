@@ -204,6 +204,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "unix_rwlock",
+    hdrs = ["unix_rwlock.h"],
+    deps = [
+        ":identifier",
+        ":raw_rwlock",
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:atomic",
+    ],
+)
+
+libc_support_library(
     name = "mutex",
     hdrs = ["mutex.h"],
     deps = [
@@ -404,5 +416,38 @@ libc_support_library(
         ":mutex",
         "//libc/src/__support/CPP:mutex",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "cndvar",
+    hdrs = ["CndVar.h"],
+    deps = [
+        ":futex_utils",
+        ":mutex",
+        ":raw_mutex",
+        ":sleep",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time",
+    ],
+)
+
+libc_support_library(
+    name = "linux_barrier",
+    srcs = ["linux/barrier.cpp"],
+    hdrs = ["linux/barrier.h"],
+    full_build_only = True,
+    deps = [
+        ":cndvar",
+        ":mutex",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:pthread_macros",
+        "//libc/include:llvm_libc_types_pthread_barrier_t",
+        "//libc/include:llvm_libc_types_pthread_barrierattr_t",
+        "//libc/src/__support/CPP:new",
     ],
 )

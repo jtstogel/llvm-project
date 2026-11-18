@@ -1,0 +1,1277 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "pthread_attr",
+    hdrs = ["pthread_attr.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:pthread_macros",
+        "//libc/hdr:sched_macros",
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_support_library(
+    name = "pthread_cond_utils",
+    hdrs = ["pthread_cond_utils.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:time_macros",
+        "//libc/include:llvm_libc_types_clockid_t",
+        "//libc/include:llvm_libc_types_pthread_cond_t",
+        "//libc/include:llvm_libc_types_pthread_mutex_t",
+        "//libc/include:llvm_libc_types_struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support/threads:cndvar",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support/time",
+    ],
+)
+
+libc_support_library(
+    name = "pthread_mutexattr",
+    hdrs = ["pthread_mutexattr.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "__pthread_cleanup_pop",
+    srcs = ["__pthread_cleanup_pop.cpp"],
+    hdrs = ["__pthread_cleanup_pop.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct___pthread_cleanup_frame",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "__pthread_cleanup_push",
+    srcs = ["__pthread_cleanup_push.cpp"],
+    hdrs = ["__pthread_cleanup_push.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct___pthread_cleanup_frame",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_atfork",
+    srcs = ["pthread_atfork.cpp"],
+    hdrs = ["pthread_atfork.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:fork_callbacks",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_destroy",
+    srcs = ["pthread_attr_destroy.cpp"],
+    hdrs = ["pthread_attr_destroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_getdetachstate",
+    srcs = ["pthread_attr_getdetachstate.cpp"],
+    hdrs = ["pthread_attr_getdetachstate.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_getguardsize",
+    srcs = ["pthread_attr_getguardsize.cpp"],
+    hdrs = ["pthread_attr_getguardsize.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_getinheritsched",
+    srcs = ["pthread_attr_getinheritsched.cpp"],
+    hdrs = ["pthread_attr_getinheritsched.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_getschedparam",
+    srcs = ["pthread_attr_getschedparam.cpp"],
+    hdrs = ["pthread_attr_getschedparam.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_getschedpolicy",
+    srcs = ["pthread_attr_getschedpolicy.cpp"],
+    hdrs = ["pthread_attr_getschedpolicy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_getscope",
+    srcs = ["pthread_attr_getscope.cpp"],
+    hdrs = ["pthread_attr_getscope.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:pthread_macros",
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_getstack",
+    srcs = ["pthread_attr_getstack.cpp"],
+    hdrs = ["pthread_attr_getstack.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_attr_getstacksize",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_getstacksize",
+    srcs = ["pthread_attr_getstacksize.cpp"],
+    hdrs = ["pthread_attr_getstacksize.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_init",
+    srcs = ["pthread_attr_init.cpp"],
+    hdrs = ["pthread_attr_init.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_attr",
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_setdetachstate",
+    srcs = ["pthread_attr_setdetachstate.cpp"],
+    hdrs = ["pthread_attr_setdetachstate.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_setguardsize",
+    srcs = ["pthread_attr_setguardsize.cpp"],
+    hdrs = ["pthread_attr_setguardsize.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_setinheritsched",
+    srcs = ["pthread_attr_setinheritsched.cpp"],
+    hdrs = ["pthread_attr_setinheritsched.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:pthread_macros",
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_setschedparam",
+    srcs = ["pthread_attr_setschedparam.cpp"],
+    hdrs = ["pthread_attr_setschedparam.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_setschedpolicy",
+    srcs = ["pthread_attr_setschedpolicy.cpp"],
+    hdrs = ["pthread_attr_setschedpolicy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_setscope",
+    srcs = ["pthread_attr_setscope.cpp"],
+    hdrs = ["pthread_attr_setscope.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:pthread_macros",
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_setstack",
+    srcs = ["pthread_attr_setstack.cpp"],
+    hdrs = ["pthread_attr_setstack.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_attr_setstacksize",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_attr_setstacksize",
+    srcs = ["pthread_attr_setstacksize.cpp"],
+    hdrs = ["pthread_attr_setstacksize.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_barrier_destroy",
+    srcs = ["pthread_barrier_destroy.cpp"],
+    hdrs = ["pthread_barrier_destroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_barrier_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_barrier",
+    ],
+)
+
+libc_function(
+    name = "pthread_barrier_init",
+    srcs = ["pthread_barrier_init.cpp"],
+    hdrs = ["pthread_barrier_init.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_barrier_t",
+        "//libc/hdr/types:pthread_barrierattr_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_barrier",
+    ],
+)
+
+libc_function(
+    name = "pthread_barrier_wait",
+    srcs = ["pthread_barrier_wait.cpp"],
+    hdrs = ["pthread_barrier_wait.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_barrier_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:linux_barrier",
+    ],
+)
+
+libc_function(
+    name = "pthread_cond_broadcast",
+    srcs = ["pthread_cond_broadcast.cpp"],
+    hdrs = ["pthread_cond_broadcast.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_cond_utils",
+        "//libc/include:llvm_libc_types_pthread_cond_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_cond_clockwait",
+    srcs = ["pthread_cond_clockwait.cpp"],
+    hdrs = ["pthread_cond_clockwait.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_cond_utils",
+        "//libc/hdr:errno_macros",
+        "//libc/include:llvm_libc_types_clockid_t",
+        "//libc/include:llvm_libc_types_pthread_cond_t",
+        "//libc/include:llvm_libc_types_pthread_mutex_t",
+        "//libc/include:llvm_libc_types_struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_cond_destroy",
+    srcs = ["pthread_cond_destroy.cpp"],
+    hdrs = ["pthread_cond_destroy.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_cond_utils",
+        "//libc/include:llvm_libc_types_pthread_cond_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_cond_init",
+    srcs = ["pthread_cond_init.cpp"],
+    hdrs = ["pthread_cond_init.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:time_macros",
+        "//libc/include:llvm_libc_macros_pthread_macros",
+        "//libc/include:llvm_libc_types_pthread_cond_t",
+        "//libc/include:llvm_libc_types_pthread_condattr_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:cndvar",
+    ],
+)
+
+libc_function(
+    name = "pthread_cond_signal",
+    srcs = ["pthread_cond_signal.cpp"],
+    hdrs = ["pthread_cond_signal.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_cond_utils",
+        "//libc/include:llvm_libc_types_pthread_cond_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_cond_timedwait",
+    srcs = ["pthread_cond_timedwait.cpp"],
+    hdrs = ["pthread_cond_timedwait.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_cond_utils",
+        "//libc/include:llvm_libc_types_pthread_cond_t",
+        "//libc/include:llvm_libc_types_pthread_mutex_t",
+        "//libc/include:llvm_libc_types_struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_cond_wait",
+    srcs = ["pthread_cond_wait.cpp"],
+    hdrs = ["pthread_cond_wait.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_cond_utils",
+        "//libc/include:llvm_libc_types_pthread_cond_t",
+        "//libc/include:llvm_libc_types_pthread_mutex_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_condattr_destroy",
+    srcs = ["pthread_condattr_destroy.cpp"],
+    hdrs = ["pthread_condattr_destroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_condattr_getclock",
+    srcs = ["pthread_condattr_getclock.cpp"],
+    hdrs = ["pthread_condattr_getclock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_condattr_getpshared",
+    srcs = ["pthread_condattr_getpshared.cpp"],
+    hdrs = ["pthread_condattr_getpshared.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_condattr_init",
+    srcs = ["pthread_condattr_init.cpp"],
+    hdrs = ["pthread_condattr_init.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:time_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_condattr_setclock",
+    srcs = ["pthread_condattr_setclock.cpp"],
+    hdrs = ["pthread_condattr_setclock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:clockid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_condattr_setpshared",
+    srcs = ["pthread_condattr_setpshared.cpp"],
+    hdrs = ["pthread_condattr_setpshared.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_create",
+    srcs = ["pthread_create.cpp"],
+    hdrs = ["pthread_create.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_attr",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:pthread_macros",
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/hdr/types:pthread_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_detach",
+    srcs = ["pthread_detach.cpp"],
+    hdrs = ["pthread_detach.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_equal",
+    srcs = ["pthread_equal.cpp"],
+    hdrs = ["pthread_equal.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_exit",
+    srcs = ["pthread_exit.cpp"],
+    hdrs = ["pthread_exit.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_getattr_np",
+    srcs = ["pthread_getattr_np.cpp"],
+    hdrs = ["pthread_getattr_np.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:pthread_macros",
+        "//libc/hdr/types:pthread_attr_t",
+        "//libc/hdr/types:pthread_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:atomic",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:thread_attributes",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_getname_np",
+    srcs = ["pthread_getname_np.cpp"],
+    hdrs = ["pthread_getname_np.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:stringstream",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_getschedparam",
+    srcs = ["pthread_getschedparam.cpp"],
+    hdrs = ["pthread_getschedparam.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_getspecific",
+    srcs = ["pthread_getspecific.cpp"],
+    hdrs = ["pthread_getspecific.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_getstack_np",
+    srcs = ["pthread_getstack_np.cpp"],
+    hdrs = ["pthread_getstack_np.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_getthreadid_np",
+    srcs = ["pthread_getthreadid_np.cpp"],
+    hdrs = ["pthread_getthreadid_np.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_pthread_id_np_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_getunique_np",
+    srcs = ["pthread_getunique_np.cpp"],
+    hdrs = ["pthread_getunique_np.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/include:llvm_libc_types_pthread_id_np_t",
+        "//libc/include:llvm_libc_types_pthread_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_join",
+    srcs = ["pthread_join.cpp"],
+    hdrs = ["pthread_join.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_key_create",
+    srcs = ["pthread_key_create.cpp"],
+    hdrs = ["pthread_key_create.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_key_delete",
+    srcs = ["pthread_key_delete.cpp"],
+    hdrs = ["pthread_key_delete.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutex_destroy",
+    srcs = ["pthread_mutex_destroy.cpp"],
+    hdrs = ["pthread_mutex_destroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutex_init",
+    srcs = ["pthread_mutex_init.cpp"],
+    hdrs = ["pthread_mutex_init.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutex_lock",
+    srcs = ["pthread_mutex_lock.cpp"],
+    hdrs = ["pthread_mutex_lock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutex_trylock",
+    srcs = ["pthread_mutex_trylock.cpp"],
+    hdrs = ["pthread_mutex_trylock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/include:llvm_libc_types_pthread_mutex_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+        "//libc/src/__support/threads:mutex_common",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutex_unlock",
+    srcs = ["pthread_mutex_unlock.cpp"],
+    hdrs = ["pthread_mutex_unlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_destroy",
+    srcs = ["pthread_mutexattr_destroy.cpp"],
+    hdrs = ["pthread_mutexattr_destroy.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_getpshared",
+    srcs = ["pthread_mutexattr_getpshared.cpp"],
+    hdrs = ["pthread_mutexattr_getpshared.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_getrobust",
+    srcs = ["pthread_mutexattr_getrobust.cpp"],
+    hdrs = ["pthread_mutexattr_getrobust.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_gettype",
+    srcs = ["pthread_mutexattr_gettype.cpp"],
+    hdrs = ["pthread_mutexattr_gettype.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_init",
+    srcs = ["pthread_mutexattr_init.cpp"],
+    hdrs = ["pthread_mutexattr_init.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_setpshared",
+    srcs = ["pthread_mutexattr_setpshared.cpp"],
+    hdrs = ["pthread_mutexattr_setpshared.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_setrobust",
+    srcs = ["pthread_mutexattr_setrobust.cpp"],
+    hdrs = ["pthread_mutexattr_setrobust.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_mutexattr_settype",
+    srcs = ["pthread_mutexattr_settype.cpp"],
+    hdrs = ["pthread_mutexattr_settype.h"],
+    full_build_only = True,
+    deps = [
+        ":pthread_mutexattr",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_once",
+    srcs = ["pthread_once.cpp"],
+    hdrs = ["pthread_once.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:callonce",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_clockrdlock",
+    srcs = ["pthread_rwlock_clockrdlock.cpp"],
+    hdrs = ["pthread_rwlock_clockrdlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:unix_rwlock",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_clockwrlock",
+    srcs = ["pthread_rwlock_clockwrlock.cpp"],
+    hdrs = ["pthread_rwlock_clockwrlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:unix_rwlock",
+        "//libc/src/__support/time",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_destroy",
+    srcs = ["pthread_rwlock_destroy.cpp"],
+    hdrs = ["pthread_rwlock_destroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:unix_rwlock",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_init",
+    srcs = ["pthread_rwlock_init.cpp"],
+    hdrs = ["pthread_rwlock_init.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:unix_rwlock",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_rdlock",
+    srcs = ["pthread_rwlock_rdlock.cpp"],
+    hdrs = ["pthread_rwlock_rdlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:unix_rwlock",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_timedrdlock",
+    srcs = ["pthread_rwlock_timedrdlock.cpp"],
+    hdrs = ["pthread_rwlock_timedrdlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support/threads:unix_rwlock",
+        "//libc/src/__support/time",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_timedwrlock",
+    srcs = ["pthread_rwlock_timedwrlock.cpp"],
+    hdrs = ["pthread_rwlock_timedwrlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support/threads:unix_rwlock",
+        "//libc/src/__support/time",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_tryrdlock",
+    srcs = ["pthread_rwlock_tryrdlock.cpp"],
+    hdrs = ["pthread_rwlock_tryrdlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:unix_rwlock",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_trywrlock",
+    srcs = ["pthread_rwlock_trywrlock.cpp"],
+    hdrs = ["pthread_rwlock_trywrlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:unix_rwlock",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_unlock",
+    srcs = ["pthread_rwlock_unlock.cpp"],
+    hdrs = ["pthread_rwlock_unlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:unix_rwlock",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlock_wrlock",
+    srcs = ["pthread_rwlock_wrlock.cpp"],
+    hdrs = ["pthread_rwlock_wrlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:unix_rwlock",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlockattr_destroy",
+    srcs = ["pthread_rwlockattr_destroy.cpp"],
+    hdrs = ["pthread_rwlockattr_destroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlockattr_getkind_np",
+    srcs = ["pthread_rwlockattr_getkind_np.cpp"],
+    hdrs = ["pthread_rwlockattr_getkind_np.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlockattr_getpshared",
+    srcs = ["pthread_rwlockattr_getpshared.cpp"],
+    hdrs = ["pthread_rwlockattr_getpshared.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlockattr_init",
+    srcs = ["pthread_rwlockattr_init.cpp"],
+    hdrs = ["pthread_rwlockattr_init.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlockattr_setkind_np",
+    srcs = ["pthread_rwlockattr_setkind_np.cpp"],
+    hdrs = ["pthread_rwlockattr_setkind_np.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_rwlockattr_setpshared",
+    srcs = ["pthread_rwlockattr_setpshared.cpp"],
+    hdrs = ["pthread_rwlockattr_setpshared.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_self",
+    srcs = ["pthread_self.cpp"],
+    hdrs = ["pthread_self.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_setname_np",
+    srcs = ["pthread_setname_np.cpp"],
+    hdrs = ["pthread_setname_np.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_setschedparam",
+    srcs = ["pthread_setschedparam.cpp"],
+    hdrs = ["pthread_setschedparam.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pthread_t",
+        "//libc/hdr/types:struct_sched_param",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_setspecific",
+    srcs = ["pthread_setspecific.cpp"],
+    hdrs = ["pthread_setspecific.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_spin_destroy",
+    srcs = ["pthread_spin_destroy.cpp"],
+    hdrs = ["pthread_spin_destroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:spin_lock",
+    ],
+)
+
+libc_function(
+    name = "pthread_spin_init",
+    srcs = ["pthread_spin_init.cpp"],
+    hdrs = ["pthread_spin_init.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:spin_lock",
+    ],
+)
+
+libc_function(
+    name = "pthread_spin_lock",
+    srcs = ["pthread_spin_lock.cpp"],
+    hdrs = ["pthread_spin_lock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:identifier",
+        "//libc/src/__support/threads:spin_lock",
+    ],
+)
+
+libc_function(
+    name = "pthread_spin_trylock",
+    srcs = ["pthread_spin_trylock.cpp"],
+    hdrs = ["pthread_spin_trylock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:identifier",
+        "//libc/src/__support/threads:spin_lock",
+    ],
+)
+
+libc_function(
+    name = "pthread_spin_unlock",
+    srcs = ["pthread_spin_unlock.cpp"],
+    hdrs = ["pthread_spin_unlock.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:identifier",
+        "//libc/src/__support/threads:spin_lock",
+    ],
+)
