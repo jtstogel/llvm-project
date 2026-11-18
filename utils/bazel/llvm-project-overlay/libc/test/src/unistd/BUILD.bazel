@@ -23,6 +23,24 @@ libc_test(
 )
 
 libc_test(
+    name = "_exit_test",
+    srcs = ["_exit_test.cpp"],
+    full_build_only = True,
+    deps = ["//libc/src/unistd:_exit"],
+)
+
+libc_test(
+    name = "chroot_test",
+    srcs = ["chroot_test.cpp"],
+    deps = [
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/sys/stat:mkdir",
+        "//libc/src/unistd:chroot",
+        "//libc/src/unistd:rmdir",
+    ],
+)
+
+libc_test(
     name = "dup_test",
     srcs = ["dup_test.cpp"],
     deps = [
@@ -65,6 +83,22 @@ libc_test(
 )
 
 libc_test(
+    name = "close_range_test",
+    srcs = ["close_range_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/fcntl",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:close_range",
+        "//libc/src/unistd:pipe",
+    ],
+)
+
+libc_test(
     name = "ftruncate_test",
     srcs = ["ftruncate_test.cpp"],
     deps = [
@@ -74,6 +108,43 @@ libc_test(
         "//libc/src/unistd:close",
         "//libc/src/unistd:ftruncate",
         "//libc/src/unistd:read",
+        "//libc/src/unistd:unlink",
+        "//libc/src/unistd:write",
+    ],
+)
+
+libc_test(
+    name = "fdatasync_test",
+    srcs = ["fdatasync_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:fdatasync",
+        "//libc/src/unistd:unlink",
+        "//libc/src/unistd:write",
+    ],
+)
+
+libc_test(
+    name = "sync_test",
+    srcs = ["sync_test.cpp"],
+    deps = ["//libc/src/unistd:sync"],
+)
+
+libc_test(
+    name = "syncfs_test",
+    srcs = ["syncfs_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/fcntl:open",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:syncfs",
         "//libc/src/unistd:unlink",
         "//libc/src/unistd:write",
     ],
@@ -103,6 +174,15 @@ libc_test(
 )
 
 libc_test(
+    name = "pipe2_test",
+    srcs = ["pipe2_test.cpp"],
+    deps = [
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:pipe2",
+    ],
+)
+
+libc_test(
     name = "read_write_test",
     srcs = ["read_write_test.cpp"],
     deps = [
@@ -121,6 +201,23 @@ libc_test(
         "//libc/src/fcntl:open",
         "//libc/src/unistd:close",
         "//libc/src/unistd:link",
+        "//libc/src/unistd:unlink",
+    ],
+)
+
+libc_test(
+    name = "lchown_test",
+    srcs = ["lchown_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/fcntl:open",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:getgid",
+        "//libc/src/unistd:getuid",
+        "//libc/src/unistd:lchown",
+        "//libc/src/unistd:symlink",
         "//libc/src/unistd:unlink",
     ],
 )
@@ -223,6 +320,281 @@ libc_test(
     ],
 )
 
+libc_test(
+    name = "getgroups_test",
+    srcs = ["getgroups_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/src/unistd:getgroups",
+    ],
+)
+
+libc_test(
+    name = "getpgid_test",
+    srcs = ["getpgid_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:getpgid",
+        "//libc/src/unistd:getpid",
+    ],
+)
+
+libc_test(
+    name = "getpgrp_test",
+    srcs = ["getpgrp_test.cpp"],
+    deps = [
+        "//libc/src/unistd:getpgid",
+        "//libc/src/unistd:getpgrp",
+    ],
+)
+
+libc_test(
+    name = "getresgid_test",
+    srcs = ["getresgid_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:getegid",
+        "//libc/src/unistd:getgid",
+        "//libc/src/unistd:getresgid",
+    ],
+)
+
+libc_test(
+    name = "getresuid_test",
+    srcs = ["getresuid_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:geteuid",
+        "//libc/src/unistd:getresuid",
+        "//libc/src/unistd:getuid",
+    ],
+)
+
+libc_test(
+    name = "setegid_test",
+    srcs = ["setegid_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:getegid",
+        "//libc/src/unistd:getgid",
+        "//libc/src/unistd:setegid",
+    ],
+)
+
+libc_test(
+    name = "seteuid_test",
+    srcs = ["seteuid_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:geteuid",
+        "//libc/src/unistd:getuid",
+        "//libc/src/unistd:seteuid",
+    ],
+)
+
+libc_test(
+    name = "setgid_test",
+    srcs = ["setgid_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:getgid",
+        "//libc/src/unistd:setgid",
+    ],
+)
+
+libc_test(
+    name = "setpgid_test",
+    srcs = ["setpgid_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:setpgid",
+    ],
+)
+
+libc_test(
+    name = "setregid_test",
+    srcs = ["setregid_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:getegid",
+        "//libc/src/unistd:getgid",
+        "//libc/src/unistd:setregid",
+    ],
+)
+
+libc_test(
+    name = "setresgid_test",
+    srcs = ["setresgid_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:getegid",
+        "//libc/src/unistd:getgid",
+        "//libc/src/unistd:setresgid",
+    ],
+)
+
+libc_test(
+    name = "setresuid_test",
+    srcs = ["setresuid_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:geteuid",
+        "//libc/src/unistd:getuid",
+        "//libc/src/unistd:setresuid",
+    ],
+)
+
+libc_test(
+    name = "setreuid_test",
+    srcs = ["setreuid_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:geteuid",
+        "//libc/src/unistd:getuid",
+        "//libc/src/unistd:setreuid",
+    ],
+)
+
+libc_test(
+    name = "setuid_test",
+    srcs = ["setuid_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:getuid",
+        "//libc/src/unistd:setuid",
+    ],
+)
+
+libc_test(
+    name = "tcgetpgrp_test",
+    srcs = ["tcgetpgrp_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:tcgetpgrp",
+        "//libc/src/unistd:unlink",
+    ],
+)
+
+libc_test(
+    name = "tcsetpgrp_test",
+    srcs = ["tcsetpgrp_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:tcsetpgrp",
+        "//libc/src/unistd:unlink",
+    ],
+)
+
+libc_test(
+    name = "execlp_test",
+    srcs = ["execlp_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:execlp",
+    ],
+)
+
+libc_test(
+    name = "fexecve_test",
+    srcs = ["fexecve_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:fexecve",
+    ],
+)
+
+libc_test(
+    name = "confstr_test",
+    srcs = ["confstr_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/src/unistd:confstr",
+    ],
+)
+
+libc_test(
+    name = "fpathconf_test",
+    srcs = ["fpathconf_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/src/fcntl:open",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:fpathconf",
+    ],
+)
+
+libc_test(
+    name = "getentropy_test",
+    srcs = ["getentropy_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/unistd:getentropy",
+    ],
+)
+
+libc_test(
+    name = "getopt_test",
+    srcs = ["getopt_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support/CPP:array",
+        "//libc/src/stdio:fflush",
+        "//libc/src/stdio:fopencookie",
+        "//libc/src/unistd:getopt",
+    ],
+)
+
+libc_test(
+    name = "nice_test",
+    srcs = ["nice_test.cpp"],
+    deps = ["//libc/src/unistd:nice"],
+)
+
+libc_test(
+    name = "sleep_test",
+    srcs = ["sleep_test.cpp"],
+    deps = [
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/unistd:sleep",
+    ],
+)
+
+libc_test(
+    name = "usleep_test",
+    srcs = ["usleep_test.cpp"],
+    deps = [
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/unistd:usleep",
+    ],
+)
+
 # TODO: add rules for functions modifying directories.
 
 #TODO: Enable once fullbuild is added to bazel, since this depends on a macro
@@ -243,18 +615,5 @@ libc_test(
 #     srcs = ["sysconf_test.cpp"],
 #     deps = [
 #         "//libc:sysconf",
-#     ],
-# )
-
-# TODO: add fopencookie and fflush
-
-# libc_test(
-#     name = "getopt_test",
-#     srcs = ["getopt_test.cpp"],
-#     deps = [
-#         "//libc:__support_cpp_array",
-#         "//libc:getopt",
-#         "//libc:fopencookie",
-#         "//libc:fflush",
 #     ],
 # )

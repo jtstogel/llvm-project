@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -16,6 +16,65 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "__llvm_libc_syscall",
+    srcs = ["linux/syscall.cpp"],
+    hdrs = ["syscall.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:unistd_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "_exit",
+    srcs = ["_exit.cpp"],
+    hdrs = ["_exit.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil:exit",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "linux_exec_utils",
+    hdrs = ["linux/exec_utils.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:execve",
+        "//libc/src/__support/macros:config",
+        "//libc/src/stdlib:environ_internal",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "linux_pathconf_utils",
+    srcs = ["linux/pathconf_utils.cpp"],
+    hdrs = ["linux/pathconf_utils.h"],
+    deps = [
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/hdr/types:struct_statfs",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "access",
     srcs = ["linux/access.cpp"],
     hdrs = ["access.h"],
@@ -27,6 +86,17 @@ libc_function(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:access",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "alarm",
+    srcs = ["linux/alarm.cpp"],
+    hdrs = ["alarm.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:alarm",
+        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -64,6 +134,19 @@ libc_function(
 )
 
 libc_function(
+    name = "chroot",
+    srcs = ["linux/chroot.cpp"],
+    hdrs = ["chroot.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:chroot",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "close",
     srcs = ["linux/close.cpp"],
     hdrs = ["close.h"],
@@ -71,6 +154,39 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "close_range",
+    srcs = ["linux/close_range.cpp"],
+    hdrs = ["close_range.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close_range",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "confstr",
+    srcs = ["confstr.cpp"],
+    hdrs = ["confstr.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
@@ -138,6 +254,135 @@ libc_function(
 )
 
 libc_function(
+    name = "execl",
+    srcs = ["linux/execl.cpp"],
+    hdrs = ["execl.h"],
+    full_build_only = True,
+    deps = [
+        ":environ",
+        ":linux_exec_utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:execve",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "execle",
+    srcs = ["linux/execle.cpp"],
+    hdrs = ["execle.h"],
+    deps = [
+        ":linux_exec_utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:execve",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "execlp",
+    srcs = ["linux/execlp.cpp"],
+    hdrs = ["execlp.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":environ",
+        ":linux_exec_utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "execv",
+    srcs = ["linux/execv.cpp"],
+    hdrs = ["execv.h"],
+    full_build_only = True,
+    deps = [
+        ":environ",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:execve",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "execve",
+    srcs = ["linux/execve.cpp"],
+    hdrs = ["execve.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:execve",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "execvp",
+    srcs = ["linux/execvp.cpp"],
+    hdrs = ["execvp.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":environ",
+        ":linux_exec_utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "execvpe",
+    srcs = ["linux/execvpe.cpp"],
+    hdrs = ["execvpe.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":linux_exec_utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "faccessat",
+    srcs = ["linux/faccessat.cpp"],
+    hdrs = ["faccessat.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:faccessat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "fchdir",
     srcs = ["linux/fchdir.cpp"],
     hdrs = ["fchdir.h"],
@@ -165,6 +410,69 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:fchown",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "fchownat",
+    srcs = ["linux/fchownat.cpp"],
+    hdrs = ["fchownat.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fchownat",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fdatasync",
+    srcs = ["linux/fdatasync.cpp"],
+    hdrs = ["fdatasync.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fdatasync",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "fexecve",
+    srcs = ["linux/fexecve.cpp"],
+    hdrs = ["fexecve.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:execveat",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fpathconf",
+    srcs = ["linux/fpathconf.cpp"],
+    hdrs = ["fpathconf.h"],
+    deps = [
+        ":linux_pathconf_utils",
+        "//libc/hdr/types:struct_statfs",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fstatfs",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
@@ -219,6 +527,20 @@ libc_function(
 )
 
 libc_function(
+    name = "getentropy",
+    srcs = ["linux/getentropy.cpp"],
+    hdrs = ["getentropy.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getrandom",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "geteuid",
     srcs = ["linux/geteuid.cpp"],
     hdrs = ["geteuid.h"],
@@ -227,6 +549,23 @@ libc_function(
         "//libc/hdr/types:uid_t",
         "//libc/src/__support:common",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:geteuid",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "getgroups",
+    srcs = ["linux/getgroups.cpp"],
+    hdrs = ["getgroups.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getgroups",
         "//libc/src/__support/macros:config",
     ],
 )
@@ -252,12 +591,56 @@ libc_function(
 )
 
 libc_function(
+    name = "getopt",
+    srcs = ["getopt.cpp"],
+    hdrs = ["getopt.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:unistd_macros",
+        "//libc/hdr/types:FILE",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/macros:config",
+        "//libc/src/stdio:fprintf",
+        "//libc/src/stdio:stderr",
+    ],
+)
+
+libc_function(
     name = "getpagesize",
     srcs = ["linux/getpagesize.cpp"],
     hdrs = ["getpagesize.h"],
     deps = [
         "//libc/src/__support:common",
         "//libc/src/__support/OSUtil:linux_auxv",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "getpgid",
+    srcs = ["linux/getpgid.cpp"],
+    hdrs = ["getpgid.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getpgid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getpgrp",
+    srcs = ["linux/getpgrp.cpp"],
+    hdrs = ["getpgrp.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getpgid",
         "//libc/src/__support/macros:config",
     ],
 )
@@ -315,6 +698,40 @@ libc_function(
 )
 
 libc_function(
+    name = "getresgid",
+    srcs = ["linux/getresgid.cpp"],
+    hdrs = ["getresgid.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getresgid",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "getresuid",
+    srcs = ["linux/getresuid.cpp"],
+    hdrs = ["getresuid.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getresuid",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "getsid",
     srcs = ["linux/getsid.cpp"],
     hdrs = ["getsid.h"],
@@ -329,6 +746,17 @@ libc_function(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:getsid",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "gettid",
+    srcs = ["gettid.cpp"],
+    hdrs = ["gettid.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/threads:identifier",
     ],
 )
 
@@ -387,6 +815,24 @@ libc_function(
 )
 
 libc_function(
+    name = "lchown",
+    srcs = ["linux/lchown.cpp"],
+    hdrs = ["lchown.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:lchown",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "link",
     srcs = ["linux/link.cpp"],
     hdrs = ["link.h"],
@@ -410,6 +856,74 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:linkat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "lockf",
+    srcs = ["linux/lockf.cpp"],
+    hdrs = ["lockf.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/hdr/types:off_t",
+        "//libc/hdr/types:struct_flock",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fcntl",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getpid",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "nice",
+    srcs = ["linux/nice.cpp"],
+    hdrs = ["nice.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:sys_resource_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:math_extras",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getpriority",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setpriority",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "pathconf",
+    srcs = ["linux/pathconf.cpp"],
+    hdrs = ["pathconf.h"],
+    deps = [
+        ":linux_pathconf_utils",
+        "//libc/hdr/types:struct_statfs",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:statfs",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "pause",
+    srcs = ["linux/pause.cpp"],
+    hdrs = ["pause.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:pause",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
@@ -440,6 +954,19 @@ libc_function(
         "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:lseek",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "pipe2",
+    srcs = ["linux/pipe2.cpp"],
+    hdrs = ["pipe2.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:pipe2",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
@@ -557,6 +1084,137 @@ libc_function(
 )
 
 libc_function(
+    name = "setegid",
+    srcs = ["linux/setegid.cpp"],
+    hdrs = ["setegid.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setresgid",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "seteuid",
+    srcs = ["linux/seteuid.cpp"],
+    hdrs = ["seteuid.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setresuid",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "setgid",
+    srcs = ["linux/setgid.cpp"],
+    hdrs = ["setgid.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setgid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "setpgid",
+    srcs = ["linux/setpgid.cpp"],
+    hdrs = ["setpgid.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setpgid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "setregid",
+    srcs = ["linux/setregid.cpp"],
+    hdrs = ["setregid.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setregid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "setresgid",
+    srcs = ["linux/setresgid.cpp"],
+    hdrs = ["setresgid.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setresgid",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "setresuid",
+    srcs = ["linux/setresuid.cpp"],
+    hdrs = ["setresuid.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setresuid",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "setreuid",
+    srcs = ["linux/setreuid.cpp"],
+    hdrs = ["setreuid.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setreuid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "setsid",
     srcs = ["linux/setsid.cpp"],
     hdrs = ["setsid.h"],
@@ -571,6 +1229,34 @@ libc_function(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:setsid",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "setuid",
+    srcs = ["linux/setuid.cpp"],
+    hdrs = ["setuid.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setuid",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "sleep",
+    srcs = ["linux/sleep.cpp"],
+    hdrs = ["sleep.h"],
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:nanosleep",
+        "//libc/src/__support/macros:config",
     ],
 )
 
@@ -612,6 +1298,67 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "sync",
+    srcs = ["linux/sync.cpp"],
+    hdrs = ["sync.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sync",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "syncfs",
+    srcs = ["linux/syncfs.cpp"],
+    hdrs = ["syncfs.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:syncfs",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "tcgetpgrp",
+    srcs = ["linux/tcgetpgrp.cpp"],
+    hdrs = ["tcgetpgrp.h"],
+    deps = [
+        "//libc/hdr:sys_ioctl_macros",
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tcsetpgrp",
+    srcs = ["linux/tcsetpgrp.cpp"],
+    hdrs = ["tcsetpgrp.h"],
+    deps = [
+        "//libc/hdr:sys_ioctl_macros",
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
     ],
 )
 
@@ -699,6 +1446,21 @@ libc_function(
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:write",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "usleep",
+    srcs = ["linux/usleep.cpp"],
+    hdrs = ["usleep.h"],
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr/types:useconds_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:nanosleep",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
