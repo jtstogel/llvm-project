@@ -1,0 +1,35 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc netdb functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "gai_strerror_test",
+    srcs = ["gai_strerror_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:netdb_macros",
+        "//libc/src/netdb:gai_strerror",
+    ],
+)
+
+libc_test(
+    name = "getaddrinfo_test",
+    srcs = ["getaddrinfo_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:netdb_macros",
+        "//libc/hdr:sys_socket_macros",
+        "//libc/hdr/types:struct_addrinfo",
+        "//libc/src/netdb:freeaddrinfo",
+        "//libc/src/netdb:getaddrinfo",
+    ],
+)
