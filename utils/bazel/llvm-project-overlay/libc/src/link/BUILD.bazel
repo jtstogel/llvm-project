@@ -25,3 +25,19 @@ libc_function(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_function(
+    name = "dl_iterate_phdr",
+    srcs = ["dl_iterate_phdr.cpp"],
+    hdrs = ["dl_iterate_phdr.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_dl_phdr_info",
+        "//libc/include:llvm_libc_macros_link_macros",
+        "//libc/include:llvm_libc_types___dl_iterate_phdr_callback_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/OSUtil:linux_auxv",
+        "//libc/src/__support/macros:config",
+    ],
+)
