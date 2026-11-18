@@ -1,0 +1,39 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc __support/HashTable functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "bitmask_test",
+    srcs = ["bitmask_test.cpp"],
+    deps = ["//libc/src/__support/HashTable:bitmask"],
+)
+
+libc_test(
+    name = "table_test",
+    srcs = ["table_test.cpp"],
+    # Transitively uses CPP:new whose __asm__ labels clash with pre-declared operator delete in overlay mode.
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/HashTable:randomness",
+        "//libc/src/__support/HashTable:table",
+    ],
+)
+
+libc_test(
+    name = "group_test",
+    srcs = ["group_test.cpp"],
+    deps = [
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/HashTable:bitmask",
+        "//libc/src/stdlib:rand",
+    ],
+)

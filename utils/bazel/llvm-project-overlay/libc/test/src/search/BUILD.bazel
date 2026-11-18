@@ -1,0 +1,68 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc search functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "hsearch_test",
+    srcs = ["hsearch_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/HashTable:table",
+        "//libc/src/search:hcreate",
+        "//libc/src/search:hcreate_r",
+        "//libc/src/search:hdestroy",
+        "//libc/src/search:hdestroy_r",
+        "//libc/src/search:hsearch",
+    ],
+)
+
+libc_test(
+    name = "insque_test",
+    srcs = ["insque_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/search:insque",
+        "//libc/src/search:remque",
+    ],
+)
+
+libc_test(
+    name = "lfind_test",
+    srcs = ["lfind_test.cpp"],
+    full_build_only = True,
+    deps = ["//libc/src/search:lfind"],
+)
+
+libc_test(
+    name = "lsearch_test",
+    srcs = ["lsearch_test.cpp"],
+    full_build_only = True,
+    deps = ["//libc/src/search:lsearch"],
+)
+
+libc_test(
+    name = "tsearch_test",
+    srcs = ["tsearch_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:posix_tnode",
+        "//libc/src/search:tdelete",
+        "//libc/src/search:tdestroy",
+        "//libc/src/search:tfind",
+        "//libc/src/search:tsearch",
+        "//libc/src/search:twalk",
+        "//libc/src/search:twalk_r",
+        "//libc/src/string:strcmp",
+        "//libc/src/string:strcpy",
+        "//libc/src/string:strlen",
+    ],
+)

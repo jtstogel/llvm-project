@@ -176,3 +176,20 @@ libc_test(
         "//libc/src/string:memset",
     ],
 )
+
+libc_test(
+    name = "memory_size_test",
+    srcs = ["memory_size_test.cpp"],
+    deps = ["//libc/src/__support:memory_size"],
+)
+
+libc_test(
+    name = "weak_avl_test",
+    srcs = ["weak_avl_test.cpp"],
+    # Transitively uses CPP:new whose __asm__ labels clash with pre-declared operator delete in overlay mode.
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:weak_avl",
+        "//libc/src/__support/CPP:optional",
+    ],
+)
