@@ -1,0 +1,140 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "report",
+    srcs = ["report.cpp"],
+    hdrs = ["report.h"],
+    deps = [
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil:io",
+        "//libc/src/__support/StringUtil",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_main",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/errno:program_invocation_short_name",
+    ],
+)
+
+libc_function(
+    name = "err",
+    srcs = ["err.cpp"],
+    hdrs = ["err.h"],
+    deps = [
+        ":report",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:exit",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "errx",
+    srcs = ["errx.cpp"],
+    hdrs = ["errx.h"],
+    deps = [
+        ":report",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:exit",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "verr",
+    srcs = ["verr.cpp"],
+    hdrs = ["verr.h"],
+    deps = [
+        ":report",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:exit",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "verrx",
+    srcs = ["verrx.cpp"],
+    hdrs = ["verrx.h"],
+    deps = [
+        ":report",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:exit",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "vwarn",
+    srcs = ["vwarn.cpp"],
+    hdrs = ["vwarn.h"],
+    deps = [
+        ":report",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "vwarnx",
+    srcs = ["vwarnx.cpp"],
+    hdrs = ["vwarnx.h"],
+    deps = [
+        ":report",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "warn",
+    srcs = ["warn.cpp"],
+    hdrs = ["warn.h"],
+    deps = [
+        ":report",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "warnx",
+    srcs = ["warnx.cpp"],
+    hdrs = ["warnx.h"],
+    deps = [
+        ":report",
+        "//libc/src/__support:arg_list",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+    ],
+)
