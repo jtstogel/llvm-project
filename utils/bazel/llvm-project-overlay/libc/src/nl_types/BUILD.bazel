@@ -1,0 +1,54 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "catclose",
+    srcs = ["catclose.cpp"],
+    hdrs = ["catclose.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_nl_catd",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "catgets",
+    srcs = ["catgets.cpp"],
+    hdrs = ["catgets.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_nl_catd",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "catopen",
+    srcs = ["catopen.cpp"],
+    hdrs = ["catopen.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_nl_catd",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
