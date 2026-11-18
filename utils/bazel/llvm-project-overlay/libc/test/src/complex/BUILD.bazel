@@ -94,3 +94,63 @@ licenses(["notice"])
         "crealf16",
     ]
 ]
+
+libc_test(
+    name = "cabs_test",
+    srcs = [
+        "CAbsTest.h",
+        "cabs_test.cpp",
+    ],
+    overlay_build_only = True,  # Depends on mpc
+    deps = [
+        "//libc/hdr:math_macros",
+        "//libc/src/complex:cabs",
+        "//libc/test/UnitTest:fp_test_helpers",
+        "//libc/utils/MPCWrapper:mpc_wrapper",
+    ],
+)
+
+libc_test(
+    name = "cabsf_test",
+    srcs = [
+        "CAbsTest.h",
+        "cabsf_test.cpp",
+    ],
+    overlay_build_only = True,  # Depends on mpc
+    deps = [
+        "//libc/hdr:math_macros",
+        "//libc/src/complex:cabsf",
+        "//libc/test/UnitTest:fp_test_helpers",
+        "//libc/utils/MPCWrapper:mpc_wrapper",
+    ],
+)
+
+libc_test(
+    name = "carg_test",
+    srcs = [
+        "CArgTest.h",
+        "carg_test.cpp",
+    ],
+    overlay_build_only = True,  # Depends on mpc
+    deps = [
+        "//libc/hdr:math_macros",
+        "//libc/src/complex:carg",
+        "//libc/test/UnitTest:fp_test_helpers",
+        "//libc/utils/MPCWrapper:mpc_wrapper",
+    ],
+)
+
+libc_test(
+    name = "cargf_test",
+    srcs = [
+        "CArgTest.h",
+        "cargf_test.cpp",
+    ],
+    overlay_build_only = True,  # Depends on mpc
+    deps = [
+        "//libc/hdr:math_macros",
+        "//libc/src/complex:cargf",
+        "//libc/test/UnitTest:fp_test_helpers",
+        "//libc/utils/MPCWrapper:mpc_wrapper",
+    ],
+)
