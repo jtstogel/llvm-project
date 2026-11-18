@@ -1,0 +1,186 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc grp functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "grp_utils_test",
+    srcs = ["grp_utils_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/pwd:flat_file_db",
+        "//libc/src/grp:grp_utils",
+    ],
+)
+
+libc_test(
+    name = "getgrnam_r_test",
+    srcs = [
+        "getgrnam_r_test.cpp",
+        "grp_test_utils.h",
+    ],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/grp:getgrnam_r",
+        "//libc/src/grp:grp_utils",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
+    name = "getgrgid_r_test",
+    srcs = [
+        "getgrgid_r_test.cpp",
+        "grp_test_utils.h",
+    ],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/grp:getgrgid_r",
+        "//libc/src/grp:grp_utils",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
+    name = "initgroups_test",
+    srcs = [
+        "grp_test_utils.h",
+        "initgroups_test.cpp",
+    ],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/grp:endgrent",
+        "//libc/src/grp:getgrent",
+        "//libc/src/grp:grp_utils",
+        "//libc/src/grp:initgroups",
+        "//libc/src/grp:setgrent",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+        "//libc/src/unistd:getuid",
+    ],
+)
+
+libc_test(
+    name = "setgroups_test",
+    srcs = ["setgroups_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/grp:setgroups",
+        "//libc/src/unistd:getuid",
+    ],
+)
+
+libc_test(
+    name = "getgrent_test",
+    srcs = [
+        "getgrent_test.cpp",
+        "grp_test_utils.h",
+    ],
+    # DO NOT SUBMIT: Function is overlay-compatible in CMake; test source uses
+    # LIBC_NAMESPACE::libc_errno which breaks when libc_errno is an overlay macro.
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/grp:endgrent",
+        "//libc/src/grp:getgrent",
+        "//libc/src/grp:grp_utils",
+        "//libc/src/grp:setgrent",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
+    name = "getgrnam_test",
+    srcs = [
+        "getgrnam_test.cpp",
+        "grp_test_utils.h",
+    ],
+    # DO NOT SUBMIT: Function is overlay-compatible in CMake; test source uses
+    # LIBC_NAMESPACE::libc_errno which breaks when libc_errno is an overlay macro.
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/grp:endgrent",
+        "//libc/src/grp:getgrent",
+        "//libc/src/grp:getgrnam",
+        "//libc/src/grp:grp_utils",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
+    name = "getgrgid_test",
+    srcs = [
+        "getgrgid_test.cpp",
+        "grp_test_utils.h",
+    ],
+    # DO NOT SUBMIT: Function is overlay-compatible in CMake; test source uses
+    # LIBC_NAMESPACE::libc_errno which breaks when libc_errno is an overlay macro.
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/File:file",
+        "//libc/src/__support/File:platform_file",
+        "//libc/src/grp:endgrent",
+        "//libc/src/grp:getgrent",
+        "//libc/src/grp:getgrgid",
+        "//libc/src/grp:grp_utils",
+        "//libc/src/stdio:remove",
+        "//libc/src/string:utils",
+    ],
+)

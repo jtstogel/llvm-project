@@ -1,0 +1,196 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "grp_utils",
+    srcs = ["grp_utils.cpp"],
+    hdrs = ["grp_utils.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr/func:free",
+        "//libc/hdr/func:malloc",
+        "//libc/hdr/func:realloc",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setgroups",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/__support/pwd:dynamic_buffer",
+        "//libc/src/__support/pwd:field_tokenizer",
+        "//libc/src/__support/pwd:flat_file_db",
+    ],
+)
+
+libc_function(
+    name = "endgrent",
+    srcs = ["endgrent.cpp"],
+    hdrs = ["endgrent.h"],
+    deps = [
+        ":grp_utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getgrent",
+    srcs = ["getgrent.cpp"],
+    hdrs = ["getgrent.h"],
+    deps = [
+        ":grp_utils",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getgrgid",
+    srcs = ["getgrgid.cpp"],
+    hdrs = ["getgrgid.h"],
+    deps = [
+        ":grp_utils",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getgrgid_r",
+    srcs = ["getgrgid_r.cpp"],
+    hdrs = ["getgrgid_r.h"],
+    deps = [
+        ":grp_utils",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "getgrnam",
+    srcs = ["getgrnam.cpp"],
+    hdrs = ["getgrnam.h"],
+    deps = [
+        ":grp_utils",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getgrnam_r",
+    srcs = ["getgrnam_r.cpp"],
+    hdrs = ["getgrnam_r.h"],
+    deps = [
+        ":grp_utils",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_group",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "setgrent",
+    srcs = ["setgrent.cpp"],
+    hdrs = ["setgrent.h"],
+    deps = [
+        ":grp_utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getgrouplist",
+    srcs = ["getgrouplist.cpp"],
+    hdrs = ["getgrouplist.h"],
+    deps = [
+        ":grp_utils",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "initgroups",
+    srcs = ["initgroups.cpp"],
+    hdrs = ["initgroups.h"],
+    full_build_only = True,
+    deps = [
+        ":grp_utils",
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "setgroups",
+    srcs = ["setgroups.cpp"],
+    hdrs = ["setgroups.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setgroups",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
