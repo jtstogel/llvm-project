@@ -403,6 +403,18 @@ libc_function(
 )
 
 libc_function(
+    name = "strnlen_s",
+    srcs = ["strnlen_s.cpp"],
+    hdrs = ["strnlen_s.h"],
+    deps = [
+        ":utils",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "strcspn",
     srcs = ["strcspn.cpp"],
     hdrs = ["strcspn.h"],
@@ -423,6 +435,20 @@ libc_function(
         "//libc/include:llvm_libc_types_size_t",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_function(
+    name = "strndup",
+    srcs = ["strndup.cpp"],
+    hdrs = ["strndup.h"],
+    deps = [
+        ":utils",
+        "//libc/include:llvm_libc_types_size_t",
+        "//libc/src/__support:checked_ptr",
+        "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
         "//libc/src/string/memory_utils",
     ],
@@ -471,5 +497,79 @@ libc_function(
         ":utils",
         "//libc/src/__support:common",
         "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "strcoll",
+    srcs = ["strcoll.cpp"],
+    hdrs = ["strcoll.h"],
+    deps = [
+        ":utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "strcoll_l",
+    srcs = ["strcoll_l.cpp"],
+    hdrs = ["strcoll_l.h"],
+    full_build_only = True,
+    deps = [
+        ":utils",
+        "//libc/include:llvm_libc_types_locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "strerror",
+    srcs = ["strerror.cpp"],
+    hdrs = ["strerror.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/StringUtil",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "strerror_r",
+    srcs = ["strerror_r.cpp"],
+    hdrs = ["strerror_r.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/StringUtil",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "strxfrm",
+    srcs = ["strxfrm.cpp"],
+    hdrs = ["strxfrm.h"],
+    deps = [
+        ":utils",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_function(
+    name = "strxfrm_l",
+    srcs = ["strxfrm_l.cpp"],
+    hdrs = ["strxfrm_l.h"],
+    full_build_only = True,
+    deps = [
+        ":utils",
+        "//libc/include:llvm_libc_types_locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string/memory_utils",
     ],
 )

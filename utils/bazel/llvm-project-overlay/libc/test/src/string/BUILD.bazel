@@ -136,6 +136,12 @@ libc_test(
 )
 
 libc_test(
+    name = "strnlen_s_test",
+    srcs = ["strnlen_s_test.cpp"],
+    deps = ["//libc/src/string:strnlen_s"],
+)
+
+libc_test(
     name = "memrchr_test",
     srcs = ["memrchr_test.cpp"],
     deps = [
@@ -336,6 +342,36 @@ libc_test(
     srcs = ["memmem_test.cpp"],
     deps = [
         "//libc/src/string:memmem",
+        "//libc/src/string:utils",
+    ],
+)
+
+libc_test(
+    name = "strndup_test",
+    srcs = ["strndup_test.cpp"],
+    deps = ["//libc/src/string:strndup"],
+)
+
+libc_test(
+    name = "strcoll_test",
+    srcs = ["strcoll_test.cpp"],
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/src/string:strcoll",
+    ],
+)
+
+libc_test(
+    name = "strerror_r_test",
+    srcs = ["strerror_r_test.cpp"],
+    deps = ["//libc/src/string:strerror_r"],
+)
+
+libc_test(
+    name = "strxfrm_test",
+    srcs = ["strxfrm_test.cpp"],
+    deps = [
+        "//libc/src/string:strxfrm",
         "//libc/src/string:utils",
     ],
 )
