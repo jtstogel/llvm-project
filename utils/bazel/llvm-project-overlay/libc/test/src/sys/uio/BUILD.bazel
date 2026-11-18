@@ -1,0 +1,36 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/uio functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "process_vm_readv_test",
+    srcs = ["process_vm_readv_test.cpp"],
+    # Does not clear pre-existing system errno before checking libc_errno in overlay mode.
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_iovec",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/sys/uio:process_vm_readv",
+        "//libc/src/unistd:getpid",
+    ],
+)
+
+libc_test(
+    name = "process_vm_writev_test",
+    srcs = ["process_vm_writev_test.cpp"],
+    # Does not clear pre-existing system errno before checking libc_errno in overlay mode.
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_iovec",
+        "//libc/src/sys/uio:process_vm_writev",
+        "//libc/src/unistd:getpid",
+    ],
+)

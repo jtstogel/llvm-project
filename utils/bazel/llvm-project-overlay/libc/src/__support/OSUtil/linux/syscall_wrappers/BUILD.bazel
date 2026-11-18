@@ -548,6 +548,42 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "process_vm_readv",
+    hdrs = ["process_vm_readv.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_iovec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "process_vm_writev",
+    hdrs = ["process_vm_writev.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_iovec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "ptrace",
     hdrs = ["ptrace.h"],
     deps = [
