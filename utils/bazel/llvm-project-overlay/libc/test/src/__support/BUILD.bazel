@@ -176,3 +176,20 @@ libc_test(
         "//libc/src/string:memset",
     ],
 )
+
+libc_test(
+    name = "memory_size_test",
+    srcs = ["memory_size_test.cpp"],
+    deps = ["//libc/src/__support:memory_size"],
+)
+
+libc_test(
+    name = "weak_avl_test",
+    srcs = ["weak_avl_test.cpp"],
+    # DO NOT SUBMIT: Stale comment; test builds in overlay mode here, and
+    # the underlying <new> vs CPP/new.h __asm__ label clash is an upstream bug.
+    deps = [
+        "//libc/src/__support:weak_avl",
+        "//libc/src/__support/CPP:optional",
+    ],
+)

@@ -444,3 +444,43 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "intrusive_list",
+    hdrs = ["intrusive_list.h"],
+    deps = [
+        ":common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "memory_size",
+    hdrs = ["memory_size.h"],
+    deps = [
+        ":math_extras",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:type_traits",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:optimization",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_support_library(
+    name = "weak_avl",
+    hdrs = ["weak_avl.h"],
+    deps = [
+        ":alloc_checker",
+        ":libc_assert",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:utility",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)

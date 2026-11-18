@@ -1,0 +1,240 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "hcreate",
+    srcs = ["hcreate.cpp"],
+    hdrs = ["hcreate.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/HashTable:randomness",
+        "//libc/src/__support/HashTable:table",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+        "//libc/src/search/hsearch:global",
+    ],
+)
+
+libc_function(
+    name = "hcreate_r",
+    srcs = ["hcreate_r.cpp"],
+    hdrs = ["hcreate_r.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_hsearch_data",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/HashTable:randomness",
+        "//libc/src/__support/HashTable:table",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "hdestroy",
+    srcs = ["hdestroy.cpp"],
+    hdrs = ["hdestroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support/HashTable:table",
+        "//libc/src/__support/macros:config",
+        "//libc/src/search/hsearch:global",
+    ],
+)
+
+libc_function(
+    name = "hdestroy_r",
+    srcs = ["hdestroy_r.cpp"],
+    hdrs = ["hdestroy_r.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_hsearch_data",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/HashTable:table",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "hsearch",
+    srcs = ["hsearch.cpp"],
+    hdrs = ["hsearch.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:action",
+        "//libc/hdr/types:entry",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/HashTable:randomness",
+        "//libc/src/__support/HashTable:table",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+        "//libc/src/search/hsearch:global",
+    ],
+)
+
+libc_function(
+    name = "hsearch_r",
+    srcs = ["hsearch_r.cpp"],
+    hdrs = ["hsearch_r.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:action",
+        "//libc/hdr/types:entry",
+        "//libc/hdr/types:struct_hsearch_data",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/HashTable:table",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "insque",
+    srcs = ["insque.cpp"],
+    hdrs = ["insque.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:intrusive_list",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "lfind",
+    srcs = ["lfind.cpp"],
+    hdrs = ["lfind.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:math_extras",
+        "//libc/src/__support/CPP:cstddef",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "lsearch",
+    srcs = ["lsearch.cpp"],
+    hdrs = ["lsearch.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:math_extras",
+        "//libc/src/__support/CPP:cstddef",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_function(
+    name = "remque",
+    srcs = ["remque.cpp"],
+    hdrs = ["remque.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:intrusive_list",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "tdelete",
+    srcs = ["tdelete.cpp"],
+    hdrs = ["tdelete.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:posix_tnode",
+        "//libc/src/__support:common",
+        "//libc/src/__support:weak_avl",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "tdestroy",
+    srcs = ["tdestroy.cpp"],
+    hdrs = ["tdestroy.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:posix_tnode",
+        "//libc/src/__support:common",
+        "//libc/src/__support:weak_avl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "tfind",
+    srcs = ["tfind.cpp"],
+    hdrs = ["tfind.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:posix_tnode",
+        "//libc/src/__support:common",
+        "//libc/src/__support:weak_avl",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "tsearch",
+    srcs = ["tsearch.cpp"],
+    hdrs = ["tsearch.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:posix_tnode",
+        "//libc/src/__support:common",
+        "//libc/src/__support:weak_avl",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "twalk",
+    srcs = ["twalk.cpp"],
+    hdrs = ["twalk.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:posix_tnode",
+        "//libc/hdr/types:visit",
+        "//libc/src/__support:common",
+        "//libc/src/__support:weak_avl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "twalk_r",
+    srcs = ["twalk_r.cpp"],
+    hdrs = ["twalk_r.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:posix_tnode",
+        "//libc/hdr/types:visit",
+        "//libc/src/__support:common",
+        "//libc/src/__support:weak_avl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
