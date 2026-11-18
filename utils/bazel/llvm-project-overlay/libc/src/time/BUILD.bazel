@@ -2,7 +2,7 @@
 # See https://llvm.org/LICENSE.txt for license information.
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
 
 package(
     default_visibility = ["//visibility:public"],
@@ -14,6 +14,89 @@ package(
 )
 
 licenses(["notice"])
+
+libc_support_library(
+    name = "asctime_utils",
+    hdrs = ["asctime_utils.h"],
+    deps = [
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/time/strftime_core:strftime_main",
+    ],
+)
+
+libc_support_library(
+    name = "time_constants",
+    hdrs = ["time_constants.h"],
+    deps = [
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:string_view",
+    ],
+)
+
+libc_support_library(
+    name = "time_utils",
+    srcs = ["time_utils.cpp"],
+    hdrs = ["time_utils.h"],
+    deps = [
+        ":time_constants",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support:uint128",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "asctime",
+    srcs = ["asctime.cpp"],
+    hdrs = ["asctime.h"],
+    full_build_only = True,
+    deps = [
+        ":asctime_utils",
+        ":time_constants",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "asctime_r",
+    srcs = ["asctime_r.cpp"],
+    hdrs = ["asctime_r.h"],
+    full_build_only = True,
+    deps = [
+        ":asctime_utils",
+        ":time_constants",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
 
 libc_function(
     name = "clock",
@@ -28,5 +111,418 @@ libc_function(
         "//libc/src/__support/macros:config",
         "//libc/src/__support/time",
         "//libc/src/__support/time:clock_gettime",
+    ],
+)
+
+libc_function(
+    name = "clock_getcpuclockid",
+    srcs = ["linux/clock_getcpuclockid.cpp"],
+    hdrs = ["clock_getcpuclockid.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:clock_getres",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time:linux_cpu_clock",
+    ],
+)
+
+libc_function(
+    name = "clock_getres",
+    srcs = ["linux/clock_getres.cpp"],
+    hdrs = ["clock_getres.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:clock_getres",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "clock_gettime",
+    srcs = ["linux/clock_gettime.cpp"],
+    hdrs = ["clock_gettime.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "clock_settime",
+    srcs = ["linux/clock_settime.cpp"],
+    hdrs = ["clock_settime.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time:clock_settime",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "ctime",
+    srcs = ["ctime.cpp"],
+    hdrs = ["ctime.h"],
+    full_build_only = True,
+    deps = [
+        ":asctime_utils",
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "ctime_r",
+    srcs = ["ctime_r.cpp"],
+    hdrs = ["ctime_r.h"],
+    full_build_only = True,
+    deps = [
+        ":asctime_utils",
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "difftime",
+    srcs = ["difftime.cpp"],
+    hdrs = ["difftime.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "gmtime",
+    srcs = ["gmtime.cpp"],
+    hdrs = ["gmtime.h"],
+    full_build_only = True,
+    deps = [
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "gmtime_r",
+    srcs = ["gmtime_r.cpp"],
+    hdrs = ["gmtime_r.h"],
+    full_build_only = True,
+    deps = [
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "localtime",
+    srcs = ["localtime.cpp"],
+    hdrs = ["localtime.h"],
+    full_build_only = True,
+    deps = [
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "localtime_r",
+    srcs = ["localtime_r.cpp"],
+    hdrs = ["localtime_r.h"],
+    full_build_only = True,
+    deps = [
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "mktime",
+    srcs = ["mktime.cpp"],
+    hdrs = ["mktime.h"],
+    full_build_only = True,
+    deps = [
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "timegm",
+    srcs = ["timegm.cpp"],
+    hdrs = ["timegm.h"],
+    full_build_only = True,
+    deps = [
+        ":time_constants",
+        ":time_utils",
+        "//libc/hdr/types:struct_tm",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "nanosleep",
+    srcs = ["linux/nanosleep.cpp"],
+    hdrs = ["nanosleep.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:nanosleep",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "strftime",
+    srcs = ["strftime.cpp"],
+    hdrs = ["strftime.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/time/strftime_core:strftime_main",
+    ],
+)
+
+libc_function(
+    name = "strftime_l",
+    srcs = ["strftime_l.cpp"],
+    hdrs = ["strftime_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/printf_core:printf_writer",
+        "//libc/src/time/strftime_core:strftime_main",
+    ],
+)
+
+libc_function(
+    name = "strptime",
+    srcs = ["strptime.cpp"],
+    hdrs = ["strptime.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_tm",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "time",
+    srcs = ["time.cpp"],
+    hdrs = ["time_func.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "timer_create",
+    srcs = ["linux/timer_create.cpp"],
+    hdrs = ["timer_create.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:clockid_t",
+        "//libc/hdr/types:struct_sigevent",
+        "//libc/hdr/types:timer_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:timer_create",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "timer_delete",
+    srcs = ["linux/timer_delete.cpp"],
+    hdrs = ["timer_delete.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:timer_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:timer_delete",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "timer_getoverrun",
+    srcs = ["linux/timer_getoverrun.cpp"],
+    hdrs = ["timer_getoverrun.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:timer_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:timer_getoverrun",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "timer_gettime",
+    srcs = ["linux/timer_gettime.cpp"],
+    hdrs = ["timer_gettime.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/hdr/types:timer_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:timer_gettime",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "timer_settime",
+    srcs = ["linux/timer_settime.cpp"],
+    hdrs = ["timer_settime.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/hdr/types:timer_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:timer_settime",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "timespec_get",
+    srcs = ["linux/timespec_get.cpp"],
+    hdrs = ["timespec_get.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tz_variables",
+    srcs = ["linux/tz_variables.cpp"],
+    hdrs = ["tz_variables.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "tzset",
+    srcs = ["linux/tzset.cpp"],
+    hdrs = ["tzset.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
     ],
 )
