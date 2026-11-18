@@ -99,3 +99,22 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "linux_popen_file",
+    srcs = ["linux/popen_file.cpp"],
+    hdrs = ["linux/popen_file.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":file",
+        ":platform_file",
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:mutex",
+    ],
+)
