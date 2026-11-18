@@ -16,6 +16,20 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "getpriority",
+    srcs = ["linux/getpriority.cpp"],
+    hdrs = ["getpriority.h"],
+    deps = [
+        "//libc/hdr/types:id_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getpriority",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "getrlimit",
     srcs = ["linux/getrlimit.cpp"],
     hdrs = ["getrlimit.h"],
@@ -25,6 +39,34 @@ libc_function(
         "//libc/src/__support:libc_errno",
         "//libc/src/__support/OSUtil:syscall",
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:prlimit",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "getrusage",
+    srcs = ["linux/getrusage.cpp"],
+    hdrs = ["getrusage.h"],
+    deps = [
+        "//libc/hdr/types:struct_rusage",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getrusage",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "setpriority",
+    srcs = ["linux/setpriority.cpp"],
+    hdrs = ["setpriority.h"],
+    deps = [
+        "//libc/hdr/types:id_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:setpriority",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
     ],
