@@ -21,3 +21,124 @@ libc_test(
         "//libc/src/signal:sigaction",
     ],
 )
+
+libc_test(
+    name = "raise_test",
+    srcs = ["raise_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/src/signal:raise",
+    ],
+)
+
+libc_test(
+    name = "sigprocmask_test",
+    srcs = ["sigprocmask_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/signal:raise",
+        "//libc/src/signal:sigaddset",
+        "//libc/src/signal:sigemptyset",
+        "//libc/src/signal:sigprocmask",
+    ],
+)
+
+libc_test(
+    name = "sigpending_test",
+    srcs = ["sigpending_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/signal",
+        "//libc/src/signal:raise",
+        "//libc/src/signal:sigaddset",
+        "//libc/src/signal:sigemptyset",
+        "//libc/src/signal:sigismember",
+        "//libc/src/signal:sigpending",
+        "//libc/src/signal:sigprocmask",
+    ],
+)
+
+libc_test(
+    name = "pthread_sigmask_test",
+    srcs = ["pthread_sigmask_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/signal:pthread_sigmask",
+        "//libc/src/signal:raise",
+        "//libc/src/signal:sigaddset",
+        "//libc/src/signal:sigemptyset",
+    ],
+)
+
+libc_test(
+    name = "sigaddset_test",
+    srcs = ["sigaddset_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/signal:sigaddset",
+    ],
+)
+
+libc_test(
+    name = "sigfillset_test",
+    srcs = ["sigfillset_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/signal:raise",
+        "//libc/src/signal:sigfillset",
+        "//libc/src/signal:sigprocmask",
+    ],
+)
+
+libc_test(
+    name = "sigdelset_test",
+    srcs = ["sigdelset_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/signal:raise",
+        "//libc/src/signal:sigdelset",
+        "//libc/src/signal:sigfillset",
+        "//libc/src/signal:sigprocmask",
+    ],
+)
+
+libc_test(
+    name = "sigismember_test",
+    srcs = ["sigismember_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/signal:sigaddset",
+        "//libc/src/signal:sigdelset",
+        "//libc/src/signal:sigemptyset",
+        "//libc/src/signal:sigfillset",
+        "//libc/src/signal:sigismember",
+    ],
+)
+
+libc_test(
+    name = "killpg_test",
+    srcs = ["killpg_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/src/signal:killpg",
+        "//libc/src/unistd:getpgrp",
+        "//libc/src/unistd:setpgid",
+    ],
+)
