@@ -1,0 +1,25 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/personality functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "personality_test",
+    srcs = ["linux/personality_test.cpp"],
+    # DO NOT SUBMIT: sys/personality.h isn't generated in libc/include/BUILD.bazel
+    # yet (even though personality.yaml exists for CMake); also duplicates
+    # overlay_build_only's target_compatible_with.
+    overlay_build_only = True,
+    target_compatible_with = select({
+        "//libc:full_build": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+    deps = ["//libc/src/sys/personality"],
+)
