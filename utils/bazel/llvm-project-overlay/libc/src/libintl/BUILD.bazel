@@ -1,0 +1,187 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "bind_textdomain_codeset",
+    srcs = ["bind_textdomain_codeset.cpp"],
+    hdrs = ["bind_textdomain_codeset.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "bindtextdomain",
+    srcs = ["bindtextdomain.cpp"],
+    hdrs = ["bindtextdomain.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dcgettext",
+    srcs = ["dcgettext.cpp"],
+    hdrs = ["dcgettext.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dcgettext_l",
+    srcs = ["dcgettext_l.cpp"],
+    hdrs = ["dcgettext_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dcngettext",
+    srcs = ["dcngettext.cpp"],
+    hdrs = ["dcngettext.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dcngettext_l",
+    srcs = ["dcngettext_l.cpp"],
+    hdrs = ["dcngettext_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dgettext",
+    srcs = ["dgettext.cpp"],
+    hdrs = ["dgettext.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dgettext_l",
+    srcs = ["dgettext_l.cpp"],
+    hdrs = ["dgettext_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dngettext",
+    srcs = ["dngettext.cpp"],
+    hdrs = ["dngettext.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dngettext_l",
+    srcs = ["dngettext_l.cpp"],
+    hdrs = ["dngettext_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "gettext",
+    srcs = ["gettext.cpp"],
+    hdrs = ["gettext.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "gettext_l",
+    srcs = ["gettext_l.cpp"],
+    hdrs = ["gettext_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "ngettext",
+    srcs = ["ngettext.cpp"],
+    hdrs = ["ngettext.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "ngettext_l",
+    srcs = ["ngettext_l.cpp"],
+    hdrs = ["ngettext_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "textdomain",
+    srcs = ["textdomain.cpp"],
+    hdrs = ["textdomain.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
