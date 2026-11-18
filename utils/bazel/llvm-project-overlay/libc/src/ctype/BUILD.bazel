@@ -28,10 +28,38 @@ libc_function(
 )
 
 libc_function(
+    name = "isalnum_l",
+    srcs = ["isalnum_l.cpp"],
+    hdrs = ["isalnum_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "isalpha",
     srcs = ["isalpha.cpp"],
     hdrs = ["isalpha.h"],
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "isalpha_l",
+    srcs = ["isalpha_l.cpp"],
+    hdrs = ["isalpha_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
@@ -62,6 +90,18 @@ libc_function(
 )
 
 libc_function(
+    name = "isblank_l",
+    srcs = ["isblank_l.cpp"],
+    hdrs = ["isblank_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "iscntrl",
     srcs = ["iscntrl.cpp"],
     hdrs = ["iscntrl.h"],
@@ -73,10 +113,36 @@ libc_function(
 )
 
 libc_function(
+    name = "iscntrl_l",
+    srcs = ["iscntrl_l.cpp"],
+    hdrs = ["iscntrl_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "isdigit",
     srcs = ["isdigit.cpp"],
     hdrs = ["isdigit.h"],
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "isdigit_l",
+    srcs = ["isdigit_l.cpp"],
+    hdrs = ["isdigit_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
@@ -97,10 +163,38 @@ libc_function(
 )
 
 libc_function(
+    name = "isgraph_l",
+    srcs = ["isgraph_l.cpp"],
+    hdrs = ["isgraph_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "islower",
     srcs = ["islower.cpp"],
     hdrs = ["islower.h"],
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "islower_l",
+    srcs = ["islower_l.cpp"],
+    hdrs = ["islower_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
@@ -120,10 +214,36 @@ libc_function(
 )
 
 libc_function(
+    name = "isprint_l",
+    srcs = ["isprint_l.cpp"],
+    hdrs = ["isprint_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "ispunct",
     srcs = ["ispunct.cpp"],
     hdrs = ["ispunct.h"],
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "ispunct_l",
+    srcs = ["ispunct_l.cpp"],
+    hdrs = ["ispunct_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
@@ -144,6 +264,20 @@ libc_function(
 )
 
 libc_function(
+    name = "isspace_l",
+    srcs = ["isspace_l.cpp"],
+    hdrs = ["isspace_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "isupper",
     srcs = ["isupper.cpp"],
     hdrs = ["isupper.h"],
@@ -156,10 +290,38 @@ libc_function(
 )
 
 libc_function(
+    name = "isupper_l",
+    srcs = ["isupper_l.cpp"],
+    hdrs = ["isupper_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "isxdigit",
     srcs = ["isxdigit.cpp"],
     hdrs = ["isxdigit.h"],
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "isxdigit_l",
+    srcs = ["isxdigit_l.cpp"],
+    hdrs = ["isxdigit_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
@@ -191,10 +353,38 @@ libc_function(
 )
 
 libc_function(
+    name = "tolower_l",
+    srcs = ["tolower_l.cpp"],
+    hdrs = ["tolower_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "toupper",
     srcs = ["toupper.cpp"],
     hdrs = ["toupper.h"],
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "toupper_l",
+    srcs = ["toupper_l.cpp"],
+    hdrs = ["toupper_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
         "//libc/src/__support:common",
         "//libc/src/__support:ctype_utils",
         "//libc/src/__support/CPP:limits",
