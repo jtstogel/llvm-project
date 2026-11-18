@@ -1,0 +1,56 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "freeaddrinfo",
+    srcs = ["freeaddrinfo.cpp"],
+    hdrs = ["freeaddrinfo.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:struct_addrinfo",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "gai_strerror",
+    srcs = ["gai_strerror.cpp"],
+    hdrs = ["gai_strerror.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:netdb_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "getaddrinfo",
+    srcs = ["getaddrinfo.cpp"],
+    hdrs = ["getaddrinfo.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:netdb_macros",
+        "//libc/hdr/types:struct_addrinfo",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
