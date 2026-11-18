@@ -55,6 +55,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "poll_macros",
+    hdrs = ["poll_macros.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_macros_poll_macros"],
+        "//conditions:default": [":poll_overlay"],
+    }),
+)
+
+libc_support_library(
     name = "sys_socket_overlay",
     hdrs = ["sys_socket_overlay.h"],
     target_compatible_with = select({
@@ -80,6 +89,24 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "net_if_macros",
+    hdrs = ["net_if_macros.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_macros_net_if_macros"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "netdb_macros",
+    hdrs = ["netdb_macros.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_macros_netdb_macros"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "offsetof_macros",
     hdrs = ["offsetof_macros.h"],
     deps = select({
@@ -97,6 +124,15 @@ libc_support_library(
         "//libc:full_build": [
             "//libc/include:llvm_libc_macros_pthread_macros",
         ],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "semaphore_macros",
+    hdrs = ["semaphore_macros.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_macros_semaphore_macros"],
         "//conditions:default": [],
     }),
 )
@@ -129,6 +165,22 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "sys_eventfd_macros",
+    hdrs = ["sys_eventfd_macros.h"],
+)
+
+libc_support_library(
+    name = "sys_file_macros",
+    hdrs = ["sys_file_macros.h"],
+    deps = ["//libc/include:llvm_libc_macros_sys_file_macros"],
+)
+
+libc_support_library(
+    name = "sys_inotify_macros",
+    hdrs = ["sys_inotify_macros.h"],
+)
+
+libc_support_library(
     name = "sys_ioctl_macros",
     hdrs = ["sys_ioctl_macros.h"],
 )
@@ -136,6 +188,24 @@ libc_support_library(
 libc_support_library(
     name = "sys_mman_macros",
     hdrs = ["sys_mman_macros.h"],
+)
+
+libc_support_library(
+    name = "sys_ptrace_macros",
+    hdrs = ["sys_ptrace_macros.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_macros_sys_ptrace_macros"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "sys_select_macros",
+    hdrs = ["sys_select_macros.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_macros_sys_select_macros"],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(
@@ -173,6 +243,15 @@ libc_support_library(
     deps = [
         "//libc/include:llvm_libc_macros_sys_stat_macros",
     ],
+)
+
+libc_support_library(
+    name = "sys_time_macros",
+    hdrs = ["sys_time_macros.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_macros_sys_time_macros"],
+        "//conditions:default": [],
+    }),
 )
 
 libc_support_library(
@@ -285,6 +364,15 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "dirent_overlay",
+    hdrs = ["dirent_overlay.h"],
+    target_compatible_with = select({
+        "//libc:full_build": ["@platforms//:incompatible"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
     name = "wchar_macros",
     hdrs = ["wchar_macros.h"],
     deps = select({
@@ -318,6 +406,13 @@ libc_support_library(
         "//libc:full_build": ["@platforms//:incompatible"],
         "//conditions:default": [],
     }),
+)
+
+libc_support_library(
+    name = "locale_macros",
+    hdrs = ["locale_macros.h"],
+    full_build_only = True,
+    deps = ["//libc/include:llvm_libc_macros_locale_macros"],
 )
 
 libc_support_library(
@@ -358,4 +453,38 @@ libc_support_library(
 libc_support_library(
     name = "link_macros",
     hdrs = ["link_macros.h"],
+)
+
+libc_support_library(
+    name = "fnmatch_macros",
+    hdrs = ["fnmatch_macros.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_macros_fnmatch_macros"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "glob_macros",
+    hdrs = ["glob_macros.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_macros_glob_macros"],
+        "//conditions:default": [],
+    }),
+)
+
+libc_support_library(
+    name = "regex_macros",
+    hdrs = ["regex_macros.h"],
+    full_build_only = True,
+    deps = ["//libc/include:llvm_libc_macros_regex_macros"],
+)
+
+libc_support_library(
+    name = "termios_macros",
+    hdrs = ["termios_macros.h"],
+    deps = select({
+        "//libc:full_build": ["//libc/include:llvm_libc_macros_termios_macros"],
+        "//conditions:default": [],
+    }),
 )
