@@ -79,6 +79,7 @@ def _libc_library(
         name,
         deps = [],
         copts = [],
+        defines = [],
         target_compatible_with = [],
         full_build_only = False,
         **kwargs):
@@ -88,6 +89,7 @@ def _libc_library(
       name: Target name.
       deps: cc_library deps.
       copts: copts for cc_library, only allowed if full_build_only is True.
+      defines: defines for cc_library, only allowed if full_build_only is True.
       target_compatible_with: target_compatible_with for the cc_library rule.
       full_build_only: Whether this target is only used in full-build mode.
       **kwargs: All other attributes relevant for the cc_library rule.
@@ -97,12 +99,15 @@ def _libc_library(
         if attr in kwargs:
             fail("disallowed attribute: '{}' in rule: '{}'".format(attr, name))
 
-    # Allow copts if the target is only for full-builds. Startup or threading
-    # code necessitate copts, but LLVM-libc's build rules should prefer to
-    # avoid copts when possible as per-file-copts are not compatible with
-    # libc_release_library's method of aggregating sources into one cc_library.
+    # Allow copts and defines if the target is only for full-builds. Startup or
+    # threading code necessitate copts, but LLVM-libc's build rules should
+    # prefer to avoid per-target copts and defines when possible as they are
+    # not compatible with libc_release_library's method of aggregating sources
+    # into one cc_library.
     if copts and not full_build_only:
         fail("copts disallowed in overlay-compatible rule: '{}'".format(name))
+    if defines and not full_build_only:
+        fail("defines disallowed in overlay-compatible rule: '{}'".format(name))
 
     if full_build_only:
         target_compatible_with = target_compatible_with + select({
@@ -113,6 +118,7 @@ def _libc_library(
     cc_library(
         name = name,
         copts = libc_common_copts() + copts,
+        defines = defines,
         local_defines = LIBC_CONFIGURE_OPTIONS,
         deps = deps + libc_common_deps(),
         linkstatic = True,
