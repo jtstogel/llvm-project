@@ -363,6 +363,30 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "getpriority",
+    hdrs = ["getpriority.h"],
+    deps = [
+        "//libc/hdr/types:id_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "getrusage",
+    hdrs = ["getrusage.h"],
+    deps = [
+        "//libc/hdr/types:struct_rusage",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "getxattr",
     hdrs = ["getxattr.h"],
     deps = [
@@ -926,6 +950,18 @@ libc_support_library(
         "//libc/hdr/types:socklen_t",
         "//libc/hdr/types:ssize_t",
         "//libc/hdr/types:struct_sockaddr",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "setpriority",
+    hdrs = ["setpriority.h"],
+    deps = [
+        "//libc/hdr/types:id_t",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",
