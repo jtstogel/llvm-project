@@ -168,6 +168,71 @@ libc_test(
 )
 
 libc_test(
+    name = "mkdtemp_test",
+    srcs = ["mkdtemp_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/hdr/types:struct_stat",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/stdlib:mkdtemp",
+        "//libc/src/string:strdup",
+        "//libc/src/string:strlen",
+        "//libc/src/sys/stat",
+        "//libc/src/unistd:access",
+        "//libc/src/unistd:rmdir",
+    ],
+)
+
+libc_test(
+    name = "mkostemp_test",
+    srcs = ["mkostemp_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr:stdio_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr:unistd_macros",
+        "//libc/hdr/types:struct_stat",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/fcntl",
+        "//libc/src/stdlib:mkostemp",
+        "//libc/src/string:strdup",
+        "//libc/src/string:strlen",
+        "//libc/src/sys/stat",
+        "//libc/src/unistd:access",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:lseek",
+        "//libc/src/unistd:read",
+        "//libc/src/unistd:unlink",
+        "//libc/src/unistd:write",
+        "//libc/test/UnitTest:memory_matcher",
+    ],
+)
+
+libc_test(
+    name = "mkstemp_test",
+    srcs = ["mkstemp_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/src/stdlib:mkstemp",
+        "//libc/src/string:strdup",
+        "//libc/src/string:strlen",
+        "//libc/src/unistd:access",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:read",
+        "//libc/src/unistd:unlink",
+        "//libc/src/unistd:write",
+    ],
+)
+
+libc_test(
     name = "heap_sort_test",
     srcs = ["heap_sort_test.cpp"],
     deps = [
@@ -175,6 +240,29 @@ libc_test(
         "//libc/hdr/types:size_t",
         "//libc/src/stdlib:qsort",
         "//libc/src/stdlib:qsort_util",
+    ],
+)
+
+libc_test(
+    name = "at_quick_exit_test",
+    srcs = ["at_quick_exit_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:utility",
+        "//libc/src/stdlib:_Exit",
+        "//libc/src/stdlib:at_quick_exit",
+        "//libc/src/stdlib:quick_exit",
+    ],
+)
+
+libc_test(
+    name = "quick_exit_test",
+    srcs = ["quick_exit_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/stdlib:exit",
+        "//libc/src/stdlib:quick_exit",
     ],
 )
 
@@ -322,5 +410,93 @@ libc_test(
         "//libc/src/__support:uint128",
         "//libc/src/__support/FPUtil:fp_bits",
         "//libc/src/stdlib:strtold",
+    ],
+)
+
+libc_test(
+    name = "a64l_test",
+    srcs = ["a64l_test.cpp"],
+    deps = ["//libc/src/stdlib:a64l"],
+)
+
+libc_test(
+    name = "l64a_test",
+    srcs = ["l64a_test.cpp"],
+    deps = [
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/stdlib:l64a",
+    ],
+)
+
+libc_test(
+    name = "getloadavg_test",
+    srcs = ["getloadavg_test.cpp"],
+    deps = ["//libc/src/stdlib:getloadavg"],
+)
+
+libc_test(
+    name = "memalignment_test",
+    srcs = ["memalignment_test.cpp"],
+    deps = ["//libc/src/stdlib:memalignment"],
+)
+
+libc_test(
+    name = "mblen_test",
+    srcs = ["mblen_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/stdlib:mblen",
+    ],
+)
+
+libc_test(
+    name = "mbstowcs_test",
+    srcs = ["mbstowcs_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/stdlib:mbstowcs",
+    ],
+)
+
+libc_test(
+    name = "mbtowc_test",
+    srcs = ["mbtowc_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/stdlib:mbtowc",
+    ],
+)
+
+libc_test(
+    name = "wcstombs_test",
+    srcs = ["wcstombs_test.cpp"],
+    full_build_only = True,
+    deps = ["//libc/src/stdlib:wcstombs"],
+)
+
+libc_test(
+    name = "wctomb_test",
+    srcs = ["wctomb_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/stdlib:wctomb",
+    ],
+)
+
+libc_test(
+    name = "system_test",
+    srcs = ["system_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:sys_wait_macros",
+        "//libc/src/stdlib:system",
     ],
 )

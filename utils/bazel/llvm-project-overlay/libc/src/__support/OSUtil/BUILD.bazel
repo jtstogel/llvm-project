@@ -170,6 +170,26 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "linux_shell_fork",
+    hdrs = ["linux/shell_fork.h"],
+    full_build_only = True,
+    deps = [
+        ":exit",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/CPP:functional",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:clone3",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:execle",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:wait4",
+        "//libc/src/__support/macros:config",
+        "//libc/src/unistd:environ",
+    ],
+)
+
+libc_support_library(
     name = "linux_stat_kernel_statx_types",
     hdrs = ["linux/stat/kernel_statx_types.h"],
     target_compatible_with = select({
