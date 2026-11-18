@@ -1,0 +1,237 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "linux_speed_utils",
+    hdrs = ["linux/speed_utils.h"],
+    deps = [
+        "//libc/hdr:termios_macros",
+        "//libc/hdr/types:speed_t",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "linux_kernel_termios",
+    hdrs = ["linux/kernel_termios.h"],
+    deps = [
+        "//libc/hdr/types:cc_t",
+        "//libc/hdr/types:tcflag_t",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "cfgetispeed",
+    srcs = ["linux/cfgetispeed.cpp"],
+    hdrs = ["cfgetispeed.h"],
+    deps = [
+        "//libc/hdr/types:speed_t",
+        "//libc/hdr/types:struct_termios",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "cfgetospeed",
+    srcs = ["linux/cfgetospeed.cpp"],
+    hdrs = ["cfgetospeed.h"],
+    deps = [
+        "//libc/hdr/types:speed_t",
+        "//libc/hdr/types:struct_termios",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "cfsetispeed",
+    srcs = ["linux/cfsetispeed.cpp"],
+    hdrs = ["cfsetispeed.h"],
+    deps = [
+        ":linux_speed_utils",
+        "//libc/hdr/types:speed_t",
+        "//libc/hdr/types:struct_termios",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "cfsetospeed",
+    srcs = ["linux/cfsetospeed.cpp"],
+    hdrs = ["cfsetospeed.h"],
+    deps = [
+        ":linux_speed_utils",
+        "//libc/hdr/types:speed_t",
+        "//libc/hdr/types:struct_termios",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tcdrain",
+    srcs = ["linux/tcdrain.cpp"],
+    hdrs = ["tcdrain.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tcflow",
+    srcs = ["linux/tcflow.cpp"],
+    hdrs = ["tcflow.h"],
+    deps = [
+        "//libc/hdr:termios_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tcflush",
+    srcs = ["linux/tcflush.cpp"],
+    hdrs = ["tcflush.h"],
+    deps = [
+        "//libc/hdr:termios_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tcgetattr",
+    srcs = ["linux/tcgetattr.cpp"],
+    hdrs = ["tcgetattr.h"],
+    deps = [
+        ":linux_kernel_termios",
+        ":linux_speed_utils",
+        "//libc/hdr:termios_macros",
+        "//libc/hdr/types:struct_termios",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:algorithm",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tcgetsid",
+    srcs = ["linux/tcgetsid.cpp"],
+    hdrs = ["tcgetsid.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tcsendbreak",
+    srcs = ["linux/tcsendbreak.cpp"],
+    hdrs = ["tcsendbreak.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tcsetattr",
+    srcs = ["linux/tcsetattr.cpp"],
+    hdrs = ["tcsetattr.h"],
+    deps = [
+        ":linux_kernel_termios",
+        ":linux_speed_utils",
+        "//libc/hdr:termios_macros",
+        "//libc/hdr/types:struct_termios",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:algorithm",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "tcgetwinsize",
+    srcs = ["linux/tcgetwinsize.cpp"],
+    hdrs = ["tcgetwinsize.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:sys_ioctl_macros",
+        "//libc/hdr/types:struct_winsize",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "tcsetwinsize",
+    srcs = ["linux/tcsetwinsize.cpp"],
+    hdrs = ["tcsetwinsize.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:sys_ioctl_macros",
+        "//libc/hdr/types:struct_winsize",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:ioctl",
+        "//libc/src/__support/macros:config",
+    ],
+)
