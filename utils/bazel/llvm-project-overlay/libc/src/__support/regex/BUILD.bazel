@@ -1,0 +1,98 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "expr_pool",
+    srcs = ["regex_expr_pool.cpp"],
+    hdrs = [
+        "regex_ast.h",
+        "regex_expr_pool.h",
+    ],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:regex_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support:checked_ptr",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:hash",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support/CPP:algorithm",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:bitset",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:unique_ptr",
+        "//libc/src/__support/CPP:utility",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "internal",
+    hdrs = ["regex_internal.h"],
+    full_build_only = True,
+    deps = [
+        ":expr_pool",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/threads:spin_lock",
+    ],
+)
+
+libc_support_library(
+    name = "matcher",
+    srcs = ["regex_matcher.cpp"],
+    hdrs = ["regex_matcher.h"],
+    full_build_only = True,
+    deps = [
+        ":expr_pool",
+        ":internal",
+        "//libc/hdr:regex_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "parser",
+    srcs = ["regex_parser.cpp"],
+    hdrs = [
+        "regex_charclass.h",
+        "regex_parser.h",
+    ],
+    full_build_only = True,
+    deps = [
+        ":expr_pool",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:regex_macros",
+        "//libc/src/__support:checked_ptr",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:bitset",
+        "//libc/src/__support/CPP:optional",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/CPP:unique_ptr",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)

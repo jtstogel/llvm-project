@@ -160,3 +160,19 @@ libc_test(
         "//libc/src/__support/printf_core:printf_writer",
     ],
 )
+
+libc_test(
+    name = "hash_test",
+    srcs = ["hash_test.cpp"],
+    # DO NOT SUBMIT: Stale comment; test builds in overlay mode here, and
+    # the underlying <new> vs CPP/new.h __asm__ label clash is an upstream bug.
+    deps = [
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:hash",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/stdlib:rand",
+        "//libc/src/stdlib:srand",
+        "//libc/src/string:memset",
+    ],
+)

@@ -1,0 +1,35 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc __support/regex functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "expr_test",
+    srcs = ["expr_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:regex_macros",
+        "//libc/src/__support/regex:expr_pool",
+    ],
+)
+
+libc_test(
+    name = "matcher_test",
+    srcs = ["matcher_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:regex_macros",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/regex:expr_pool",
+        "//libc/src/__support/regex:matcher",
+        "//libc/src/__support/regex:parser",
+    ],
+)

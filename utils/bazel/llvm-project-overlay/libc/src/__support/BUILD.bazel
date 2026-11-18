@@ -431,3 +431,16 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "hash",
+    hdrs = ["hash.h"],
+    deps = [
+        ":uint128",
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
