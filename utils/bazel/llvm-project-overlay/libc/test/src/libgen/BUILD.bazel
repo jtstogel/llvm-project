@@ -1,0 +1,35 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc libgen functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "basename_test",
+    srcs = ["basename_test.cpp"],
+    deps = ["//libc/src/libgen:basename"],
+)
+
+libc_test(
+    name = "dirname_test",
+    srcs = ["dirname_test.cpp"],
+    deps = ["//libc/src/libgen:dirname"],
+)
+
+libc_test(
+    name = "basename_death_test",
+    srcs = ["basename_death_test.cpp"],
+    deps = ["//libc/src/libgen:basename"],
+)
+
+libc_test(
+    name = "dirname_death_test",
+    srcs = ["dirname_death_test.cpp"],
+    deps = ["//libc/src/libgen:dirname"],
+)
