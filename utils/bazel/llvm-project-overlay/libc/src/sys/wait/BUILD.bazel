@@ -16,6 +16,56 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "wait",
+    srcs = ["linux/wait.cpp"],
+    hdrs = ["wait.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:wait4",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "wait4",
+    srcs = ["linux/wait4.cpp"],
+    hdrs = ["wait4.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:struct_rusage",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:wait4",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "waitid",
+    srcs = ["linux/waitid.cpp"],
+    hdrs = ["waitid.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:id_t",
+        "//libc/hdr/types:idtype_t",
+        "//libc/hdr/types:siginfo_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:waitid",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "waitpid",
     srcs = ["linux/waitpid.cpp"],
     hdrs = ["waitpid.h"],
