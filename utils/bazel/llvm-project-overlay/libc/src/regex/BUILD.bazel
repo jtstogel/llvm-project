@@ -1,0 +1,88 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "regcomp",
+    srcs = ["regcomp.cpp"],
+    hdrs = ["regcomp.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:regex_macros",
+        "//libc/hdr/types:regex_t",
+        "//libc/src/__support:checked_ptr",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/regex:expr_pool",
+        "//libc/src/__support/regex:internal",
+        "//libc/src/__support/regex:parser",
+    ],
+)
+
+libc_function(
+    name = "regerror",
+    srcs = ["regerror.cpp"],
+    hdrs = ["regerror.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:regex_macros",
+        "//libc/hdr/types:regex_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_function(
+    name = "regexec",
+    srcs = ["regexec.cpp"],
+    hdrs = ["regexec.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:regex_macros",
+        "//libc/hdr/types:regex_t",
+        "//libc/hdr/types:regmatch_t",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:mutex",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/regex:internal",
+        "//libc/src/__support/regex:matcher",
+    ],
+)
+
+libc_function(
+    name = "regfree",
+    srcs = ["regfree.cpp"],
+    hdrs = ["regfree.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:regex_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/regex:internal",
+    ],
+)

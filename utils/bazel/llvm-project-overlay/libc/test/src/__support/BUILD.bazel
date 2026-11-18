@@ -160,3 +160,19 @@ libc_test(
         "//libc/src/__support/printf_core:printf_writer",
     ],
 )
+
+libc_test(
+    name = "hash_test",
+    srcs = ["hash_test.cpp"],
+    # Uses CPP:new whose __asm__ labels clash with pre-declared operator delete in overlay mode.
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:hash",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/stdlib:rand",
+        "//libc/src/stdlib:srand",
+        "//libc/src/string:memset",
+    ],
+)
