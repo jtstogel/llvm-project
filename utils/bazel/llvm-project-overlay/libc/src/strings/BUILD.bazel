@@ -16,6 +16,39 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "ffs",
+    srcs = ["ffs.cpp"],
+    hdrs = ["ffs.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:math_extras",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "ffsl",
+    srcs = ["ffsl.cpp"],
+    hdrs = ["ffsl.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:math_extras",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "ffsll",
+    srcs = ["ffsll.cpp"],
+    hdrs = ["ffsll.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:math_extras",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "index",
     srcs = ["index.cpp"],
     hdrs = ["index.h"],
@@ -85,6 +118,20 @@ libc_function(
 )
 
 libc_function(
+    name = "strcasecmp_l",
+    srcs = ["strcasecmp_l.cpp"],
+    hdrs = ["strcasecmp_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/macros:config",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_function(
     name = "strncasecmp",
     srcs = ["strncasecmp.cpp"],
     hdrs = ["strncasecmp.h"],
@@ -93,6 +140,20 @@ libc_function(
         "//libc/src/__support:ctype_utils",
         "//libc/src/__support/macros:config",
         "//libc/src/__support/macros:null_check",
+        "//libc/src/string/memory_utils",
+    ],
+)
+
+libc_function(
+    name = "strncasecmp_l",
+    srcs = ["strncasecmp_l.cpp"],
+    hdrs = ["strncasecmp_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/macros:config",
         "//libc/src/string/memory_utils",
     ],
 )
