@@ -1,0 +1,121 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "locale",
+    srcs = ["locale.cpp"],
+    hdrs = [
+        "locale.h",
+        "locale_data.h",
+    ],
+    # DO NOT SUBMIT: Per-target defines break libc_release_library (only
+    # srcs/textual_hdrs propagate). Move LIBC_CONF_* into LIBC_CONFIGURE_OPTIONS.
+    defines = [
+        'LIBC_CONF_DEFAULT_LOCALE=\\"C.UTF-8\\"',
+        "LIBC_CONF_ENABLE_RUNTIME_LOCALE",
+    ],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "duplocale",
+    srcs = ["duplocale.cpp"],
+    hdrs = ["duplocale.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "freelocale",
+    srcs = ["freelocale.cpp"],
+    hdrs = ["freelocale.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "localeconv",
+    srcs = ["localeconv.cpp"],
+    hdrs = ["localeconv.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_struct_lconv",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:limits",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "newlocale",
+    srcs = ["newlocale.cpp"],
+    hdrs = ["newlocale.h"],
+    full_build_only = True,
+    deps = [
+        ":locale",
+        "//libc/hdr:locale_macros",
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "setlocale",
+    srcs = ["setlocale.cpp"],
+    hdrs = ["setlocale.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:locale_macros",
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "uselocale",
+    srcs = ["uselocale.cpp"],
+    hdrs = ["uselocale.h"],
+    full_build_only = True,
+    deps = [
+        ":locale",
+        "//libc/hdr:locale_macros",
+        "//libc/hdr/types:locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)

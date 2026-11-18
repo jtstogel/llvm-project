@@ -1,0 +1,36 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc locale functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "locale_test",
+    srcs = ["locale_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:locale_macros",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/locale:freelocale",
+        "//libc/src/locale:newlocale",
+        "//libc/src/locale:setlocale",
+        "//libc/src/locale:uselocale",
+    ],
+)
+
+libc_test(
+    name = "localeconv_test",
+    srcs = ["localeconv_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:locale_macros",
+        "//libc/src/locale:localeconv",
+    ],
+)
