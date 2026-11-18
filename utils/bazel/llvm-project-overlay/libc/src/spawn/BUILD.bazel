@@ -1,0 +1,117 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_support_library(
+    name = "file_actions",
+    hdrs = ["file_actions.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:stdint_proxy",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn",
+    srcs = ["linux/posix_spawn.cpp"],
+    hdrs = ["posix_spawn.h"],
+    full_build_only = True,
+    deps = [
+        ":file_actions",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:dup2",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:exit_group",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/macros:config",
+        "//libc/src/signal:__signal_utils",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_addclose",
+    srcs = ["posix_spawn_file_actions_addclose.cpp"],
+    hdrs = ["posix_spawn_file_actions_addclose.h"],
+    full_build_only = True,
+    deps = [
+        ":file_actions",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_adddup2",
+    srcs = ["posix_spawn_file_actions_adddup2.cpp"],
+    hdrs = ["posix_spawn_file_actions_adddup2.h"],
+    full_build_only = True,
+    deps = [
+        ":file_actions",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_addopen",
+    srcs = ["posix_spawn_file_actions_addopen.cpp"],
+    hdrs = ["posix_spawn_file_actions_addopen.h"],
+    full_build_only = True,
+    deps = [
+        ":file_actions",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:alloc_checker",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_destroy",
+    srcs = ["posix_spawn_file_actions_destroy.cpp"],
+    hdrs = ["posix_spawn_file_actions_destroy.h"],
+    full_build_only = True,
+    deps = [
+        ":file_actions",
+        "//libc/hdr:errno_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:new",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "posix_spawn_file_actions_init",
+    srcs = ["posix_spawn_file_actions_init.cpp"],
+    hdrs = ["posix_spawn_file_actions_init.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)

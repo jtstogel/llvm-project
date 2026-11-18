@@ -1,0 +1,26 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc spawn functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "posix_spawn_file_actions_test",
+    srcs = ["posix_spawn_file_actions_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/src/spawn:file_actions",
+        "//libc/src/spawn:posix_spawn_file_actions_addclose",
+        "//libc/src/spawn:posix_spawn_file_actions_adddup2",
+        "//libc/src/spawn:posix_spawn_file_actions_addopen",
+        "//libc/src/spawn:posix_spawn_file_actions_destroy",
+        "//libc/src/spawn:posix_spawn_file_actions_init",
+    ],
+)
