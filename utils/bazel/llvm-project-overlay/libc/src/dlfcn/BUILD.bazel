@@ -1,0 +1,67 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("//libc:libc_build_rules.bzl", "libc_function")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "dladdr",
+    srcs = ["dladdr.cpp"],
+    hdrs = ["dladdr.h"],
+    deps = [
+        "//libc/hdr/types:dl_info",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dlclose",
+    srcs = ["dlclose.cpp"],
+    hdrs = ["dlclose.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dlerror",
+    srcs = ["dlerror.cpp"],
+    hdrs = ["dlerror.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dlopen",
+    srcs = ["dlopen.cpp"],
+    hdrs = ["dlopen.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "dlsym",
+    srcs = ["dlsym.cpp"],
+    hdrs = ["dlsym.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
