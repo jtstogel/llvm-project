@@ -1663,6 +1663,55 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "timerfd_create",
+    hdrs = ["timerfd_create.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "timerfd_gettime",
+    hdrs = ["timerfd_gettime.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "timerfd_settime",
+    hdrs = ["timerfd_settime.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "accept",
     hdrs = ["accept.h"],
     target_compatible_with = select({

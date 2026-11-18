@@ -1,0 +1,57 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/timerfd functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "timerfd_create_test",
+    srcs = ["linux/timerfd_create_test.cpp"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_timerfd_macros",
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:ssize_t",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/fcntl",
+        "//libc/src/sys/timerfd:timerfd_create",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:read",
+    ],
+)
+
+libc_test(
+    name = "timerfd_gettime_test",
+    srcs = ["linux/timerfd_gettime_test.cpp"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:sys_timerfd_macros",
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_itimerspec",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/hdr/types:time_t",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/sys/timerfd:timerfd_create",
+        "//libc/src/sys/timerfd:timerfd_gettime",
+        "//libc/src/sys/timerfd:timerfd_settime",
+        "//libc/src/unistd:close",
+        "//libc/src/unistd:read",
+    ],
+)
