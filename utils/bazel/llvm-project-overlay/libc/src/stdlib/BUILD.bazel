@@ -63,6 +63,7 @@ libc_function(
     name = "exit",
     srcs = ["exit.cpp"],
     hdrs = ["exit.h"],
+    copts = ["-DLIBC_COPT_EXIT_FLUSH_STREAMS"],
     # Full-build only, as overlay mode must use the host libc's cleanup.
     full_build_only = True,
     deps = [
