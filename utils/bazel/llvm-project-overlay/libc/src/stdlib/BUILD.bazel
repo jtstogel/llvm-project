@@ -75,6 +75,51 @@ libc_function(
 )
 
 libc_function(
+    name = "__cxa_thread_atexit_impl",
+    srcs = ["__cxa_thread_atexit_impl.cpp"],
+    hdrs = ["__cxa_thread_atexit_impl.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "at_quick_exit",
+    srcs = ["at_quick_exit.cpp"],
+    hdrs = ["at_quick_exit.h"],
+    full_build_only = True,
+    deps = [
+        ":atexit",
+        ":exit_handler",
+        "//libc/hdr/types:atexithandler_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "quick_exit",
+    srcs = ["quick_exit.cpp"],
+    hdrs = ["quick_exit.h"],
+    full_build_only = True,
+    deps = [
+        ":at_quick_exit",
+        ":atexit",
+        ":exit_handler",
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil:exit",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "abs",
     srcs = ["abs.cpp"],
     hdrs = ["abs.h"],
@@ -281,6 +326,80 @@ libc_function(
     ],
 )
 
+libc_function(
+    name = "clearenv",
+    srcs = ["linux/clearenv.cpp"],
+    hdrs = ["clearenv.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        ":environ_internal",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "putenv",
+    srcs = ["linux/putenv.cpp"],
+    hdrs = ["putenv.h"],
+    full_build_only = True,
+    deps = [
+        ":environ_internal",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "secure_getenv",
+    srcs = ["linux/secure_getenv.cpp"],
+    hdrs = ["secure_getenv.h"],
+    full_build_only = True,
+    deps = [
+        ":environ_internal",
+        "//libc/hdr:sys_auxv_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil:linux_auxv",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "setenv",
+    srcs = ["linux/setenv.cpp"],
+    hdrs = ["setenv.h"],
+    full_build_only = True,
+    deps = [
+        ":environ_internal",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "unsetenv",
+    srcs = ["linux/unsetenv.cpp"],
+    hdrs = ["unsetenv.h"],
+    full_build_only = True,
+    deps = [
+        ":environ_internal",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
 libc_support_library(
     name = "qsort_util",
     hdrs = [
@@ -379,6 +498,71 @@ libc_function(
     ],
 )
 
+libc_support_library(
+    name = "linux_mktemp_util",
+    hdrs = ["linux/mktemp_util.h"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/CPP:array",
+        "//libc/src/__support/CPP:span",
+        "//libc/src/__support/CPP:string_view",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:getrandom",
+        "//libc/src/__support/macros:attributes",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "mkdtemp",
+    srcs = ["linux/mkdtemp.cpp"],
+    hdrs = ["mkdtemp.h"],
+    deps = [
+        ":linux_mktemp_util",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mkdir",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
+libc_function(
+    name = "mkostemp",
+    srcs = ["linux/mkostemp.cpp"],
+    hdrs = ["mkostemp.h"],
+    deps = [
+        ":linux_mktemp_util",
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "mkstemp",
+    srcs = ["linux/mkstemp.cpp"],
+    hdrs = ["mkstemp.h"],
+    deps = [
+        ":linux_mktemp_util",
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:open",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+    ],
+)
+
 libc_function(
     name = "srand",
     srcs = ["srand.cpp"],
@@ -466,10 +650,40 @@ libc_function(
 )
 
 libc_function(
+    name = "strtol_l",
+    srcs = ["strtol_l.cpp"],
+    hdrs = ["strtol_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "strtoll",
     srcs = ["strtoll.cpp"],
     hdrs = ["strtoll.h"],
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "strtoll_l",
+    srcs = ["strtoll_l.cpp"],
+    hdrs = ["strtoll_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_locale_t",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
@@ -492,10 +706,40 @@ libc_function(
 )
 
 libc_function(
+    name = "strtoul_l",
+    srcs = ["strtoul_l.cpp"],
+    hdrs = ["strtoul_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "strtoull",
     srcs = ["strtoull.cpp"],
     hdrs = ["strtoull.h"],
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_integer",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "strtoull_l",
+    srcs = ["strtoull_l.cpp"],
+    hdrs = ["strtoull_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_locale_t",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_integer",
@@ -518,10 +762,40 @@ libc_function(
 )
 
 libc_function(
+    name = "strtof_l",
+    srcs = ["strtof_l.cpp"],
+    hdrs = ["strtof_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "strtod",
     srcs = ["strtod.cpp"],
     hdrs = ["strtod.h"],
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "strtod_l",
+    srcs = ["strtod_l.cpp"],
+    hdrs = ["strtod_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_locale_t",
         "//libc/src/__support:common",
         "//libc/src/__support:libc_errno",
         "//libc/src/__support:str_to_float",
@@ -540,5 +814,173 @@ libc_function(
         "//libc/src/__support:str_to_float",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "mblen",
+    srcs = ["mblen.cpp"],
+    hdrs = ["mblen.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbrtowc",
+        "//libc/src/__support/wchar:mbstate",
+    ],
+)
+
+libc_function(
+    name = "strtold_l",
+    srcs = ["strtold_l.cpp"],
+    hdrs = ["strtold_l.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/include:llvm_libc_types_locale_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support:str_to_float",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "mbstowcs",
+    srcs = ["mbstowcs.cpp"],
+    hdrs = ["mbstowcs.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/wchar:mbsnrtowcs",
+        "//libc/src/__support/wchar:mbstate",
+    ],
+)
+
+libc_function(
+    name = "mbtowc",
+    srcs = ["mbtowc.cpp"],
+    hdrs = ["mbtowc.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbrtowc",
+        "//libc/src/__support/wchar:mbstate",
+    ],
+)
+
+libc_function(
+    name = "wcstombs",
+    srcs = ["wcstombs.cpp"],
+    hdrs = ["wcstombs.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:char32_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcsnrtombs",
+    ],
+)
+
+libc_function(
+    name = "wctomb",
+    srcs = ["wctomb.cpp"],
+    hdrs = ["wctomb.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:mbstate_t",
+        "//libc/hdr/types:wchar_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/wchar:mbstate",
+        "//libc/src/__support/wchar:wcrtomb",
+    ],
+)
+
+libc_function(
+    name = "a64l",
+    srcs = ["a64l.cpp"],
+    hdrs = ["a64l.h"],
+    deps = [
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "l64a",
+    srcs = ["l64a.cpp"],
+    hdrs = ["l64a.h"],
+    deps = [
+        "//libc/hdr:stdint_proxy",
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:ctype_utils",
+        "//libc/src/__support:libc_assert",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "getloadavg",
+    srcs = ["linux/getloadavg.cpp"],
+    hdrs = ["getloadavg.h"],
+    deps = [
+        "//libc/hdr/types:struct_sysinfo",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sysinfo",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "memalignment",
+    srcs = ["memalignment.cpp"],
+    hdrs = ["memalignment.h"],
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/CPP:bit",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "system",
+    srcs = ["linux/system.cpp"],
+    hdrs = ["system.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:pid_t",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:linux_shell_fork",
+        "//libc/src/__support/OSUtil:linux_sigmask",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigaction",
+        "//libc/src/__support/macros:config",
+        "//libc/src/signal:__signal_utils",
     ],
 )

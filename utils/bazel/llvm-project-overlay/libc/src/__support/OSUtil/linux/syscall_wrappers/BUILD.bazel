@@ -46,12 +46,37 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "clone3",
+    hdrs = ["clone3.h"],
+    # GRTE sysroot <sys/syscall.h> in overlay mode lacks SYS_clone3.
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "eventfd",
     hdrs = ["eventfd.h"],
     target_compatible_with = select({
         "@platforms//os:linux": [],
         "//conditions:default": ["@platforms//:incompatible"],
     }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "execle",
+    hdrs = ["execle.h"],
     deps = [
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
@@ -863,6 +888,18 @@ libc_support_library(
     }),
     deps = [
         "//libc/hdr:fcntl_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "rt_sigaction",
+    hdrs = ["rt_sigaction.h"],
+    deps = [
+        "//libc/hdr/types:sigset_t",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",
