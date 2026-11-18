@@ -16,6 +16,20 @@ package(
 licenses(["notice"])
 
 libc_support_library(
+    name = "alarm",
+    hdrs = ["alarm.h"],
+    deps = [
+        ":setitimer",
+        "//libc/hdr:sys_time_macros",
+        "//libc/hdr/types:struct_itimerval",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "bind",
     hdrs = ["bind.h"],
     target_compatible_with = select({
@@ -46,10 +60,36 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "chroot",
+    hdrs = ["chroot.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "clone3",
     hdrs = ["clone3.h"],
     deps = [
         "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "close_range",
+    hdrs = ["close_range.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",
@@ -75,6 +115,44 @@ libc_support_library(
 libc_support_library(
     name = "execle",
     hdrs = ["execle.h"],
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "execve",
+    hdrs = ["execve.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "execveat",
+    hdrs = ["execveat.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "faccessat",
+    hdrs = ["faccessat.h"],
     deps = [
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
@@ -116,6 +194,34 @@ libc_support_library(
     deps = [
         "//libc/hdr:errno_macros",
         "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "fchownat",
+    hdrs = ["fchownat.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "fdatasync",
+    hdrs = ["fdatasync.h"],
+    deps = [
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",
@@ -416,6 +522,22 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "getgroups",
+    hdrs = ["getgroups.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "getitimer",
     hdrs = ["getitimer.h"],
     deps = [
@@ -428,10 +550,54 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "getpgid",
+    hdrs = ["getpgid.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "getpriority",
     hdrs = ["getpriority.h"],
     deps = [
         "//libc/hdr/types:id_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "getresgid",
+    hdrs = ["getresgid.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "getresuid",
+    hdrs = ["getresuid.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:uid_t",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",
@@ -518,6 +684,24 @@ libc_support_library(
         "//conditions:default": ["@platforms//:incompatible"],
     }),
     deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "lchown",
+    hdrs = ["lchown.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr/types:gid_t",
+        "//libc/hdr/types:uid_t",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",
@@ -643,6 +827,30 @@ libc_support_library(
     deps = [
         "//libc/hdr/types:dev_t",
         "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "nanosleep",
+    hdrs = ["nanosleep.h"],
+    deps = [
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "pause",
+    hdrs = ["pause.h"],
+    deps = [
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",
@@ -1208,6 +1416,18 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "setgid",
+    hdrs = ["setgid.h"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "setitimer",
     hdrs = ["setitimer.h"],
     deps = [
@@ -1222,10 +1442,90 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "setpgid",
+    hdrs = ["setpgid.h"],
+    deps = [
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "setpriority",
     hdrs = ["setpriority.h"],
     deps = [
         "//libc/hdr/types:id_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "setregid",
+    hdrs = ["setregid.h"],
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "setresgid",
+    hdrs = ["setresgid.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:gid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "setresuid",
+    hdrs = ["setresuid.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "setreuid",
+    hdrs = ["setreuid.h"],
+    deps = [
+        "//libc/hdr/types:uid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "setuid",
+    hdrs = ["setuid.h"],
+    deps = [
+        "//libc/hdr/types:uid_t",
         "//libc/src/__support:common",
         "//libc/src/__support:error_or",
         "//libc/src/__support/OSUtil:syscall",
@@ -1354,6 +1654,35 @@ libc_support_library(
 libc_support_library(
     name = "symlinkat",
     hdrs = ["symlinkat.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "sync",
+    hdrs = ["sync.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
+    name = "syncfs",
+    hdrs = ["syncfs.h"],
     target_compatible_with = select({
         "@platforms//os:linux": [],
         "//conditions:default": ["@platforms//:incompatible"],
