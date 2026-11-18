@@ -1,0 +1,54 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("@bazel_skylib//lib:selects.bzl", "selects")
+load("//libc:libc_build_rules.bzl", "libc_function")
+load("//libc:platforms.bzl", "PLATFORM_CPU_X86_64")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "getcontext",
+    srcs = ["x86_64/getcontext.cpp"],
+    hdrs = ["getcontext.h"],
+    full_build_only = True,
+    target_compatible_with = selects.with_or({
+        PLATFORM_CPU_X86_64: [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/include:llvm_libc_macros_signal_macros",
+        "//libc/include:llvm_libc_types_ucontext_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "setcontext",
+    srcs = ["x86_64/setcontext.cpp"],
+    hdrs = ["setcontext.h"],
+    full_build_only = True,
+    target_compatible_with = selects.with_or({
+        PLATFORM_CPU_X86_64: [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:size_t",
+        "//libc/include:llvm_libc_macros_signal_macros",
+        "//libc/include:llvm_libc_types_ucontext_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
