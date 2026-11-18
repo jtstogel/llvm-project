@@ -263,3 +263,20 @@ libc_support_library(
         "//libc/src/__support/macros:config",
     ],
 )
+
+libc_support_library(
+    name = "linux_network_syscall_policy",
+    hdrs = ["linux/network_syscall_policy.h"],
+    deps = [
+        "//libc/hdr/types:socklen_t",
+        "//libc/hdr/types:ssize_t",
+        "//libc/hdr/types:struct_sockaddr",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:close",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:recvfrom",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:sendto",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:socket",
+        "//libc/src/__support/macros:config",
+    ],
+)
