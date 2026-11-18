@@ -584,6 +584,22 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "pselect6",
+    hdrs = ["pselect6.h"],
+    deps = [
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:fd_set",
+        "//libc/hdr/types:sigset_t",
+        "//libc/hdr/types:size_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "ptrace",
     hdrs = ["ptrace.h"],
     deps = [
