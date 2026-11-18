@@ -16,6 +16,106 @@ package(
 licenses(["notice"])
 
 libc_function(
+    name = "chmod",
+    srcs = ["linux/chmod.cpp"],
+    hdrs = ["chmod.h"],
+    deps = [
+        "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:chmod",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fchmod",
+    srcs = ["linux/fchmod.cpp"],
+    hdrs = ["fchmod.h"],
+    deps = [
+        "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fchmod",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "fchmodat",
+    srcs = ["linux/fchmodat.cpp"],
+    hdrs = ["fchmodat.h"],
+    deps = [
+        "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:fchmodat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "fstat",
+    srcs = ["linux/fstat.cpp"],
+    hdrs = ["fstat.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr/types:struct_stat",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:linux_stat_stat_via_statx",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "fstatat",
+    srcs = ["linux/fstatat.cpp"],
+    hdrs = ["fstatat.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr/types:struct_stat",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:linux_stat_stat_via_statx",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "futimens",
+    srcs = ["linux/futimens.cpp"],
+    hdrs = ["futimens.h"],
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:utimensat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "lstat",
+    srcs = ["linux/lstat.cpp"],
+    hdrs = ["lstat.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr/types:struct_stat",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:linux_stat_stat_via_statx",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "mkdir",
     srcs = ["linux/mkdir.cpp"],
     hdrs = ["mkdir.h"],
@@ -43,5 +143,108 @@ libc_function(
         "//libc/src/__support/OSUtil/linux/syscall_wrappers:mkdirat",
         "//libc/src/__support/macros:config",
         "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "mkfifo",
+    srcs = ["linux/mkfifo.cpp"],
+    hdrs = ["mkfifo.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mknodat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "mkfifoat",
+    srcs = ["linux/mkfifoat.cpp"],
+    hdrs = ["mkfifoat.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mknodat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "mknod",
+    srcs = ["linux/mknod.cpp"],
+    hdrs = ["mknod.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr/types:dev_t",
+        "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mknodat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "mknodat",
+    srcs = ["linux/mknodat.cpp"],
+    hdrs = ["mknodat.h"],
+    deps = [
+        "//libc/hdr/types:dev_t",
+        "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:mknodat",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "stat",
+    srcs = ["linux/stat.cpp"],
+    hdrs = ["stat.h"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr/types:struct_stat",
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:linux_stat_stat_via_statx",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "umask",
+    srcs = ["linux/umask.cpp"],
+    hdrs = ["umask.h"],
+    deps = [
+        "//libc/hdr/types:mode_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:umask",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "utimensat",
+    srcs = ["linux/utimensat.cpp"],
+    hdrs = ["utimensat.h"],
+    deps = [
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:utimensat",
+        "//libc/src/__support/macros:config",
     ],
 )

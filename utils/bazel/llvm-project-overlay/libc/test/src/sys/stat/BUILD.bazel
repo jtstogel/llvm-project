@@ -1,0 +1,70 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc sys/stat functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "mknod_test",
+    srcs = ["mknod_test.cpp"],
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr/types:dev_t",
+        "//libc/hdr/types:mode_t",
+        "//libc/hdr/types:struct_stat",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/sys/stat",
+        "//libc/src/sys/stat:mknod",
+        "//libc/src/sys/stat:umask",
+        "//libc/src/unistd:unlink",
+    ],
+)
+
+libc_test(
+    name = "utimensat_test",
+    srcs = ["utimensat_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/fcntl:open",
+        "//libc/src/stdio:remove",
+        "//libc/src/sys/stat",
+        "//libc/src/sys/stat:utimensat",
+        "//libc/src/unistd:close",
+    ],
+)
+
+libc_test(
+    name = "futimens_test",
+    srcs = ["futimens_test.cpp"],
+    deps = [
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/CPP:scope",
+        "//libc/src/fcntl:open",
+        "//libc/src/stdio:remove",
+        "//libc/src/sys/stat",
+        "//libc/src/sys/stat:futimens",
+        "//libc/src/unistd:close",
+    ],
+)
+
+libc_test(
+    name = "umask_test",
+    srcs = ["umask_test.cpp"],
+    deps = [
+        "//libc/hdr:sys_stat_macros",
+        "//libc/hdr/types:mode_t",
+        "//libc/src/sys/stat:umask",
+    ],
+)
