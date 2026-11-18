@@ -77,6 +77,55 @@ libc_function(
 )
 
 libc_function(
+    name = "killpg",
+    srcs = ["linux/killpg.cpp"],
+    hdrs = ["killpg.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:pid_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:kill",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "pthread_kill",
+    srcs = ["linux/pthread_kill.cpp"],
+    hdrs = ["pthread_kill.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:signal_macros",
+        "//libc/hdr/types:pthread_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros:null_check",
+        "//libc/src/__support/threads:thread",
+        "//libc/src/__support/threads:thread_headers",
+    ],
+)
+
+libc_function(
+    name = "pthread_sigmask",
+    srcs = ["linux/pthread_sigmask.cpp"],
+    hdrs = ["pthread_sigmask.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigprocmask",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
     name = "raise",
     srcs = ["linux/raise.cpp"],
     hdrs = ["raise.h"],
@@ -109,6 +158,21 @@ libc_function(
 )
 
 libc_function(
+    name = "sigaddset",
+    srcs = ["linux/sigaddset.cpp"],
+    hdrs = ["sigaddset.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:linux_sigmask",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "sigaltstack",
     srcs = ["linux/sigaltstack.cpp"],
     hdrs = ["sigaltstack.h"],
@@ -129,6 +193,71 @@ libc_function(
 )
 
 libc_function(
+    name = "sigdelset",
+    srcs = ["linux/sigdelset.cpp"],
+    hdrs = ["sigdelset.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:linux_sigmask",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "sigemptyset",
+    srcs = ["linux/sigemptyset.cpp"],
+    hdrs = ["sigemptyset.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:linux_sigmask",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "sigfillset",
+    srcs = ["linux/sigfillset.cpp"],
+    hdrs = ["sigfillset.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:linux_sigmask",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "sigismember",
+    srcs = ["linux/sigismember.cpp"],
+    hdrs = ["sigismember.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil:linux_sigmask",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
     name = "signal",
     srcs = ["linux/signal.cpp"],
     hdrs = ["signal.h"],
@@ -138,6 +267,58 @@ libc_function(
         ":sigaction",
         "//libc/hdr:signal_macros",
         "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "sigpending",
+    srcs = ["linux/sigpending.cpp"],
+    hdrs = ["sigpending.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigpending",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_function(
+    name = "sigprocmask",
+    srcs = ["linux/sigprocmask.cpp"],
+    hdrs = ["sigprocmask.h"],
+    full_build_only = True,
+    deps = [
+        ":__signal_utils",
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigprocmask",
+        "//libc/src/__support/macros:config",
+        "//libc/src/errno",
+    ],
+)
+
+libc_function(
+    name = "sigsuspend",
+    srcs = ["linux/sigsuspend.cpp"],
+    hdrs = ["sigsuspend.h"],
+    full_build_only = True,
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/hdr/types:sigset_t",
+        "//libc/src/__support:common",
+        "//libc/src/__support:libc_errno",
+        "//libc/src/__support/OSUtil/linux/syscall_wrappers:rt_sigsuspend",
         "//libc/src/__support/macros:config",
     ],
 )
