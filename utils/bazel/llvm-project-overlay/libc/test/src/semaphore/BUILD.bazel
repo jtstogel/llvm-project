@@ -1,0 +1,119 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc semaphore functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "sem_init_test",
+    srcs = ["sem_init_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/semaphore:sem_clockwait",
+        "//libc/src/semaphore:sem_destroy",
+        "//libc/src/semaphore:sem_getvalue",
+        "//libc/src/semaphore:sem_init",
+        "//libc/src/semaphore:sem_post",
+        "//libc/src/semaphore:sem_timedwait",
+        "//libc/src/semaphore:sem_trywait",
+        "//libc/src/semaphore:sem_wait",
+    ],
+)
+
+libc_test(
+    name = "sem_wait_test",
+    srcs = ["sem_wait_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:sem_t",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/semaphore:sem_clockwait",
+        "//libc/src/semaphore:sem_destroy",
+        "//libc/src/semaphore:sem_getvalue",
+        "//libc/src/semaphore:sem_init",
+        "//libc/src/semaphore:sem_post",
+        "//libc/src/semaphore:sem_timedwait",
+        "//libc/src/semaphore:sem_trywait",
+        "//libc/src/semaphore:sem_wait",
+    ],
+)
+
+libc_test(
+    name = "sem_getvalue_test",
+    srcs = ["sem_getvalue_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:limits_macros",
+        "//libc/hdr/types:sem_t",
+        "//libc/src/semaphore:sem_destroy",
+        "//libc/src/semaphore:sem_getvalue",
+        "//libc/src/semaphore:sem_init",
+        "//libc/src/semaphore:sem_post",
+        "//libc/src/semaphore:sem_wait",
+    ],
+)
+
+libc_test(
+    name = "sem_open_test",
+    srcs = ["sem_open_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:semaphore_macros",
+        "//libc/hdr/types:sem_t",
+        "//libc/src/semaphore:sem_close",
+        "//libc/src/semaphore:sem_getvalue",
+        "//libc/src/semaphore:sem_open",
+        "//libc/src/semaphore:sem_post",
+        "//libc/src/semaphore:sem_unlink",
+        "//libc/src/semaphore:sem_wait",
+    ],
+)
+
+libc_test(
+    name = "sem_unlink_test",
+    srcs = ["sem_unlink_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:semaphore_macros",
+        "//libc/hdr/types:sem_t",
+        "//libc/src/semaphore:sem_close",
+        "//libc/src/semaphore:sem_open",
+        "//libc/src/semaphore:sem_post",
+        "//libc/src/semaphore:sem_unlink",
+    ],
+)
+
+libc_test(
+    name = "semaphore_test",
+    srcs = ["linux/semaphore_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:errno_macros",
+        "//libc/hdr:fcntl_macros",
+        "//libc/hdr:limits_macros",
+        "//libc/hdr:time_macros",
+        "//libc/hdr/types:struct_timespec",
+        "//libc/src/__support/time:clock_gettime",
+        "//libc/src/semaphore:linux_named_semaphore",
+        "//libc/src/semaphore:linux_semaphore",
+    ],
+)
