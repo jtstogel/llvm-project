@@ -1,0 +1,47 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc netinet/ether functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "ether_aton_test",
+    srcs = ["ether_aton_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_ether_addr",
+        "//libc/src/netinet/ether:ether_aton",
+    ],
+)
+
+libc_test(
+    name = "ether_aton_r_test",
+    srcs = ["ether_aton_r_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_ether_addr",
+        "//libc/src/netinet/ether:ether_aton_r",
+    ],
+)
+
+libc_test(
+    name = "ether_ntoa_test",
+    srcs = ["ether_ntoa_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_ether_addr",
+        "//libc/src/netinet/ether:ether_ntoa",
+    ],
+)
+
+libc_test(
+    name = "ether_ntoa_r_test",
+    srcs = ["ether_ntoa_r_test.cpp"],
+    deps = [
+        "//libc/hdr/types:struct_ether_addr",
+        "//libc/src/netinet/ether:ether_ntoa_r",
+    ],
+)
