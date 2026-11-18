@@ -39,11 +39,12 @@ struct ScratchRequiringEntry {
 };
 
 class HermeticFile {
-  char path[256];
+  char path[4096];
 
 public:
   HermeticFile(const char *file_path, const char *content) {
-    LIBC_NAMESPACE::internal::strlcpy(path, file_path, sizeof(path));
+    EXPECT_LT(LIBC_NAMESPACE::internal::strlcpy(path, file_path, sizeof(path)),
+              sizeof(path));
 
     auto file_or = LIBC_NAMESPACE::openfile(path, "w");
     if (file_or.has_value()) {
