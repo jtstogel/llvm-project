@@ -1,0 +1,116 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+load("@bazel_skylib//lib:selects.bzl", "selects")
+load("//libc:libc_build_rules.bzl", "libc_function", "libc_support_library")
+load("//libc:platforms.bzl", "PLATFORM_CPU_ARM64", "PLATFORM_CPU_RISCV64", "PLATFORM_CPU_X86_64")
+
+package(
+    default_visibility = ["//visibility:public"],
+    features = [
+        "parse_headers",
+        "-use_header_modules",
+        "layering_check",
+    ],
+)
+
+licenses(["notice"])
+
+libc_function(
+    name = "longjmp",
+    srcs = selects.with_or({
+        PLATFORM_CPU_ARM64: ["aarch64/longjmp.cpp"],
+        PLATFORM_CPU_RISCV64: ["riscv/longjmp.cpp"],
+        PLATFORM_CPU_X86_64: ["x86_64/longjmp.cpp"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["longjmp.h"],
+    copts = selects.with_or({
+        PLATFORM_CPU_ARM64: ["-DLIBC_COPT_SETJMP_AARCH64_RESTORE_PLATFORM_REGISTER"],
+        PLATFORM_CPU_RISCV64: ["-fomit-frame-pointer"],
+        PLATFORM_CPU_X86_64: [],
+        "//conditions:default": [],
+    }),
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:jmp_buf",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/macros/properties:compiler",
+    ],
+)
+
+libc_function(
+    name = "setjmp",
+    srcs = selects.with_or({
+        PLATFORM_CPU_ARM64: ["aarch64/setjmp.cpp"],
+        PLATFORM_CPU_RISCV64: ["riscv/setjmp.cpp"],
+        PLATFORM_CPU_X86_64: ["x86_64/setjmp.cpp"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["setjmp_impl.h"],
+    copts = selects.with_or({
+        PLATFORM_CPU_ARM64: ["-DLIBC_COPT_SETJMP_AARCH64_RESTORE_PLATFORM_REGISTER"],
+        PLATFORM_CPU_RISCV64: ["-fomit-frame-pointer"],
+        PLATFORM_CPU_X86_64: [],
+        "//conditions:default": [],
+    }),
+    full_build_only = True,
+    deps = [
+        "//libc/hdr:offsetof_macros",
+        "//libc/hdr/types:jmp_buf",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros/properties:architectures",
+        "//libc/src/__support/macros/properties:compiler",
+    ],
+)
+
+libc_function(
+    name = "siglongjmp",
+    srcs = ["siglongjmp.cpp"],
+    hdrs = ["siglongjmp.h"],
+    full_build_only = True,
+    deps = [
+        ":longjmp",
+        "//libc/hdr/types:jmp_buf",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros/properties:compiler",
+    ],
+)
+
+libc_support_library(
+    name = "sigsetjmp_epilogue",
+    srcs = ["linux/sigsetjmp_epilogue.cpp"],
+    hdrs = ["sigsetjmp_epilogue.h"],
+    full_build_only = True,
+    deps = [
+        "//libc/hdr/types:sigjmp_buf",
+        "//libc/src/__support:common",
+        "//libc/src/__support/OSUtil:linux_sigmask",
+    ],
+)
+
+libc_function(
+    name = "sigsetjmp",
+    srcs = selects.with_or({
+        PLATFORM_CPU_ARM64: ["aarch64/sigsetjmp.cpp"],
+        PLATFORM_CPU_RISCV64: ["riscv/sigsetjmp.cpp"],
+        PLATFORM_CPU_X86_64: ["x86_64/sigsetjmp.cpp"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["sigsetjmp.h"],
+    full_build_only = True,
+    deps = [
+        ":setjmp",
+        ":sigsetjmp_epilogue",
+        "//libc/hdr:offsetof_macros",
+        "//libc/hdr/types:sigjmp_buf",
+        "//libc/src/__support:common",
+        "//libc/src/__support/macros:config",
+        "//libc/src/__support/macros/properties:compiler",
+    ],
+)

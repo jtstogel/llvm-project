@@ -1,0 +1,34 @@
+# This file is licensed under the Apache License v2.0 with LLVM Exceptions.
+# See https://llvm.org/LICENSE.txt for license information.
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
+# Tests for LLVM libc setjmp functions.
+
+load("//libc/test:libc_test_rules.bzl", "libc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+licenses(["notice"])
+
+libc_test(
+    name = "setjmp_test",
+    srcs = ["setjmp_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/setjmp",
+        "//libc/src/setjmp:longjmp",
+    ],
+)
+
+libc_test(
+    name = "sigsetjmp_test",
+    srcs = ["sigsetjmp_test.cpp"],
+    full_build_only = True,
+    deps = [
+        "//libc/src/setjmp:siglongjmp",
+        "//libc/src/setjmp:sigsetjmp",
+        "//libc/src/signal:sigprocmask",
+        "//libc/src/string:memcmp",
+        "//libc/src/string:memset",
+    ],
+)
