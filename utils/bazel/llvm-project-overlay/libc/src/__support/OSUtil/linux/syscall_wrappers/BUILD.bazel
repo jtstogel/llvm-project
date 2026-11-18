@@ -46,6 +46,21 @@ libc_support_library(
 )
 
 libc_support_library(
+    name = "eventfd",
+    hdrs = ["eventfd.h"],
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = [
+        "//libc/src/__support:common",
+        "//libc/src/__support:error_or",
+        "//libc/src/__support/OSUtil:syscall",
+        "//libc/src/__support/macros:config",
+    ],
+)
+
+libc_support_library(
     name = "fchmod",
     hdrs = ["fchmod.h"],
     deps = [
